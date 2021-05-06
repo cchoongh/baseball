@@ -16,6 +16,10 @@ public class TeamType {
         return new TeamType(TeamTypeEnum.HOME);
     }
 
+    public String getName() {
+        return this.teamTypeEnum.korean;
+    }
+
     enum TeamTypeEnum {
         AWAY("원정팀"),
         HOME("홈팀");

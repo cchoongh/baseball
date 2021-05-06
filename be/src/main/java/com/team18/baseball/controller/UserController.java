@@ -14,5 +14,4 @@ public class UserController {
         session.setAttribute("user", id);
         return "Success!";
     }
-
 }
