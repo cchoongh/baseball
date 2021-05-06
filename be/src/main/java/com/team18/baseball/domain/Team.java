@@ -3,7 +3,6 @@ package com.team18.baseball.domain;
 import org.springframework.data.annotation.Id;
 
 import java.util.List;
-import java.util.Set;
 
 public class Team {
     @Id

@@ -3,10 +3,10 @@ VALUES ("kkk@honux.com"),
        ("jjj@honux.com"),
        ("qqq@honux.com");
 
-INSERT INTO `match`(id, `name`)
-VALUES (1, "match1"),
-       (2, "match2"),
-       (3, "match3");
+INSERT INTO game(id)
+VALUES (1),
+       (2),
+       (3);
 
 INSERT INTO team (id, `name`)
 VALUES (1, "hanwha"),
@@ -16,7 +16,7 @@ VALUES (1, "hanwha"),
        (5, "lotte"),
        (6, "lg");
 
-INSERT INTO match_has_team(team_id, `match`, match_key)
+INSERT INTO game_has_team(team_id, game, game_key)
 VALUES (1, 1, "away"),
        (2, 1, "home"),
        (3, 2, "away"),
