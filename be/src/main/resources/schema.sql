@@ -28,7 +28,7 @@ CREATE TABLE team
 CREATE TABLE `game_has_team`
 (
     id        int not null auto_increment,
-    team_id   int,
+    team_id int,
     game   int references game (id),
     game_key varchar(64),
     score     int,
@@ -39,11 +39,12 @@ CREATE TABLE `game_has_team`
 CREATE TABLE player
 (
     id         int                   not null auto_increment,
-    team_id    int                   not null,
+    team       int                   not null,
+    team_key   int,
     `name`     varchar(45)           not null,
      is_pitcher boolean default false not null,
     primary key (id),
-    foreign key (team_id) references team (id)
+    foreign key (team) references team (id)
 );
 --
 -- CREATE TABLE halfInning

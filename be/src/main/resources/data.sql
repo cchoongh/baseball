@@ -26,7 +26,7 @@ VALUES (1, 1, "away"),
 
 -- INSERT INTO game ();
 
-INSERT INTO player(`name`, team_id, is_pitcher)
+INSERT INTO player(`name`, team, is_pitcher)
 VALUES ("김종수", 1, false),
        ("남지민", 1, false),
        ("임준섭", 1, false),
