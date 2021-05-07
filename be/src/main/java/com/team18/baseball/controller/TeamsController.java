@@ -1,21 +1,18 @@
 package com.team18.baseball.controller;
 
-import org.apache.catalina.User;
-import org.springframework.web.bind.annotation.GetMapping;
+import com.team18.baseball.service.TeamService;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.servlet.http.HttpSession;
 
 @RestController("/teams")
 public class TeamsController {
+    private final TeamService teamService;
 
-    @GetMapping()
-    public String readTeams(HttpSession session) {
-
-        return "";
+    public TeamsController(TeamService teamService) {
+        this.teamService = teamService;
     }
 
+    public void getMatches() {
 
-
+    }
 
 }

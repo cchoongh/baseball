@@ -17,4 +17,16 @@ public class GameHasTeam {
     public static final GameHasTeam create(Long teamId) {
         return new GameHasTeam(null, teamId, 0);
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public Long getTeamId() {
+        return teamId;
+    }
+
+    public int getScore() {
+        return score;
+    }
 }

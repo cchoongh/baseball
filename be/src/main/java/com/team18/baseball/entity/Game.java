@@ -10,7 +10,7 @@ import java.util.Map;
 public class Game {
     @Id
     private final Long id;
-    private List<HalfInning> halfInningList = new ArrayList<>();
+//    private List<HalfInning> halfInningList = new ArrayList<>();
     private Map<TeamType, GameHasTeam> teams = new HashMap<>();
 
 
@@ -22,11 +22,23 @@ public class Game {
         return new Game(id);
     }
 
-    public void addHomeTeam(Team team) {
-        this.teams.put(TeamType.home(), GameHasTeam.create(team.getId()));
+    public Long getId() {
+        return id;
     }
 
-    public void addAwayTeam(Team team) {
-        this.teams.put(TeamType.away(), GameHasTeam.create(team.getId()));
+//    public List<HalfInning> getHalfInningList() {
+//        return halfInningList;
+//    }
+
+    public Map<TeamType, GameHasTeam> getTeams() {
+        return teams;
     }
+//
+//    public void addHomeTeam(Team team) {
+//        this.teams.put(TeamType.home(), GameHasTeam.create(team.getId()));
+//    }
+//
+//    public void addAwayTeam(Team team) {
+//        this.teams.put(TeamType.away(), GameHasTeam.create(team.getId()));
+//    }
 }

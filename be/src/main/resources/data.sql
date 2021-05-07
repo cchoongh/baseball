@@ -16,13 +16,13 @@ VALUES (1, "hanwha"),
        (5, "lotte"),
        (6, "lg");
 
-INSERT INTO game_has_team(team_id, game, game_key)
-VALUES (1, 1, "away"),
-       (2, 1, "home"),
-       (3, 2, "away"),
-       (4, 2, "home"),
-       (5, 3, "away"),
-       (6, 3, "home");
+INSERT INTO game_has_team(team_id, game, game_key, score)
+VALUES (1, 1, "away", 0),
+       (2, 1, "home", 0),
+       (3, 2, "away", 0),
+       (4, 2, "home", 0),
+       (5, 3, "away", 0),
+       (6, 3, "home", 0);
 
 -- INSERT INTO game ();
 

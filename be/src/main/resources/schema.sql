@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS `halfInning`;
 DROP TABLE IF EXISTS player;
 DROP TABLE IF EXISTS `game_has_team`;
 DROP TABLE IF EXISTS team;
@@ -39,7 +40,7 @@ CREATE TABLE `game_has_team`
 CREATE TABLE player
 (
     id         int                   not null auto_increment,
-    team       int                   not null,
+    team      int                   not null,
     team_key   int,
     `name`     varchar(45)           not null,
      is_pitcher boolean default false not null,
@@ -49,23 +50,23 @@ CREATE TABLE player
 --
 -- CREATE TABLE halfInning
 -- (
---     int         id          not null auto_increment,
---     game_id     int         not null,
---     inning      int         not null,
---     inning_type varchar(45) not null,
---     first_base  tinyint(1) default 0 not null,
---     second_base tinyint(1) default 0 not null,
---     third_base  tinyint(1) default 0 not null,
---     score       int         not null,
---     strike      int         not null,
---     ball        int         not null,
---     out         int         not null,
---     isEnd       tinyint(0) not null,
---     batter_id   int         not null,
+--     id          int          not null auto_increment,
+--     game_id     int          not null,
+--     inning      int          not null,
+--     inning_type varchar(45)  not null,
+--     first_base  boolean default false not null,
+--     second_base boolean default false not null,
+--     third_base  boolean default false not null,
+--     score       int          not null,
+--     strike      int          not null,
+--     `ball`        int          not null,
+--     `out`         int          not null,
+--     `isEnd`       boolean default false not null,
+--     batter_id   int          not null,
 --     primary key (id),
 --     foreign key (game_id) references game (id)
 -- );
---
+
 -- CREATE TABLE plate_appearance
 -- (
 --     id     int not null auto_increment,
