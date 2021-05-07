@@ -19,13 +19,9 @@ import java.util.Optional;
 
 public class GameController {
     private final GameService gameService;
-    private final UserRepository userRepository;
-    private final TeamRepository teamRepository;
 
-    public GameController(GameService gameService, UserRepository userRepository, TeamRepository teamRepository) {
+    public GameController(GameService gameService) {
         this.gameService = gameService;
-        this.userRepository = userRepository;
-        this.teamRepository = teamRepository;
     }
 
     @GetMapping("/games")
@@ -34,15 +30,14 @@ public class GameController {
         return gameService.getTeamsInGameList();
     }
 
-    @GetMapping("/test")
-    public Long test() {
-        return teamRepository.findById(2L).orElseThrow(IllegalStateException::new).getUserId();
-    }
+//    @GetMapping("/test")
+//    public Long test() {
+//        return teamRepository.findById(2L).orElseThrow(IllegalStateException::new).getUserId();
+//    }
 
     @PostMapping ("/games/{gameId}/team/{teamId}")
     public ResponseDto selectTeam(@PathVariable Long gameId, @PathVariable Long teamId, HttpSession session) {
 //        User user = HttpSessionUtils.getLoginUser(session).orElseThrow(IllegalStateException::new);
-        User user = userRepository.findById(1L).orElseThrow(IllegalStateException::new);
         return gameService.selectTeam(user, gameId, teamId) ? ResponseDto.ok() : ResponseDto.selected();
     }
 }
