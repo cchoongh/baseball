@@ -19,12 +19,10 @@ import java.util.Map;
 public class GameService {
     private final GameRepository gameRepository;
     private final TeamRepository teamRepository;
-    private final PlayerRepository playerRepository;
 
-    public GameService(GameRepository gameRepository, TeamRepository teamRepository, PlayerRepository playerRepository) {
+    public GameService(GameRepository gameRepository, TeamRepository teamRepository) {
         this.gameRepository = gameRepository;
         this.teamRepository = teamRepository;
-        this.playerRepository = playerRepository;
     }
 
     public List<TeamsInGameDto> getTeamsInGameList() {
@@ -43,6 +41,4 @@ public class GameService {
         Team team = teamRepository.findById(teamId).orElseThrow(IllegalStateException::new);
         return TeamSelectionData.from(team);
     }
-
-
 }
