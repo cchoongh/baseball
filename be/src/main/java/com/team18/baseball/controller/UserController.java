@@ -1,6 +1,6 @@
 package com.team18.baseball.controller;
 
-import com.team18.baseball.UserRepository;
+import com.team18.baseball.repository.UserRepository;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;

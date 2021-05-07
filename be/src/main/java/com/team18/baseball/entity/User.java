@@ -1,13 +1,22 @@
 package com.team18.baseball.entity;
 
-public class User {
-   private final String githubId;
+import org.springframework.data.annotation.Id;
 
-    User(String githubId) {
+public class User {
+    @Id
+    private final Long id;
+    private final String githubId;
+
+    User(Long id, String githubId) {
+        this.id = id;
         this.githubId = githubId;
     }
 
-    public static User create(String githubId) {
-        return new User(githubId);
+    public static User create(Long id, String githubId) {
+        return new User(id, githubId);
+    }
+
+    public Long getId() {
+        return id;
     }
 }

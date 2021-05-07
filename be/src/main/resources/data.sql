@@ -1,4 +1,4 @@
-INSERT INTO `user`(email)
+INSERT INTO `user`(github_id)
 VALUES ("kkk@honux.com"),
        ("jjj@honux.com"),
        ("qqq@honux.com");

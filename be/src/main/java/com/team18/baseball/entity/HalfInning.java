@@ -6,6 +6,7 @@ public class HalfInning {
     @Id
     private final Long id;
     private final Long game;
+    private final int inning;
     private final InningType inningType;
     private final boolean firstBase;
     private final boolean secondBase;
@@ -17,11 +18,12 @@ public class HalfInning {
     private final boolean isEnd;
     private final int batterId;
 
-    HalfInning(Long id, Long game, InningType inningType,
+    HalfInning(Long id, Long game, int inning, InningType inningType,
                boolean firstBase, boolean secondBase, boolean thirdBase,
                int score, int strike, int ball, int out, boolean isEnd, int batterId) {
         this.id = id;
         this.game = game;
+        this.inning = inning;
         this.inningType = inningType;
         this.firstBase = firstBase;
         this.secondBase = secondBase;
@@ -34,10 +36,10 @@ public class HalfInning {
         this.batterId = batterId;
     }
 
-    public static final HalfInning create(Long id, Long game, InningType inningType,
+    public static final HalfInning create(Long id, Long game, int inning, InningType inningType,
                                           boolean first_base, boolean second_base, boolean third_base,
                                           int score, int strike, int ball, int out, boolean isEnd, int batter_id) {
-        return new HalfInning(id, game, inningType, first_base, second_base, third_base, score, strike, ball
+        return new HalfInning(id, game, inning, inningType, first_base, second_base, third_base, score, strike, ball
                 , out, isEnd, batter_id);
     }
 }

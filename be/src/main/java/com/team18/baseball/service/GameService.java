@@ -2,12 +2,8 @@ package com.team18.baseball.service;
 
 import com.team18.baseball.dto.TeamSelectionData;
 import com.team18.baseball.dto.TeamsInGameDto;
-import com.team18.baseball.entity.Game;
-import com.team18.baseball.entity.GameHasTeam;
-import com.team18.baseball.entity.Team;
-import com.team18.baseball.entity.TeamType;
+import com.team18.baseball.entity.*;
 import com.team18.baseball.repository.GameRepository;
-import com.team18.baseball.repository.PlayerRepository;
 import com.team18.baseball.repository.TeamRepository;
 import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Service;
@@ -40,5 +36,14 @@ public class GameService {
         Long teamId = teams.get(teamType.toString()).getTeamId();
         Team team = teamRepository.findById(teamId).orElseThrow(IllegalStateException::new);
         return TeamSelectionData.from(team);
+    }
+
+    public boolean selectTeam(User user, Long gameId, Long teamId) {
+        Team team = teamRepository.findById(teamId).orElseThrow(IllegalStateException::new);
+        if(!team.selectTeam(user.getId())) {
+            return false;
+        }
+        teamRepository.save(team);
+        return true;
     }
 }

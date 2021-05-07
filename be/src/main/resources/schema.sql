@@ -8,8 +8,9 @@ DROP TABLE IF EXISTS `user`;
 
 CREATE TABLE `user`
 (
-    email varchar(50) not null,
-    primary key (email)
+    id int auto_increment,
+    github_id varchar(50),
+    primary key (id)
 );
 
 CREATE TABLE game
@@ -21,10 +22,10 @@ CREATE TABLE game
 CREATE TABLE team
 (
     id         int         auto_increment,
-    user_email varchar(45),
+    user_id int,
     `name`     varchar(45) not null,
     primary key (id),
-    foreign key (user_email) references `user` (email)
+    foreign key (user_id) references `user` (id)
 );
 
 CREATE TABLE `game_has_team`
