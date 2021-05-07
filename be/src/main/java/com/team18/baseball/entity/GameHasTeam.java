@@ -29,4 +29,13 @@ public class GameHasTeam {
     public int getScore() {
         return score;
     }
+
+    @Override
+    public String toString() {
+        return "GameHasTeam{" +
+                "id=" + id +
+                ", teamId=" + teamId +
+                ", score=" + score +
+                '}';
+    }
 }

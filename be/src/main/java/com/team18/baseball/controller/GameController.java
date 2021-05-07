@@ -1,6 +1,9 @@
 package com.team18.baseball.controller;
 
+import com.team18.baseball.HttpSessionUtils;
 import com.team18.baseball.dto.TeamsInGameDto;
+import com.team18.baseball.entity.TeamType;
+import com.team18.baseball.entity.User;
 import com.team18.baseball.service.GameService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

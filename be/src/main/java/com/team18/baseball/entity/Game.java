@@ -10,35 +10,44 @@ import java.util.Map;
 public class Game {
     @Id
     private final Long id;
-//    private List<HalfInning> halfInningList = new ArrayList<>();
-    private Map<TeamType, GameHasTeam> teams = new HashMap<>();
-
+    private List<HalfInning> halfInningList = new ArrayList<>();
+    private Map<String, GameHasTeam> teams = new HashMap<>();
 
     Game(Long id) {
         this.id = id;
     }
 
-    public static final Game create(Long id) {
-        return new Game(id);
+    public static final Game create() {
+        return new Game(null);
     }
 
     public Long getId() {
         return id;
     }
 
-//    public List<HalfInning> getHalfInningList() {
-//        return halfInningList;
-//    }
+    public List<HalfInning> getHalfInningList() {
+        return halfInningList;
+    }
 
-    public Map<TeamType, GameHasTeam> getTeams() {
+    public Map<String, GameHasTeam> getTeams() {
         return teams;
     }
-//
-//    public void addHomeTeam(Team team) {
-//        this.teams.put(TeamType.home(), GameHasTeam.create(team.getId()));
-//    }
-//
-//    public void addAwayTeam(Team team) {
-//        this.teams.put(TeamType.away(), GameHasTeam.create(team.getId()));
-//    }
+
+    public void addHomeTeam(Team team) {
+        this.teams.put(TeamType.HOME.toString(), GameHasTeam.create(team.getId()));
+    }
+
+    public void addAwayTeam(Team team) {
+        this.teams.put(TeamType.AWAY.toString(), GameHasTeam.create(team.getId()));
+    }
+
+
+    @Override
+    public String toString() {
+        return "Game{" +
+                "id=" + id +
+                ", halfInningList=" + halfInningList +
+                ", teams=" + teams +
+                '}';
+    }
 }

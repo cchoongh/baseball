@@ -7,6 +7,7 @@ import com.team18.baseball.entity.GameHasTeam;
 import com.team18.baseball.entity.Team;
 import com.team18.baseball.entity.TeamType;
 import com.team18.baseball.repository.GameRepository;
+import com.team18.baseball.repository.PlayerRepository;
 import com.team18.baseball.repository.TeamRepository;
 import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Service;
@@ -18,28 +19,30 @@ import java.util.Map;
 public class GameService {
     private final GameRepository gameRepository;
     private final TeamRepository teamRepository;
+    private final PlayerRepository playerRepository;
 
-    public GameService(GameRepository gameRepository, TeamRepository teamRepository) {
+    public GameService(GameRepository gameRepository, TeamRepository teamRepository, PlayerRepository playerRepository) {
         this.gameRepository = gameRepository;
         this.teamRepository = teamRepository;
+        this.playerRepository = playerRepository;
     }
-
-//    public List<Team> getTeams() {
-//         return Streamable.of(teamRepository.findAll()).toList();
-//    }
 
     public List<TeamsInGameDto> getTeamsInGameList() {
         return Streamable.of(gameRepository.findAll()).map((game)->getTeamsInGame(game)).toList();
     }
 
-    public TeamsInGameDto getTeamsInGame(Game game) {
-        Map<TeamType, GameHasTeam> teams = game.getTeams();
-        Long homeTeamId = teams.get(TeamType.home()).getId();
-        Long awayTeamId = teams.get(TeamType.away()).getId();
-        Team home = teamRepository.findById(homeTeamId).orElseThrow(IllegalStateException::new);
-        Team away = teamRepository.findById(awayTeamId).orElseThrow(IllegalStateException::new);
-        TeamSelectionData homeData = TeamSelectionData.from(home);
-        TeamSelectionData awayData = TeamSelectionData.from(away);
+    private TeamsInGameDto getTeamsInGame(Game game) {
+        Map<String, GameHasTeam> teams = game.getTeams();
+        TeamSelectionData homeData = getTeamSelectionData(teams, TeamType.HOME);
+        TeamSelectionData awayData = getTeamSelectionData(teams, TeamType.AWAY);
         return TeamsInGameDto.from(game.getId(), homeData, awayData);
     }
+
+    private TeamSelectionData getTeamSelectionData(Map<String, GameHasTeam> teams, TeamType teamType) {
+        Long teamId = teams.get(teamType.toString()).getTeamId();
+        Team team = teamRepository.findById(teamId).orElseThrow(IllegalStateException::new);
+        return TeamSelectionData.from(team);
+    }
+
+
 }
