@@ -7,6 +7,7 @@ public class GameHasTeam {
     private final Long id;
     private final Long teamId;
     private final int score;
+    private Long userId;
 
     GameHasTeam(Long id, Long teamId, int score) {
         this.id = id;

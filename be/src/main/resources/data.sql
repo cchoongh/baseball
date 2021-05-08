@@ -22,7 +22,7 @@ VALUES (1, 1, "AWAY", 0),
        (3, 2, "AWAY", 0),
        (4, 2, "HOME", 0),
        (5, 3, "AWAY", 0),
-       (6, 3, "HOME", 0);
+       (1, 3, "HOME", 0);
 
 -- INSERT INTO game ();
 

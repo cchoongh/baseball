@@ -23,7 +23,7 @@ CREATE TABLE team
 (
     id         int         auto_increment,
     user_id int,
-    `name`     varchar(45) not null,
+    `name`     varchar(50) not null,
     primary key (id),
     foreign key (user_id) references `user` (id)
 );
@@ -33,8 +33,9 @@ CREATE TABLE `game_has_team`
     `id`       int    auto_increment,
     `team_id`  int    not null,
     `game`     int not null,
-    `game_key` varchar(64),
+    `game_key` varchar(50),
     `score`    int,
+    `user_id`  varchar(50),
     primary key (id),
     foreign key (team_id) references team (id),
     foreign key (game) references game (id)
@@ -45,7 +46,7 @@ CREATE TABLE player
     id         int                   auto_increment,
     team       int                   not null,
     team_key   int,
-    `name`     varchar(45)           not null,
+    `name`     varchar(50)           not null,
     is_pitcher boolean default false not null,
     primary key (id),
     foreign key (team) references team (id)
@@ -57,7 +58,7 @@ CREATE TABLE half_inning
     game        int                not null,
     game_key    int,
     inning      int                   not null,
-    inning_type varchar(45)           not null,
+    inning_type varchar(50)           not null,
     first_base  boolean default false not null,
     second_base boolean default false not null,
     third_base  boolean default false not null,

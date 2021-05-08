@@ -10,9 +10,6 @@ public class Game {
     private final Long id;
     private List<HalfInning> halfInningList = new ArrayList<>();
     private Map<String, GameHasTeam> teams = new HashMap<>();
-//    private Long homeTeamUserID;
-//    private Long awayTeamUserID;
-
 
     Game(Long id) {
         this.id = id;
@@ -42,14 +39,6 @@ public class Game {
         return teams.get(TeamType.AWAY.toString());
     }
 
-    private void addHomeTeam(Team team) {
-        this.teams.put(TeamType.HOME.toString(), GameHasTeam.create(team.getId()));
-    }
-
-    private void addAwayTeam(Team team) {
-        this.teams.put(TeamType.AWAY.toString(), GameHasTeam.create(team.getId()));
-    }
-
 //    public GameHasTeam getTeamInGameInfo(TeamType teamType) {
 //        GameHasTeam gameHasTeam;
 //        if (teamType == TeamType.HOME) {
@@ -65,6 +54,30 @@ public class Game {
                 .collect(Collectors.toMap(e -> e.getKey(),
                         e -> e.getValue().getTeamId()));
     }
+
+    public boolean teamExists (Long teamId) {
+        return getTeamIdsInGame().containsValue(teamId);
+    }
+
+    public boolean isReady() {
+        return homeTeamExist() && awayTeamExist();
+    }
+
+    private boolean homeTeamExist() {
+        return getHomeTeamInfo() != null;
+    }
+
+    private boolean awayTeamExist() {
+        return getAwayTeamInfo() != null;
+    }
+
+//    private void addHomeTeam(Team team) {
+//        this.teams.put(TeamType.HOME.toString(), GameHasTeam.create(team.getId()));
+//    }
+//
+//    private void addAwayTeam(Team team) {
+//        this.teams.put(TeamType.AWAY.toString(), GameHasTeam.create(team.getId()));
+//    }
 
     @Override
     public String toString() {

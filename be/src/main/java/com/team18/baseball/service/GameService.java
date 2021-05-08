@@ -42,23 +42,28 @@ public class GameService {
         if(!team.selectTeam(user.getId())) {
             return false;
         }
+
         teamRepository.save(team);
         return true;
     }
 
     public void start(User user, Long gameId) {
-        //user가 속한 게임이 맞는지 확인한다
-        Long userId = user.getId();
-        Team team = teamRepository.findByUserId(user.getId()).orElseThrow(IllegalStateException::new);
         Game game = gameRepository.findById(gameId).orElseThrow(IllegalStateException::new);
-        Team homeTeam = teamRepository.findById(game.getTeamInGameInfo(TeamType.HOME).getId()).orElseThrow(IllegalStateException::new);
-        Team awayTeam = teamRepository.findById(game.getTeamInGameInfo(TeamType.AWAY).getId()).orElseThrow(IllegalStateException::new);
-        if (!(homeTeam.equals(team) || awayTeam.equals(team))) {
-            //오류 참여할 수 없는 유저의 게임입니다.
+        if(!checkPlayer(user, game)) {
+            throw new IllegalStateException();
+        };
+        if(!game.isReady()) {
+            throw new IllegalStateException();
         }
-
-
-//        if(game.getTeams().
         //이닝을 생성하고 game 정보를 로드한다.
+    }
+
+    public boolean checkPlayer(User user, Game game) {
+        //팀을 선택 안한 유저라면 예외가 발생한다.
+        Team team = teamRepository.findByUserId(user.getId()).orElseThrow(IllegalStateException::new);
+        if(!game.teamExists(team.getId())) {
+            return false;
+        }
+        return true;
     }
 }
