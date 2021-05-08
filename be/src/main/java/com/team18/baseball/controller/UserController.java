@@ -1,5 +1,6 @@
 package com.team18.baseball.controller;
 
+import com.team18.baseball.entity.User;
 import com.team18.baseball.repository.UserRepository;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,7 +18,9 @@ public class UserController {
 
     @PostMapping("/users/{id}")
     public String login(@PathVariable Long id, HttpSession session) {
-        session.setAttribute("user",userRepository.findById(id).orElseThrow(IllegalStateException::new));
+        User user =userRepository.findById(id).orElseThrow(IllegalStateException::new);
+        session.setAttribute("user", user);
+        System.out.println(user);
         return "Success!";
     }
 }
