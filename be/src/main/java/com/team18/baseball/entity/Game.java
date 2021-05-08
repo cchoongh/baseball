@@ -79,16 +79,20 @@ public class Game {
         return getTeamIdsInGame().containsValue(teamId);
     }
 
-    public boolean isReady() {
+    public boolean hasTwoTeams() {
         return homeTeamExist() && awayTeamExist();
     }
 
     private boolean homeTeamExist() {
-        return getHomeTeamInfo() != null;
+        return this.homeUserId != null;
     }
 
     private boolean awayTeamExist() {
-        return getAwayTeamInfo() != null;
+        return this.awayUserId != null;
+    }
+
+    public boolean isPlaying() {
+        return halfInningList.size() != 0;
     }
 
 //    private void addHomeTeam(Team team) {

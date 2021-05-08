@@ -21,7 +21,7 @@ public class GameService {
     }
 
     public List<TeamsInGameDto> getTeamsInGameList() {
-        return Streamable.of(gameRepository.findAll()).map((game)->getTeamsInGame(game)).toList();
+        return Streamable.of(gameRepository.findAll()).map((game) -> getTeamsInGame(game)).toList();
     }
 
     private TeamsInGameDto getTeamsInGame(Game game) {
@@ -42,11 +42,12 @@ public class GameService {
         // 이 게임이 존재하는 게임인지 확인한다.
         Game game = gameRepository.findById(gameId).orElseThrow(IllegalStateException::new);
         // 이 게임이 해당 팀을 갖고 있는지 확인한다
-        if(! game.teamExists(teamId) ) {
+        if (!game.teamExists(teamId)) {
             throw new IllegalStateException();
-        };
+        }
+        ;
         //user가 team을 선택한다.
-        if(!team.selectTeam(user.getId())) {
+        if (!team.selectTeam(user.getId())) {
             return false;
         }
         teamRepository.save(team);
@@ -58,19 +59,24 @@ public class GameService {
 
     public void start(User user, Long gameId) {
         Game game = gameRepository.findById(gameId).orElseThrow(IllegalStateException::new);
-        if(!checkPlayer(user, game)) {
-            throw new IllegalStateException();
-        };
-        if(!game.isReady()) {
+        if (!checkPlayer(user, game)) {
             throw new IllegalStateException();
         }
+        if (!game.hasTwoTeams()) {
+            throw new IllegalStateException();
+        }
+        //game이 이미 진행 중일 때
+        if ( game.isPlaying()) {
+            throw new IllegalStateException();
+        }
+        
         //이닝을 생성하고 game 정보를 로드한다.
     }
 
     public boolean checkPlayer(User user, Game game) {
-        //팀을 선택 안한 유저라면 예외가 발생한다.
+        //유저가 선택한 팀이 없다면 예외가 발생한다.
         Team team = teamRepository.findByUserId(user.getId()).orElseThrow(IllegalStateException::new);
-        if(!game.teamExists(team.getId())) {
+        if (!game.teamExists(team.getId())) {
             return false;
         }
         return true;

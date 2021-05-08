@@ -25,6 +25,7 @@ class GameServiceTest {
     @Autowired
     TeamRepository teamRepository;
 
+
     @Test
     void selectTeam() {
         Long userId = 1L;
@@ -49,6 +50,44 @@ class GameServiceTest {
         assertThatThrownBy(() -> gameService.selectTeam(user2, 1L, notExistTeam))
                 .isInstanceOf(IllegalStateException.class);
     }
+
+    @Test
+    void startGame() {
+            //test1 유저가 각각 팀을 선택했을 때 성공적으로 게임시작
+        Long userId = 1L;
+        User user = userRepository.findById(userId).orElseThrow(IllegalStateException::new);
+        Long teamId = 1L;
+        Team team = teamRepository.findById(teamId).orElseThrow(IllegalStateException::new);
+        Long gameId = 1L;
+        Game game = gameRepository.findById(gameId).orElseThrow(IllegalStateException::new);
+
+        gameService.selectTeam(user, gameId, teamId);
+
+        Long user2Id = 2L;
+        User user2 = userRepository.findById(user2Id).orElseThrow(IllegalStateException::new);
+        Long team2Id = 2L;
+        Team team2 = teamRepository.findById(teamId).orElseThrow(IllegalStateException::new);
+
+        gameService.selectTeam(user2, gameId, team2Id);
+
+        game.teamExists(team2Id);
+        gameService.start(user, gameId);
+    }
+
+    @Test
+    void startSoloTeam() {
+        Long userId = 1L;
+        User user = userRepository.findById(userId).orElseThrow(IllegalStateException::new);
+        Long teamId = 1L;
+        Team team = teamRepository.findById(teamId).orElseThrow(IllegalStateException::new);
+        Long gameId = 1L;
+        Game game = gameRepository.findById(gameId).orElseThrow(IllegalStateException::new);
+
+        gameService.selectTeam(user, gameId, teamId);
+        assertThatThrownBy(() -> gameService.start(user, gameId))
+                .isInstanceOf(IllegalStateException.class);
+    }
+
 
 //    @Test
 //    void checkPlayer() {
