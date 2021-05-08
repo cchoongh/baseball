@@ -26,16 +26,25 @@ public class GameService {
     }
 
     private TeamsInGameDto getTeamsInGame(Game game) {
-        Map<String, GameHasTeam> teams = game.getTeams();
-        TeamSelectionData homeData = getTeamSelectionData(teams, TeamType.HOME);
-        TeamSelectionData awayData = getTeamSelectionData(teams, TeamType.AWAY);
+        TeamSelectionData homeData = getTeamSelectionData(game, TeamType.HOME);
+        TeamSelectionData awayData = getTeamSelectionData(game, TeamType.AWAY);
         return TeamsInGameDto.from(game.getId(), homeData, awayData);
     }
 
-    private TeamSelectionData getTeamSelectionData(Map<String, GameHasTeam> teams, TeamType teamType) {
-        Long teamId = teams.get(teamType.toString()).getTeamId();
-        Team team = teamRepository.findById(teamId).orElseThrow(IllegalStateException::new);
+    private TeamSelectionData getTeamSelectionData(Game game, TeamType teamType) {
+        GameHasTeam gameHasTeam = getTeamInGameInfo(game, teamType);
+        Team team = teamRepository.findById(gameHasTeam.getTeamId()).orElseThrow(IllegalStateException::new);
         return TeamSelectionData.from(team);
+    }
+
+    private GameHasTeam getTeamInGameInfo(Game game, TeamType teamType) {
+        GameHasTeam gameHasTeam;
+        if ( teamType == TeamType.HOME ) {
+            gameHasTeam = game.getHomeTeamInfo();
+        } else {
+            gameHasTeam = game.getAwayTeamInfo();
+        }
+        return gameHasTeam;
     }
 
     public boolean selectTeam(User user, Long teamId) {
@@ -49,7 +58,9 @@ public class GameService {
 
     public void start(User user, Long gameId) {
         //user가 속한 게임이 맞는지 확인한다
-//        TeamRepository.
+        teamRepository.findByUserId(user.getId());
+        Game game = gameRepository.findById(gameId).orElseThrow(IllegalStateException::new);
+//        if(game.getTeams().
         //이닝을 생성하고 game 정보를 로드한다.
     }
 }

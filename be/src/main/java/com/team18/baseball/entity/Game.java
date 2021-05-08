@@ -33,6 +33,14 @@ public class Game {
         return teams;
     }
 
+    public GameHasTeam getHomeTeamInfo() {
+        return teams.get(TeamType.HOME.toString());
+    }
+
+    public GameHasTeam getAwayTeamInfo() {
+        return teams.get(TeamType.AWAY.toString());
+    }
+
     public void addHomeTeam(Team team) {
         this.teams.put(TeamType.HOME.toString(), GameHasTeam.create(team.getId()));
     }
