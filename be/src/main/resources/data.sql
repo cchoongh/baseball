@@ -3,10 +3,10 @@ VALUES ("kkk@honux.com"),
        ("jjj@honux.com"),
        ("qqq@honux.com");
 
-INSERT INTO game(id)
-VALUES (1),
-       (2),
-       (3);
+INSERT INTO game(id, home_user_id, away_user_id)
+VALUES (1, null, null),
+       (2, null, null),
+       (3, null, null);
 
 INSERT INTO team (id, `name`)
 VALUES (1, "hanwha"),

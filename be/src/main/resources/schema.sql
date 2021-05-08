@@ -16,6 +16,8 @@ CREATE TABLE `user`
 CREATE TABLE game
 (
     id int auto_increment,
+    `home_user_id` int,
+    `away_user_id` int,
     primary key (id)
 );
 
@@ -35,7 +37,6 @@ CREATE TABLE `game_has_team`
     `game`     int not null,
     `game_key` varchar(50),
     `score`    int,
-    `user_id`  varchar(50),
     primary key (id),
     foreign key (team_id) references team (id),
     foreign key (game) references game (id)

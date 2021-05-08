@@ -10,6 +10,9 @@ public class Game {
     private final Long id;
     private List<HalfInning> halfInningList = new ArrayList<>();
     private Map<String, GameHasTeam> teams = new HashMap<>();
+    private Long homeUserId;
+    private Long awayUserId;
+
 
     Game(Long id) {
         this.id = id;
@@ -31,6 +34,15 @@ public class Game {
 //        return teams;
 //    }
 
+
+    public Long getHomeUserId() {
+        return homeUserId;
+    }
+
+    public Long getAwayUserId() {
+        return awayUserId;
+    }
+
     private GameHasTeam getHomeTeamInfo() {
         return teams.get(TeamType.HOME.toString());
     }
@@ -39,7 +51,7 @@ public class Game {
         return teams.get(TeamType.AWAY.toString());
     }
 
-//    public GameHasTeam getTeamInGameInfo(TeamType teamType) {
+    //    public GameHasTeam getTeamInGameInfo(TeamType teamType) {
 //        GameHasTeam gameHasTeam;
 //        if (teamType == TeamType.HOME) {
 //            gameHasTeam = getHomeTeamInfo();
@@ -51,11 +63,19 @@ public class Game {
 
     public Map<String, Long> getTeamIdsInGame() {
         return teams.entrySet().stream()
-                .collect(Collectors.toMap(e -> e.getKey(),
+                .collect(Collectors.toMap(Map.Entry::getKey,
                         e -> e.getValue().getTeamId()));
     }
 
-    public boolean teamExists (Long teamId) {
+    private Optional<String> checkTeamType(Long teamId) {
+        return getTeamIdsInGame().entrySet()
+                .stream()
+                .filter(e -> Objects.equals(e.getValue(), teamId))
+                .map(Map.Entry::getKey)
+                .findFirst();
+    }
+
+    public boolean teamExists(Long teamId) {
         return getTeamIdsInGame().containsValue(teamId);
     }
 
@@ -86,5 +106,14 @@ public class Game {
                 ", halfInningList=" + halfInningList +
                 ", teams=" + teams +
                 '}';
+    }
+
+    public void addUserId(Long teamId, Long userId) {
+        String teamType = checkTeamType(teamId).orElseThrow(IllegalStateException::new);
+        if(teamType.equals(TeamType.HOME.toString())) {
+            this.homeUserId = userId;
+        } else {
+            this.awayUserId = userId;
+        }
     }
 }

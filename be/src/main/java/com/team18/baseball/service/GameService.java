@@ -9,7 +9,6 @@ import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class GameService {
@@ -37,13 +36,23 @@ public class GameService {
         return TeamSelectionData.from(team);
     }
 
-    public boolean selectTeam(User user, Long teamId) {
+    public boolean selectTeam(User user, Long gameId, Long teamId) {
+        //이 팀이 존재하는 팀 아이디인지 확인한다.
         Team team = teamRepository.findById(teamId).orElseThrow(IllegalStateException::new);
+        // 이 게임이 존재하는 게임인지 확인한다.
+        Game game = gameRepository.findById(gameId).orElseThrow(IllegalStateException::new);
+        // 이 게임이 해당 팀을 갖고 있는지 확인한다
+        if(! game.teamExists(teamId) ) {
+            throw new IllegalStateException();
+        };
+        //user가 team을 선택한다.
         if(!team.selectTeam(user.getId())) {
             return false;
         }
-
         teamRepository.save(team);
+        // game에 userId를 기록한다.
+        game.addUserId(teamId, user.getId());
+        gameRepository.save(game);
         return true;
     }
 
