@@ -38,7 +38,7 @@ public class GameService {
         return TeamSelectionData.from(team);
     }
 
-    public boolean selectTeam(User user, Long gameId, Long teamId) {
+    public boolean selectTeam(User user, Long teamId) {
         Team team = teamRepository.findById(teamId).orElseThrow(IllegalStateException::new);
         if(!team.selectTeam(user.getId())) {
             return false;

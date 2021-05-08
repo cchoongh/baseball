@@ -1,12 +1,17 @@
 package com.team18.baseball.dto;
 
 public class ResponseDto {
+    private Long gameId;
     private Status status;
     private String message;
 
     private ResponseDto(Status status) {
         this.status = status;
         this.message = status.getMessage();
+    }
+
+    private ResponseDto(Long gameId, Status status) {
+
     }
 
     public static ResponseDto ok() {
