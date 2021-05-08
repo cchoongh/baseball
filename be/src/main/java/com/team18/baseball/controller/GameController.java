@@ -35,8 +35,11 @@ public class GameController {
         return gameService.selectTeam(user, teamId) ? ResponseDto.ok() : ResponseDto.selected();
     }
 
+    //이닝을 만들고
     @GetMapping("/{gameId}/start")
-    public void startGame() {
+    public void startGame(@PathVariable Long gameId, HttpSession session) {
+        User user = HttpSessionUtils.getLoginUser(session).orElseThrow(IllegalStateException::new);
+        gameService.start(user, gameId);
 
     }
 

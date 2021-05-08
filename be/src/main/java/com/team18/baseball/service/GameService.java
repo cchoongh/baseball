@@ -46,4 +46,10 @@ public class GameService {
         teamRepository.save(team);
         return true;
     }
+
+    public void start(User user, Long gameId) {
+        //user가 속한 게임이 맞는지 확인한다
+//        TeamRepository.
+        //이닝을 생성하고 game 정보를 로드한다.
+    }
 }
