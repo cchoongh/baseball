@@ -1,8 +1,8 @@
-package com.team18.baseball.domain;
+package com.team18.baseball.entity;
 
 import org.springframework.data.annotation.Id;
 
-public class PlateApperance {
+public class PlateAppearance {
     @Id
     private final Long id;
     private final Long playerId;
@@ -10,7 +10,7 @@ public class PlateApperance {
     private final int hit;
     private final int out;
 
-    PlateApperance(Long id, Long playerId, int atBat, int hit, int out) {
+    PlateAppearance(Long id, Long playerId, int atBat, int hit, int out) {
         this.id = id;
         this.playerId = playerId;
         this.atBat = atBat;
@@ -18,10 +18,10 @@ public class PlateApperance {
         this.out = out;
     }
 
-    public static PlateApperance create (Long id,
-                                         Long playerId,
-                                         int atBat, int hit, int out) {
-        return new PlateApperance(id,
+    public static PlateAppearance create (Long id,
+                                          Long playerId,
+                                          int atBat, int hit, int out) {
+        return new PlateAppearance(id,
                 playerId,
                 atBat, hit, out);
     }
