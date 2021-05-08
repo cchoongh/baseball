@@ -3,6 +3,7 @@ package com.team18.baseball.entity;
 import org.springframework.data.annotation.Id;
 
 import java.util.List;
+import java.util.Objects;
 
 public class Team {
     @Id
@@ -40,5 +41,18 @@ public class Team {
         }
         this.userId = userId;
         return true;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Team)) return false;
+        Team team = (Team) o;
+        return getId().equals(team.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 }

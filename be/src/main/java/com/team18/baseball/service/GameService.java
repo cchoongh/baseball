@@ -31,20 +31,10 @@ public class GameService {
         return TeamsInGameDto.from(game.getId(), homeData, awayData);
     }
 
-    private TeamSelectionData getTeamSelectionData(Game game, TeamType teamType) {
-        GameHasTeam gameHasTeam = getTeamInGameInfo(game, teamType);
-        Team team = teamRepository.findById(gameHasTeam.getTeamId()).orElseThrow(IllegalStateException::new);
+    public TeamSelectionData getTeamSelectionData(Game game, TeamType teamType) {
+        Long teamId = game.getTeamIdsInGame().get(teamType.toString());
+        Team team = teamRepository.findById(teamId).orElseThrow(IllegalStateException::new);
         return TeamSelectionData.from(team);
-    }
-
-    private GameHasTeam getTeamInGameInfo(Game game, TeamType teamType) {
-        GameHasTeam gameHasTeam;
-        if ( teamType == TeamType.HOME ) {
-            gameHasTeam = game.getHomeTeamInfo();
-        } else {
-            gameHasTeam = game.getAwayTeamInfo();
-        }
-        return gameHasTeam;
     }
 
     public boolean selectTeam(User user, Long teamId) {
@@ -58,8 +48,16 @@ public class GameService {
 
     public void start(User user, Long gameId) {
         //user가 속한 게임이 맞는지 확인한다
-        teamRepository.findByUserId(user.getId());
+        Long userId = user.getId();
+        Team team = teamRepository.findByUserId(user.getId()).orElseThrow(IllegalStateException::new);
         Game game = gameRepository.findById(gameId).orElseThrow(IllegalStateException::new);
+        Team homeTeam = teamRepository.findById(game.getTeamInGameInfo(TeamType.HOME).getId()).orElseThrow(IllegalStateException::new);
+        Team awayTeam = teamRepository.findById(game.getTeamInGameInfo(TeamType.AWAY).getId()).orElseThrow(IllegalStateException::new);
+        if (!(homeTeam.equals(team) || awayTeam.equals(team))) {
+            //오류 참여할 수 없는 유저의 게임입니다.
+        }
+
+
 //        if(game.getTeams().
         //이닝을 생성하고 game 정보를 로드한다.
     }
