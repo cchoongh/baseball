@@ -55,23 +55,37 @@ CREATE TABLE player
 
 CREATE TABLE half_inning
 (
-    id          int                auto_increment,
-    game        int                not null,
-    game_key    int,
-    inning      int                   not null,
-    inning_type varchar(50)           not null,
-    first_base  boolean default false not null,
-    second_base boolean default false not null,
-    third_base  boolean default false not null,
-    score       int                   not null,
-    strike      int                   not null,
-    `ball`      int                   not null,
-    `out`       int                   not null,
+    `id`          int                auto_increment,
+    `game`        int                not null,
+    `game_key`    int,
+    `inning`      int                   not null,
+    `inning_type` varchar(50)           not null,
+    `score`       int                   not null,
     `is_end`    boolean default false not null,
-    batter_id   int                   not null,
     primary key (id),
     foreign key (game) references game (id)
 );
+
+--
+-- CREATE TABLE half_inning_save
+-- (
+--     id          int                auto_increment,
+--     game        int                not null,
+--     game_key    int,
+--     inning      int                   not null,
+--     inning_type varchar(50)           not null,
+--     first_base  boolean default false not null,
+--     second_base boolean default false not null,
+--     third_base  boolean default false not null,
+--     score       int                   not null,
+--     strike      int                   not null,
+--     `ball`      int                   not null,
+--     `out`       int                   not null,
+--     `is_end`    boolean default false not null,
+--     batter_id   int                   not null,
+--     primary key (id),
+--     foreign key (game) references game (id)
+-- );
 
 -- CREATE TABLE plate_appearance
 -- (

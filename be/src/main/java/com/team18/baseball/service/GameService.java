@@ -45,7 +45,6 @@ public class GameService {
         if (!game.teamExists(teamId)) {
             throw new IllegalStateException();
         }
-        ;
         //user가 team을 선택한다.
         if (!team.selectTeam(user.getId())) {
             return false;
@@ -69,8 +68,9 @@ public class GameService {
         if ( game.isPlaying()) {
             throw new IllegalStateException();
         }
-        
         //이닝을 생성하고 game 정보를 로드한다.
+
+
     }
 
     public boolean checkPlayer(User user, Game game) {
