@@ -35,4 +35,15 @@ public class HalfInning {
     public String getInningType() {
         return inningType;
     }
+
+    @Override
+    public String toString() {
+        return "HalfInning{" +
+                "id=" + id +
+                ", inning=" + inning +
+                ", inningType='" + inningType + '\'' +
+                ", score=" + score +
+                ", isEnd=" + isEnd +
+                '}';
+    }
 }

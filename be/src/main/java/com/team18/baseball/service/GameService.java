@@ -71,8 +71,8 @@ public class GameService {
             throw new IllegalStateException();
         }
         //이닝을 생성하고 game 정보를 로드한다.
-        HalfInning halfInning = game.addInning();
-        halfInningRepository.save(halfInning);
+        game.addInning();
+        gameRepository.save(game);
     }
 
     public boolean checkPlayer(User user, Game game) {

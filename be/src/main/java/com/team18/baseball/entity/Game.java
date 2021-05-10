@@ -128,15 +128,15 @@ public class Game {
         }
     }
 
-    public HalfInning addInning() {
+    public void addInning() {
         if(halfInnings.size() == 0) {
-            return HalfInning.create(1,  InningType.TOP.toString());
+            halfInnings.add(HalfInning.create(1,  InningType.TOP.toString()));
         }
 
         HalfInning lastInning = halfInnings.get(halfInnings.size()-1);
         if(lastInning.getInningType().equals(InningType.TOP.toString())) {
-            return HalfInning.create(lastInning.getInning(), InningType.BOTTOM.toString());
+            halfInnings.add(HalfInning.create(lastInning.getInning(), InningType.BOTTOM.toString()));
         }
-        return HalfInning.create(lastInning.getInning() + 1, InningType.TOP.toString());
+        halfInnings.add(HalfInning.create(lastInning.getInning() + 1, InningType.TOP.toString()));
     }
 }

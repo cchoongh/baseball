@@ -1,9 +1,8 @@
 package com.team18.baseball.service;
 
-import com.team18.baseball.entity.Game;
-import com.team18.baseball.entity.Team;
-import com.team18.baseball.entity.User;
+import com.team18.baseball.entity.*;
 import com.team18.baseball.repository.GameRepository;
+import com.team18.baseball.repository.HalfInningRepository;
 import com.team18.baseball.repository.TeamRepository;
 import com.team18.baseball.repository.UserRepository;
 import org.junit.jupiter.api.Test;
@@ -24,6 +23,8 @@ class GameServiceTest {
     GameRepository gameRepository;
     @Autowired
     TeamRepository teamRepository;
+    @Autowired
+    HalfInningRepository halfInningRepository;
 
 
     @Test
@@ -53,7 +54,7 @@ class GameServiceTest {
 
     @Test
     void startGame() {
-            //test1 유저가 각각 팀을 선택했을 때 성공적으로 게임시작
+        //test1 유저가 각각 팀을 선택했을 때 성공적으로 게임시작
         Long userId = 1L;
         User user = userRepository.findById(userId).orElseThrow(IllegalStateException::new);
         Long teamId = 1L;
@@ -72,6 +73,10 @@ class GameServiceTest {
 
         game.teamExists(team2Id);
         gameService.start(user, gameId);
+
+        HalfInning halfInning = halfInningRepository.findById(1L).orElseThrow(IllegalStateException::new);
+        System.out.println(halfInning.toString());
+        assertThat(halfInning.getInningType()).isEqualTo(InningType.TOP.toString());
     }
 
     @Test
