@@ -61,21 +61,16 @@ public class GameService {
 
         //메소드 묶어줘야겠다.
         //2명의 유저가 이 게임을 선택했는가.
-        if (!game.hasTwoUsers()) {
-            throw new IllegalStateException();
-        }
+       if(!game.isReadyToStart()) {
+           throw new IllegalStateException();
+       }
         //그 중 한 명이 해당 user 인가
         if (!game.checkUser(user.getId())) {
             throw new IllegalStateException();
         }
 
-        //game이 이미 진행 중일 때 예외발생
-        if ( game.isPlaying()) {
-            throw new IllegalStateException();
-        }
-
         //이닝을 생성하고 game 정보를 로드한다.
-        HalfInning halfInning = game.addInning();
+        HalfInning halfInning = game.addHalfInning();
         gameRepository.save(game);
 
         //응답객체를 만든다.
@@ -91,4 +86,25 @@ public class GameService {
 
         return StartGameInfo.from(gameInfo, fieldingInfo, battingInfo);
     }
+
+    public void pitch(User user, Long gameId) {
+        //위의 메소드랑 중복
+        Game game = gameRepository.findById(gameId).orElseThrow(IllegalStateException::new);
+        if (!game.checkUser(user.getId())) {
+            throw new IllegalStateException();
+        }
+
+        //pitch 결과를 halfInning에 반영한다.
+        List<HalfInning> halfInnings = game.getHalfInnings();
+        HalfInning lastHalfInning = halfInnings.get(halfInnings.size() - 1);
+        HalfInning.createNext(lastHalfInning);
+
+    }
+
+    //이닝이 끝났다고 post 할 때
+    //결과를 game score에 반영, inning end 반영
+
+    // 게임 end라고 post 해주세용
+
+    //is Playing 부분 다 삭제할 듯 ..
 }

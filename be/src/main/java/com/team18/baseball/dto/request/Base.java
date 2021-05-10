@@ -1,4 +1,4 @@
-package com.team18.baseball.dto;
+package com.team18.baseball.dto.request;
 
 public class Base {
     private int first;

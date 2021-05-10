@@ -9,11 +9,11 @@ import java.util.stream.Collectors;
 public class Game {
     @Id
     private final Long id;
-    private List<HalfInning> halfInnings = new ArrayList<>();
-    private Map<String, GameHasTeam> teams = new HashMap<>();
+    private final List<HalfInning> halfInnings = new ArrayList<>();
+    private final Map<String, GameHasTeam> teams = new HashMap<>();
     private Long homeUserId;
     private Long awayUserId;
-
+    private boolean isEnd = false;
 
     Game(Long id) {
         this.id = id;
@@ -34,6 +34,10 @@ public class Game {
 //    public Map<String, GameHasTeam> getTeams() {
 //        return teams;
 //    }
+
+    public boolean isEnd() {
+        return isEnd;
+    }
 
     @JsonIgnore
     public Long getHomeUserId() {
@@ -85,7 +89,7 @@ public class Game {
     }
 
     //2명의 유저가 이 게임을 선택했는가
-    public boolean hasTwoUsers() {
+    private boolean hasTwoUsers() {
         return homeUserExist() && awayUserExist();
     }
 
@@ -98,7 +102,7 @@ public class Game {
     }
 
     public boolean isPlaying() {
-        return halfInnings.size() != 0;
+        return isStarted() && (!isEnd);
     }
 
 //    private void addHomeTeam(Team team) {
@@ -111,6 +115,14 @@ public class Game {
 
     public boolean checkUser(Long userId) {
         return (homeUserId.equals(userId)) || ((awayUserId.equals(userId)));
+    }
+
+    public boolean isReadyToStart() {
+        return hasTwoUsers() && !isStarted() && !isEnd;
+    }
+
+    private boolean isStarted() {
+        return halfInnings.size() != 0;
     }
 
     @Override
@@ -133,7 +145,7 @@ public class Game {
         }
     }
 
-    public HalfInning addInning() {
+    public HalfInning addHalfInning() {
         if(halfInnings.size() == 0) {
             HalfInning halfInning = HalfInning.create(1,  InningType.TOP.toString());
             halfInnings.add(halfInning);

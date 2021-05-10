@@ -1,8 +1,7 @@
 package com.team18.baseball.controller;
 
 import com.team18.baseball.HttpSessionUtils;
-import com.team18.baseball.dto.Batter;
-import com.team18.baseball.dto.PitchResult;
+import com.team18.baseball.dto.request.PitchResult;
 import com.team18.baseball.dto.StartGameInfo;
 import com.team18.baseball.response.Response;
 import com.team18.baseball.dto.TeamsInGame;
@@ -42,5 +41,11 @@ public class GameController {
     public StartGameInfo startGame(@PathVariable Long gameId, HttpSession session) {
         User user = HttpSessionUtils.getLoginUser(session).orElseThrow(IllegalStateException::new);
         return gameService.start(user, gameId);
+    }
+
+    @PostMapping("/{gameId}/pitch)")
+    public void pitch(@PathVariable PitchResult pitchResult, @PathVariable Long gameId, HttpSession session) {
+        User user = HttpSessionUtils.getLoginUser(session).orElseThrow(IllegalStateException::new);
+        gameService.pitch(user, gameId);
     }
 }

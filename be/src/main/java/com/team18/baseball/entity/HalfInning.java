@@ -28,12 +28,29 @@ public class HalfInning {
                 false);
     }
 
+    public static final HalfInning createNext(HalfInning lastHalfInning) {
+        if(lastHalfInning.inningType.toString().equals(InningType.TOP.toString())) {
+            return new HalfInning(null,
+                    lastHalfInning.getInning(), InningType.BOTTOM.toString(),
+                    0,
+                    false);
+        }
+        return new HalfInning(null,
+                lastHalfInning.getInning(), InningType.TOP.toString(),
+                0,
+                false);
+    }
+
     public int getInning() {
         return inning;
     }
 
     public String getInningType() {
         return inningType;
+    }
+
+    public boolean isEnd() {
+        return isEnd;
     }
 
     @Override
