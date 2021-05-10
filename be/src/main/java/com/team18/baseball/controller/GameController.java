@@ -46,6 +46,6 @@ public class GameController {
     @PostMapping("/{gameId}/pitch)")
     public void pitch(@PathVariable PitchResult pitchResult, @PathVariable Long gameId, HttpSession session) {
         User user = HttpSessionUtils.getLoginUser(session).orElseThrow(IllegalStateException::new);
-        gameService.pitch(user, gameId);
+        gameService.pitch(user, gameId, pitchResult);
     }
 }

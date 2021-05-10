@@ -1,6 +1,7 @@
 package com.team18.baseball.service;
 
 import com.team18.baseball.dto.*;
+import com.team18.baseball.dto.request.PitchResult;
 import com.team18.baseball.entity.*;
 import com.team18.baseball.repository.GameRepository;
 import com.team18.baseball.repository.TeamRepository;
@@ -87,18 +88,21 @@ public class GameService {
         return StartGameInfo.from(gameInfo, fieldingInfo, battingInfo);
     }
 
-    public void pitch(User user, Long gameId) {
+    public void pitch(User user, Long gameId, PitchResult pitchResult) {
         //위의 메소드랑 중복
         Game game = gameRepository.findById(gameId).orElseThrow(IllegalStateException::new);
         if (!game.checkUser(user.getId())) {
             throw new IllegalStateException();
         }
 
-        //pitch 결과를 halfInning에 반영한다.
+        if(!game.isPlaying()) {
+            throw new IllegalStateException();
+        }
+
+        //pitch 결과를 halfInning에 반영한다. (이닝 추가할 때, 9회말 9회 끝이면 추가 예정.. 검증 로직.. 검증 많아..)
         List<HalfInning> halfInnings = game.getHalfInnings();
         HalfInning lastHalfInning = halfInnings.get(halfInnings.size() - 1);
-        HalfInning.createNext(lastHalfInning);
-
+        lastHalfInning.update(pitchResult);
     }
 
     //이닝이 끝났다고 post 할 때

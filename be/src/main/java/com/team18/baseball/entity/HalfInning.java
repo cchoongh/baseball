@@ -1,5 +1,6 @@
 package com.team18.baseball.entity;
 
+import com.team18.baseball.dto.request.PitchResult;
 import org.springframework.data.annotation.Id;
 
 public class HalfInning {
@@ -62,5 +63,12 @@ public class HalfInning {
                 ", score=" + score +
                 ", isEnd=" + isEnd +
                 '}';
+    }
+
+    public void update(PitchResult pitchResult) {
+        if(isEnd) {
+            throw new IllegalStateException();
+        }
+        score = pitchResult.getScore().getBatting_team();
     }
 }

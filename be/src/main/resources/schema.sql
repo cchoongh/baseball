@@ -1,4 +1,3 @@
-DROP TABLE IF EXISTS inning_type;
 DROP TABLE IF EXISTS `half_inning`;
 DROP TABLE IF EXISTS player;
 DROP TABLE IF EXISTS `game_has_team`;
@@ -18,6 +17,7 @@ CREATE TABLE game
     id int auto_increment,
     `home_user_id` int,
     `away_user_id` int,
+    `is_end` boolean,
     primary key (id)
 );
 
@@ -110,11 +110,3 @@ CREATE TABLE half_inning
 --     primary key (id),
 --     foreign key (plate_appearance_id) references plate_appearance (id)
 -- );
-
-
-CREATE TABLE inning_type
-(
-    `half_inning`      INT,
-    `inning_type_enum` CHAR(10),
-    FOREIGN KEY (`half_inning`) REFERENCES `half_inning` (id)
-)
