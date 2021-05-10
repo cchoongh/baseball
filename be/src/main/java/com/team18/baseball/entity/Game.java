@@ -31,9 +31,9 @@ public class Game {
         return halfInnings;
     }
 
-//    public Map<String, GameHasTeam> getTeams() {
-//        return teams;
-//    }
+    public Map<String, GameHasTeam> getTeams() {
+        return teams;
+    }
 
     @JsonIgnore
     public Long getHomeUserId() {
@@ -46,12 +46,12 @@ public class Game {
     }
 
     @JsonIgnore
-    private GameHasTeam getHomeTeamInfo() {
+    public GameHasTeam getHomeTeamInfo() {
         return teams.get(TeamType.HOME.toString());
     }
 
     @JsonIgnore
-    private GameHasTeam getAwayTeamInfo() {
+    public GameHasTeam getAwayTeamInfo() {
         return teams.get(TeamType.AWAY.toString());
     }
 

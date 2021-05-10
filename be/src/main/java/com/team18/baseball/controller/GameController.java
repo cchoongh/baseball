@@ -42,4 +42,17 @@ public class GameController {
 
     }
 
+    @GetMapping("/{gameId}/score")
+    public void getScore(@PathVariable Long gameId, HttpSession session) {
+        User user = HttpSessionUtils.getLoginUser(session).orElseThrow(IllegalStateException::new);
+        //gameService.
+    }
+
+    @GetMapping("/{gameId}/players")
+    public void getPlayers(@PathVariable Long gameId, HttpSession session) {
+        User user = HttpSessionUtils.getLoginUser(session).orElseThrow(IllegalStateException::new);
+        //gameService.
+
+    }
+
 }

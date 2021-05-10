@@ -1,15 +1,15 @@
 package com.team18.baseball.service;
 
-import com.team18.baseball.dto.GameInfo;
-import com.team18.baseball.dto.TeamSelectionData;
-import com.team18.baseball.dto.TeamsInGame;
+import com.team18.baseball.dto.*;
 import com.team18.baseball.entity.*;
 import com.team18.baseball.repository.GameRepository;
 import com.team18.baseball.repository.HalfInningRepository;
+import com.team18.baseball.repository.PlateAppearanceRepository;
 import com.team18.baseball.repository.TeamRepository;
 import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -17,11 +17,14 @@ public class GameService {
     private final GameRepository gameRepository;
     private final TeamRepository teamRepository;
     private final HalfInningRepository halfInningRepository;
+    private final PlateAppearanceRepository plateAppearanceRepository;
 
-    public GameService(GameRepository gameRepository, TeamRepository teamRepository, HalfInningRepository halfInningRepository) {
+    public GameService(GameRepository gameRepository, TeamRepository teamRepository,
+                       HalfInningRepository halfInningRepository, PlateAppearanceRepository plateAppearanceRepository) {
         this.gameRepository = gameRepository;
         this.teamRepository = teamRepository;
         this.halfInningRepository = halfInningRepository;
+        this.plateAppearanceRepository = plateAppearanceRepository;
     }
 
     public List<TeamsInGame> getTeamsInGameList() {
@@ -87,4 +90,27 @@ public class GameService {
         }
         return true;
     }
+
+//    public ScoreDTO getScore() {
+//        // HalfInning.getScore() -> ScoreDTO
+//    }
+
+    //player별 PlateAppearance를 가져옴
+    public List<PlateAppearanceDTO> getPlayersPlateAppearance(User user, Long gameId) {
+        Game game = gameRepository.findById(gameId).orElseThrow(IllegalStateException::new);
+        GameHasTeam GameHasHomeTeam = game.getHomeTeamInfo();
+        Long homeTeamId = GameHasHomeTeam.getTeamId();
+        Team homeTeam = teamRepository.findById(homeTeamId).orElseThrow(IllegalStateException::new);
+        List<Player> players = homeTeam.getPlayers();
+        List<PlateAppearanceDTO> result = new ArrayList<>();
+        for(Player player : players) {
+            PlateAppearance playerPAs = plateAppearanceRepository.findByPlayerId(player.getId());
+            PlateAppearanceDTO playerPAsDTO = PlateAppearanceDTO.from(playerPAs.getId(), playerPAs.getPlayerId(), playerPAs.getAtBat(), playerPAs.getHit(), playerPAs.getOut());
+            result.add(playerPAsDTO);
+        }
+        return result;
+    }
+
+
+
 }
