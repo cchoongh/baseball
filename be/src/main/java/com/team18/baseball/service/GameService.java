@@ -82,6 +82,5 @@ public class GameService {
         gameRepository.save(game);
         //응답객체를 만든다.
         GameInfo gameInfo = GameInfo.from(game, halfInning);
-
     }
 }
