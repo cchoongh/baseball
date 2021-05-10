@@ -7,20 +7,34 @@ public class Player {
     private final Long id;
     private final Long team;
     private final String name;
+    private final int uniformNumber;
     private boolean isPitcher;
 
-    Player(Long id, Long team, String name, boolean isPitcher) {
+    Player(Long id, Long team, String name, int uniformNumber, boolean isPitcher) {
         this.id = id;
         this.team = team;
         this.name = name;
+        this.uniformNumber = uniformNumber;
         this.isPitcher = isPitcher;
+    }
+
+    public static Player create(Long id, Long team, String name, int uniformNumber) {
+        return new Player(id, team, name, uniformNumber, false);
     }
 
     public Long getId() {
         return id;
     }
 
-    public static Player create(Long id, Long team, String name) {
-        return new Player(id, team, name, false);
+    public String getName() {
+        return name;
+    }
+
+    public int getUniformNumber() {
+        return uniformNumber;
+    }
+
+    public boolean isPitcher() {
+        return isPitcher;
     }
 }

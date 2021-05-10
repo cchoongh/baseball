@@ -1,41 +1,26 @@
 package com.team18.baseball.dto;
 
+import java.util.List;
+
 public class PlateAppearanceDTO {
-    private final Long id;
-    private final String playerName;
-    private final int atBat;
-    private final int hit;
-    private final int out;
 
-    private PlateAppearanceDTO(Long id, String playerName, int atBat, int hit, int out) {
-        this.id = id;
-        this.playerName = playerName;
-        this.atBat = atBat;
-        this.hit = hit;
-        this.out = out;
+    private final List<PlateAppearanceInfo> fieldingTeam;
+    private final List<PlateAppearanceInfo> battingTeam;
+
+    private PlateAppearanceDTO(List<PlateAppearanceInfo> fieldingTeam, List<PlateAppearanceInfo> battingTeam) {
+        this.fieldingTeam = fieldingTeam;
+        this.battingTeam = battingTeam;
     }
 
-    public static PlateAppearanceDTO from(Long id, String playerName, int atBat, int hit, int out) {
-        return new PlateAppearanceDTO(id, playerName, atBat, hit, out);
+    public static PlateAppearanceDTO from(List<PlateAppearanceInfo> fieldingTeam, List<PlateAppearanceInfo> battingTeam) {
+        return new PlateAppearanceDTO(fieldingTeam, battingTeam);
     }
 
-    public Long getId() {
-        return id;
+    public List<PlateAppearanceInfo> getFieldingTeam() {
+        return fieldingTeam;
     }
 
-    public String getPlayerName() {
-        return playerName;
-    }
-
-    public int getAtBat() {
-        return atBat;
-    }
-
-    public int getHit() {
-        return hit;
-    }
-
-    public int getOut() {
-        return out;
+    public List<PlateAppearanceInfo> getBattingTeam() {
+        return battingTeam;
     }
 }

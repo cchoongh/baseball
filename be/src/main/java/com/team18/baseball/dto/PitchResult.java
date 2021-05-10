@@ -1,4 +1,5 @@
 package com.team18.baseball.dto;
 
-public class BattingTeam {
+public class PitchResult {
+
 }

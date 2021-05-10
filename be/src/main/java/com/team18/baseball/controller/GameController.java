@@ -1,6 +1,9 @@
 package com.team18.baseball.controller;
 
 import com.team18.baseball.HttpSessionUtils;
+import com.team18.baseball.dto.Batter;
+import com.team18.baseball.dto.PitchResult;
+import com.team18.baseball.dto.StartGameInfo;
 import com.team18.baseball.response.Response;
 import com.team18.baseball.dto.TeamsInGame;
 import com.team18.baseball.entity.User;
@@ -24,10 +27,12 @@ public class GameController {
         return gameService.getTeamsInGameList();
     }
 
-//    @GetMapping("/test")
-//    public Long test() {
-//        return teamRepository.findById(2L).orElseThrow(IllegalStateException::new).getUserId();
-//    }
+    @PostMapping("/test")
+    public Batter test(Batter batter) {
+        System.out.println("야호");
+        return batter;
+    }
+
 
     @PostMapping("/{gameId}/team/{teamId}")
     public Response selectTeam(@PathVariable Long gameId, @PathVariable Long teamId, HttpSession session) {
@@ -36,23 +41,29 @@ public class GameController {
     }
 
     @GetMapping("/{gameId}/start")
-    public void startGame(@PathVariable Long gameId, HttpSession session) {
+    public StartGameInfo startGame(@PathVariable Long gameId, HttpSession session) {
         User user = HttpSessionUtils.getLoginUser(session).orElseThrow(IllegalStateException::new);
-        gameService.start(user, gameId);
+        return gameService.start(user, gameId);
+    }
 
+    @PostMapping("/{gameId}/pitch)")
+    public void pitch(@PathVariable PitchResult pitchResult, @PathVariable Long gameId, HttpSession session) {
+        User user = HttpSessionUtils.getLoginUser(session).orElseThrow(IllegalStateException::new);
+        // gameService.pitch(user, gameId);
     }
 
     @GetMapping("/{gameId}/score")
     public void getScore(@PathVariable Long gameId, HttpSession session) {
         User user = HttpSessionUtils.getLoginUser(session).orElseThrow(IllegalStateException::new);
-        //gameService.
+        // gameService.get
     }
 
     @GetMapping("/{gameId}/players")
     public void getPlayers(@PathVariable Long gameId, HttpSession session) {
         User user = HttpSessionUtils.getLoginUser(session).orElseThrow(IllegalStateException::new);
-        gameService.getPlayersPlateAppearance(user, gameId);
+        gameService.getPlayersPlateAppearance(gameId);
 
     }
+
 
 }

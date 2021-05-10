@@ -45,10 +45,11 @@ CREATE TABLE `game_has_team`
 
 CREATE TABLE player
 (
-    id         int                   auto_increment,
-    team       int                   not null,
-    team_key   int,
-    `name`     varchar(50)           not null,
+    id              int                   auto_increment,
+    team            int                   not null,
+    team_key        int,
+    `name`          varchar(50)           not null,
+    `uniform_number` int,
     is_pitcher boolean default false not null,
     primary key (id),
     foreign key (team) references team (id)

@@ -36,6 +36,14 @@ public class HalfInning {
         return inningType;
     }
 
+    public int getScore() {
+        return score;
+    }
+
+    public boolean isEnd() {
+        return isEnd;
+    }
+
     @Override
     public String toString() {
         return "HalfInning{" +
