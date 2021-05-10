@@ -105,7 +105,8 @@ public class GameService {
         List<PlateAppearanceDTO> result = new ArrayList<>();
         for(Player player : players) {
             PlateAppearance playerPAs = plateAppearanceRepository.findByPlayerId(player.getId());
-            PlateAppearanceDTO playerPAsDTO = PlateAppearanceDTO.from(playerPAs.getId(), playerPAs.getPlayerId(), playerPAs.getAtBat(), playerPAs.getHit(), playerPAs.getOut());
+            PlateAppearanceDTO playerPAsDTO = PlateAppearanceDTO.from(playerPAs.getId(), playerPAs.getPlayerName(),
+                    playerPAs.getAtBat(), playerPAs.getHit(), playerPAs.getOut());
             result.add(playerPAsDTO);
         }
         return result;

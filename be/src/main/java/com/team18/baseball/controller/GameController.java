@@ -51,7 +51,7 @@ public class GameController {
     @GetMapping("/{gameId}/players")
     public void getPlayers(@PathVariable Long gameId, HttpSession session) {
         User user = HttpSessionUtils.getLoginUser(session).orElseThrow(IllegalStateException::new);
-        //gameService.
+        gameService.getPlayersPlateAppearance(user, gameId);
 
     }
 
