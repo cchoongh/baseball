@@ -16,6 +16,10 @@ public class Player {
         this.isPitcher = isPitcher;
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public static Player create(Long id, Long team, String name) {
         return new Player(id, team, name, false);
     }
