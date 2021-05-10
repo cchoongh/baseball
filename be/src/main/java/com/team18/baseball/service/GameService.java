@@ -3,7 +3,6 @@ package com.team18.baseball.service;
 import com.team18.baseball.dto.*;
 import com.team18.baseball.entity.*;
 import com.team18.baseball.repository.GameRepository;
-import com.team18.baseball.repository.HalfInningRepository;
 import com.team18.baseball.repository.TeamRepository;
 import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Service;
@@ -14,12 +13,10 @@ import java.util.List;
 public class GameService {
     private final GameRepository gameRepository;
     private final TeamRepository teamRepository;
-    private final HalfInningRepository halfInningRepository;
 
-    public GameService(GameRepository gameRepository, TeamRepository teamRepository, HalfInningRepository halfInningRepository) {
+    public GameService(GameRepository gameRepository, TeamRepository teamRepository) {
         this.gameRepository = gameRepository;
         this.teamRepository = teamRepository;
-        this.halfInningRepository = halfInningRepository;
     }
 
     public List<TeamsInGame> getTeamsInGameList() {
@@ -93,6 +90,5 @@ public class GameService {
         TeamInfo battingInfo = TeamInfo.from(awayTeam, TeamType.AWAY, homeTeamInfo.getScore());
 
         return StartGameInfo.from(gameInfo, fieldingInfo, battingInfo);
-
     }
 }

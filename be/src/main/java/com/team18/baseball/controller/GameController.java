@@ -1,6 +1,7 @@
 package com.team18.baseball.controller;
 
 import com.team18.baseball.HttpSessionUtils;
+import com.team18.baseball.dto.Batter;
 import com.team18.baseball.dto.StartGameInfo;
 import com.team18.baseball.response.Response;
 import com.team18.baseball.dto.TeamsInGame;
@@ -25,10 +26,12 @@ public class GameController {
         return gameService.getTeamsInGameList();
     }
 
-//    @GetMapping("/test")
-//    public Long test() {
-//        return teamRepository.findById(2L).orElseThrow(IllegalStateException::new).getUserId();
-//    }
+    @PostMapping("/test")
+    public Batter test(Batter batter) {
+        System.out.println("야호");
+        return batter;
+    }
+
 
     @PostMapping("/{gameId}/team/{teamId}")
     public Response selectTeam(@PathVariable Long gameId, @PathVariable Long teamId, HttpSession session) {

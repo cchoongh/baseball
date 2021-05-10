@@ -6,9 +6,10 @@ import com.team18.baseball.entity.Player;
 public class PlayerInfo {
     private final Long id;
     private final String name;
+    @JsonProperty("uniform_number")
     private final int uniformNumber;
 
-    private PlayerInfo(Long id, String name, int uniformNumber) {
+    PlayerInfo(Long id, String name, int uniformNumber) {
         this.id = id;
         this.name = name;
         this.uniformNumber = uniformNumber;
