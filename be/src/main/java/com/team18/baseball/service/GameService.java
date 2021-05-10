@@ -61,30 +61,27 @@ public class GameService {
 
     public void start(User user, Long gameId) {
         Game game = gameRepository.findById(gameId).orElseThrow(IllegalStateException::new);
-        if (!checkPlayer(user, game)) {
+
+        //메소드 묶어줘야겠다.
+        //2명의 유저가 이 게임을 선택했는가.
+        if (!game.hasTwoUsers()) {
             throw new IllegalStateException();
         }
-        if (!game.hasTwoTeams()) {
+        //그 중 한 명이 해당 user 인가
+        if (!game.checkUser(user.getId())) {
             throw new IllegalStateException();
         }
+
         //game이 이미 진행 중일 때 예외발생
         if ( game.isPlaying()) {
             throw new IllegalStateException();
         }
+
         //이닝을 생성하고 game 정보를 로드한다.
         HalfInning halfInning = game.addInning();
         gameRepository.save(game);
         //응답객체를 만든다.
         GameInfo gameInfo = GameInfo.from(game, halfInning);
 
-    }
-
-    public boolean checkPlayer(User user, Game game) {
-        //유저가 선택한 팀이 없다면 예외가 발생한다.
-        Team team = teamRepository.findByUserId(user.getId()).orElseThrow(IllegalStateException::new);
-        if (!game.teamExists(team.getId())) {
-            return false;
-        }
-        return true;
     }
 }

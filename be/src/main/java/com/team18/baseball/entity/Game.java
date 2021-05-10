@@ -85,7 +85,7 @@ public class Game {
     }
 
     //2명의 유저가 이 게임을 선택했는가
-    public boolean hasTwoTeams() {
+    public boolean hasTwoUsers() {
         return homeTeamExist() && awayTeamExist();
     }
 
@@ -108,6 +108,10 @@ public class Game {
 //    private void addAwayTeam(Team team) {
 //        this.teams.put(TeamType.AWAY.toString(), GameHasTeam.create(team.getId()));
 //    }
+
+    public boolean checkUser(Long userId) {
+        return (homeUserId.equals(userId)) || ((awayUserId.equals(userId)));
+    }
 
     @Override
     public String toString() {
