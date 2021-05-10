@@ -54,6 +54,10 @@ public class HalfInning {
         return isEnd;
     }
 
+    public int getScore() {
+        return score;
+    }
+
     @Override
     public String toString() {
         return "HalfInning{" +
@@ -65,10 +69,19 @@ public class HalfInning {
                 '}';
     }
 
-    public void update(PitchResult pitchResult) {
+    //home팀이면은 top일 때 pitch가능
+    public void update(PitchResult pitchResult, TeamType teamType) {
         if(isEnd) {
             throw new IllegalStateException();
         }
-        score = pitchResult.getScore().getBatting_team();
+        if((teamType == TeamType.HOME) && (inningType.equals(InningType.BOTTOM.toString()))) {
+            throw new IllegalStateException();
+        }
+        if((teamType == TeamType.AWAY) && (inningType.equals(InningType.TOP.toString()))) {
+            throw new IllegalStateException();
+        }
+        score += pitchResult.getScore().getBatting_team();
     }
+
+
 }

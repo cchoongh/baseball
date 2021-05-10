@@ -17,7 +17,7 @@ CREATE TABLE game
     id int auto_increment,
     `home_user_id` int,
     `away_user_id` int,
-    `is_end` boolean,
+    `is_end` boolean default false not null,
     primary key (id)
 );
 

@@ -4,6 +4,7 @@ import com.team18.baseball.dto.*;
 import com.team18.baseball.dto.request.PitchResult;
 import com.team18.baseball.entity.*;
 import com.team18.baseball.repository.GameRepository;
+import com.team18.baseball.repository.HalfInningRepository;
 import com.team18.baseball.repository.TeamRepository;
 import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Service;
@@ -14,10 +15,12 @@ import java.util.List;
 public class GameService {
     private final GameRepository gameRepository;
     private final TeamRepository teamRepository;
+    private final HalfInningRepository halfInningRepository;
 
-    public GameService(GameRepository gameRepository, TeamRepository teamRepository) {
+    public GameService(GameRepository gameRepository, TeamRepository teamRepository, HalfInningRepository halfInningRepository) {
         this.gameRepository = gameRepository;
         this.teamRepository = teamRepository;
+        this.halfInningRepository= halfInningRepository;
     }
 
     public List<TeamsInGame> getTeamsInGameList() {
@@ -66,9 +69,7 @@ public class GameService {
            throw new IllegalStateException();
        }
         //그 중 한 명이 해당 user 인가
-        if (!game.checkUser(user.getId())) {
-            throw new IllegalStateException();
-        }
+        game.checkUser(user.getId());
 
         //이닝을 생성하고 game 정보를 로드한다.
         HalfInning halfInning = game.addHalfInning();
@@ -88,21 +89,25 @@ public class GameService {
         return StartGameInfo.from(gameInfo, fieldingInfo, battingInfo);
     }
 
-    public void pitch(User user, Long gameId, PitchResult pitchResult) {
+    public HalfInning pitch(User user, Long gameId, PitchResult pitchResult) {
         //위의 메소드랑 중복
         Game game = gameRepository.findById(gameId).orElseThrow(IllegalStateException::new);
-        if (!game.checkUser(user.getId())) {
-            throw new IllegalStateException();
-        }
-
         if(!game.isPlaying()) {
             throw new IllegalStateException();
         }
 
+        //user가 pitch turn인지 체크한다.  (home이면 top일 때 수비)
+        TeamType teamType = game.checkUser(user.getId());
+
         //pitch 결과를 halfInning에 반영한다. (이닝 추가할 때, 9회말 9회 끝이면 추가 예정.. 검증 로직.. 검증 많아..)
         List<HalfInning> halfInnings = game.getHalfInnings();
         HalfInning lastHalfInning = halfInnings.get(halfInnings.size() - 1);
-        lastHalfInning.update(pitchResult);
+        lastHalfInning.update(pitchResult, teamType);
+        halfInningRepository.save(lastHalfInning);
+
+        Game gameResult = gameRepository.findById(gameId).orElseThrow(IllegalStateException::new);
+        System.out.println(halfInnings.size());
+        return halfInnings.get(halfInnings.size()-1);
     }
 
     //이닝이 끝났다고 post 할 때

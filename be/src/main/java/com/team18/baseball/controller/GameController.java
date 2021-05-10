@@ -3,6 +3,7 @@ package com.team18.baseball.controller;
 import com.team18.baseball.HttpSessionUtils;
 import com.team18.baseball.dto.request.PitchResult;
 import com.team18.baseball.dto.StartGameInfo;
+import com.team18.baseball.entity.HalfInning;
 import com.team18.baseball.response.Response;
 import com.team18.baseball.dto.TeamsInGame;
 import com.team18.baseball.entity.User;
@@ -43,9 +44,10 @@ public class GameController {
         return gameService.start(user, gameId);
     }
 
-    @PostMapping("/{gameId}/pitch)")
-    public void pitch(@PathVariable PitchResult pitchResult, @PathVariable Long gameId, HttpSession session) {
+    @PostMapping("/{gameId}/pitch")
+    public HalfInning pitch(@RequestBody PitchResult pitchResult, @PathVariable Long gameId, HttpSession session) {
         User user = HttpSessionUtils.getLoginUser(session).orElseThrow(IllegalStateException::new);
-        gameService.pitch(user, gameId, pitchResult);
+        System.out.println("야호");
+        return gameService.pitch(user, gameId, pitchResult);
     }
 }

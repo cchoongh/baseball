@@ -9,8 +9,8 @@ import java.util.stream.Collectors;
 public class Game {
     @Id
     private final Long id;
-    private final List<HalfInning> halfInnings = new ArrayList<>();
-    private final Map<String, GameHasTeam> teams = new HashMap<>();
+    private List<HalfInning> halfInnings = new ArrayList<>();
+    private Map<String, GameHasTeam> teams = new HashMap<>();
     private Long homeUserId;
     private Long awayUserId;
     private boolean isEnd = false;
@@ -113,8 +113,14 @@ public class Game {
 //        this.teams.put(TeamType.AWAY.toString(), GameHasTeam.create(team.getId()));
 //    }
 
-    public boolean checkUser(Long userId) {
-        return (homeUserId.equals(userId)) || ((awayUserId.equals(userId)));
+    public TeamType checkUser(Long userId) {
+        if (homeUserId.equals(userId)) {
+            return TeamType.HOME;
+        }
+        if (awayUserId.equals(userId)) {
+            return TeamType.AWAY;
+        }
+        throw new IllegalStateException();
     }
 
     public boolean isReadyToStart() {
