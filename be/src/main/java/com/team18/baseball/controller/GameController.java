@@ -51,8 +51,8 @@ public class GameController {
     }
 
     @GetMapping("/{gameId}/pitchResult")
-    public PitchResult getPitchResult(@RequestBody PitchResult pitchResult, @PathVariable Long gameId, HttpSession session) {
+    public PitchResult getPitchResult(@PathVariable Long gameId, HttpSession session) {
         User user = HttpSessionUtils.getLoginUser(session).orElseThrow(IllegalStateException::new);
-        return gameService.getPitchResult(user, gameId, pitchResult);
+        return gameService.getPitchResult(user, gameId);
     }
 }

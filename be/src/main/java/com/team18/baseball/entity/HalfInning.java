@@ -80,7 +80,7 @@ public class HalfInning {
         if((teamType == TeamType.AWAY) && (inningType.equals(InningType.TOP.toString()))) {
             throw new IllegalStateException();
         }
-        score += pitchResult.getScore().getBattingScore();
+        score = pitchResult.getScore().getBattingScore();
     }
 
 

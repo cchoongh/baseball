@@ -112,7 +112,7 @@ public class GameService {
         return halfInnings.get(halfInnings.size()-1);
     }
 
-    public PitchResult getPitchResult(User user, Long gameId, PitchResult pitchResult) {
+    public PitchResult getPitchResult(User user, Long gameId) {
         //위의 메소드랑 중복
         Game game = gameRepository.findById(gameId).orElseThrow(IllegalStateException::new);
         if(!game.isPlaying()) {
@@ -126,5 +126,5 @@ public class GameService {
 
     // 게임 end라고 post 해주세용
 
-    //is Playing 부분 다 삭제할 듯 ..
+    //게임 종료 추가
 }
