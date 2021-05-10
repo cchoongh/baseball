@@ -1,12 +1,12 @@
 package com.team18.baseball.controller;
 
 import com.team18.baseball.HttpSessionUtils;
-import com.team18.baseball.dto.request.PitchResult;
 import com.team18.baseball.dto.StartGameInfo;
-import com.team18.baseball.entity.HalfInning;
-import com.team18.baseball.response.Response;
 import com.team18.baseball.dto.TeamsInGame;
+import com.team18.baseball.dto.request.PitchResult;
+import com.team18.baseball.entity.HalfInning;
 import com.team18.baseball.entity.User;
+import com.team18.baseball.response.ResponseBody;
 import com.team18.baseball.service.GameService;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,9 +33,9 @@ public class GameController {
     }
 
     @PostMapping("/{gameId}/team/{teamId}")
-    public Response selectTeam(@PathVariable Long gameId, @PathVariable Long teamId, HttpSession session) {
+    public ResponseBody selectTeam(@PathVariable Long gameId, @PathVariable Long teamId, HttpSession session) {
         User user = HttpSessionUtils.getLoginUser(session).orElseThrow(IllegalStateException::new);
-        return gameService.selectTeam(user, gameId, teamId) ? Response.ok() : Response.selected();
+        return gameService.selectTeam(user, gameId, teamId) ? ResponseBody.selectOk() : ResponseBody.selectFail();
     }
 
     @GetMapping("/{gameId}/start")
