@@ -91,13 +91,13 @@ CREATE TABLE half_inning
 CREATE TABLE plate_appearance
 (
     id     int not null auto_increment,
-    player_id int not null,
+    -- player_id int not null,
     player_name varchar(45) not null,
     at_bat int not null,
     hit    int not null,
     out    int not null,
-    primary key (id),
-    foreign key (player_id) references player (id)
+    primary key (id)
+    -- foreign key (player_id) references player (id)
 );
 --
 -- CREATE TABLE plate_appearance_info
