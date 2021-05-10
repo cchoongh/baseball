@@ -84,6 +84,7 @@ public class Game {
         return getTeamIdsInGame().containsValue(teamId);
     }
 
+    //2명의 유저가 이 게임을 선택했는가
     public boolean hasTwoTeams() {
         return homeTeamExist() && awayTeamExist();
     }
@@ -123,20 +124,26 @@ public class Game {
             this.homeUserId = userId;
         }
 
-        if((teamType.equals(TeamType.AWAY.toString())) && (this.homeUserId == null)) {
+        if((teamType.equals(TeamType.AWAY.toString())) && (this.awayUserId == null)) {
             this.awayUserId = userId;
         }
     }
 
-    public void addInning() {
+    public HalfInning addInning() {
         if(halfInnings.size() == 0) {
-            halfInnings.add(HalfInning.create(1,  InningType.TOP.toString()));
+            HalfInning halfInning = HalfInning.create(1,  InningType.TOP.toString());
+            halfInnings.add(halfInning);
+            return halfInning;
         }
 
         HalfInning lastInning = halfInnings.get(halfInnings.size()-1);
         if(lastInning.getInningType().equals(InningType.TOP.toString())) {
-            halfInnings.add(HalfInning.create(lastInning.getInning(), InningType.BOTTOM.toString()));
+            HalfInning halfInning = HalfInning.create(lastInning.getInning(), InningType.BOTTOM.toString());
+            halfInnings.add(halfInning);
+            return halfInning;
         }
-        halfInnings.add(HalfInning.create(lastInning.getInning() + 1, InningType.TOP.toString()));
+        HalfInning halfInning = HalfInning.create(lastInning.getInning() + 1, InningType.TOP.toString());
+        halfInnings.add(halfInning);
+        return halfInning;
     }
 }

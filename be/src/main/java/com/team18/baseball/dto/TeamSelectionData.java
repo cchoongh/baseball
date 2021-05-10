@@ -6,7 +6,7 @@ import com.team18.baseball.entity.Team;
 public class TeamSelectionData {
     private final Long id;
     private final String name;
-    private Boolean selected;
+    private final Boolean selected;
 
     private TeamSelectionData(Long id, String name, Boolean selected) {
         this.id = id;

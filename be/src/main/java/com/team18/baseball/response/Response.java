@@ -1,25 +1,25 @@
-package com.team18.baseball.dto;
+package com.team18.baseball.response;
 
-public class ResponseDto {
+public class Response {
     private Long gameId;
     private Status status;
     private String message;
 
-    private ResponseDto(Status status) {
+    private Response(Status status) {
         this.status = status;
         this.message = status.getMessage();
     }
 
-    private ResponseDto(Long gameId, Status status) {
+    private Response(Long gameId, Status status) {
 
     }
 
-    public static ResponseDto ok() {
-        return new ResponseDto(Status.OK);
+    public static Response ok() {
+        return new Response(Status.OK);
     }
 
-    public static ResponseDto selected() {
-        return new ResponseDto(Status.SELECTED);
+    public static Response selected() {
+        return new Response(Status.SELECTED);
     }
 
     public enum Status {

@@ -1,7 +1,8 @@
 package com.team18.baseball.service;
 
+import com.team18.baseball.dto.GameInfo;
 import com.team18.baseball.dto.TeamSelectionData;
-import com.team18.baseball.dto.TeamsInGameDto;
+import com.team18.baseball.dto.TeamsInGame;
 import com.team18.baseball.entity.*;
 import com.team18.baseball.repository.GameRepository;
 import com.team18.baseball.repository.HalfInningRepository;
@@ -23,14 +24,14 @@ public class GameService {
         this.halfInningRepository = halfInningRepository;
     }
 
-    public List<TeamsInGameDto> getTeamsInGameList() {
+    public List<TeamsInGame> getTeamsInGameList() {
         return Streamable.of(gameRepository.findAll()).map((game) -> getTeamsInGame(game)).toList();
     }
 
-    private TeamsInGameDto getTeamsInGame(Game game) {
+    private TeamsInGame getTeamsInGame(Game game) {
         TeamSelectionData homeData = getTeamSelectionData(game, TeamType.HOME);
         TeamSelectionData awayData = getTeamSelectionData(game, TeamType.AWAY);
-        return TeamsInGameDto.from(game.getId(), homeData, awayData);
+        return TeamsInGame.from(game.getId(), homeData, awayData);
     }
 
     public TeamSelectionData getTeamSelectionData(Game game, TeamType teamType) {
@@ -71,8 +72,11 @@ public class GameService {
             throw new IllegalStateException();
         }
         //이닝을 생성하고 game 정보를 로드한다.
-        game.addInning();
+        HalfInning halfInning = game.addInning();
         gameRepository.save(game);
+        //응답객체를 만든다.
+        GameInfo gameInfo = GameInfo.from(game, halfInning);
+
     }
 
     public boolean checkPlayer(User user, Game game) {
