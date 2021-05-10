@@ -1,20 +1,12 @@
 package com.team18.baseball.entity;
 
-public class InningType {
-    private final InningTypeEnum inningTypeEnum;
+public enum InningType {
+  TOP("초"),
+  BOTTOM("말");
 
-    public InningType(InningTypeEnum inningTypeEnum) {
-        this.inningTypeEnum = inningTypeEnum;
-    }
+  private final String korean;
 
-    enum InningTypeEnum {
-        TOP("초"),
-        BOTTOM("말");
-
-        private final String korean;
-
-        InningTypeEnum(String korean) {
+  InningType(String korean) {
             this.korean = korean;
         }
-    }
 }

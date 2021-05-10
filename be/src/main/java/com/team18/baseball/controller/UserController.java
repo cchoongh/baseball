@@ -19,7 +19,7 @@ public class UserController {
     @PostMapping("/users/{id}")
     public String login(@PathVariable Long id, HttpSession session) {
         User user =userRepository.findById(id).orElseThrow(IllegalStateException::new);
-        session.setAttribute("user", user);
+        session.setAttribute("sessionedUser", user);
         System.out.println(user);
         return "Success!";
     }

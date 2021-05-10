@@ -4,6 +4,7 @@ import com.team18.baseball.dto.TeamSelectionData;
 import com.team18.baseball.dto.TeamsInGameDto;
 import com.team18.baseball.entity.*;
 import com.team18.baseball.repository.GameRepository;
+import com.team18.baseball.repository.HalfInningRepository;
 import com.team18.baseball.repository.TeamRepository;
 import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Service;
@@ -14,10 +15,12 @@ import java.util.List;
 public class GameService {
     private final GameRepository gameRepository;
     private final TeamRepository teamRepository;
+    private final HalfInningRepository halfInningRepository;
 
-    public GameService(GameRepository gameRepository, TeamRepository teamRepository) {
+    public GameService(GameRepository gameRepository, TeamRepository teamRepository, HalfInningRepository halfInningRepository) {
         this.gameRepository = gameRepository;
         this.teamRepository = teamRepository;
+        this.halfInningRepository = halfInningRepository;
     }
 
     public List<TeamsInGameDto> getTeamsInGameList() {
@@ -37,8 +40,6 @@ public class GameService {
     }
 
     public boolean selectTeam(User user, Long gameId, Long teamId) {
-        //이 팀이 존재하는 팀 아이디인지 확인한다.
-        Team team = teamRepository.findById(teamId).orElseThrow(IllegalStateException::new);
         // 이 게임이 존재하는 게임인지 확인한다.
         Game game = gameRepository.findById(gameId).orElseThrow(IllegalStateException::new);
         // 이 게임이 해당 팀을 갖고 있는지 확인한다
@@ -46,6 +47,7 @@ public class GameService {
             throw new IllegalStateException();
         }
         //user가 team을 선택한다.
+        Team team = teamRepository.findById(teamId).orElseThrow(IllegalStateException::new);
         if (!team.selectTeam(user.getId())) {
             return false;
         }
@@ -64,13 +66,13 @@ public class GameService {
         if (!game.hasTwoTeams()) {
             throw new IllegalStateException();
         }
-        //game이 이미 진행 중일 때
+        //game이 이미 진행 중일 때 예외발생
         if ( game.isPlaying()) {
             throw new IllegalStateException();
         }
         //이닝을 생성하고 game 정보를 로드한다.
-
-
+        HalfInning halfInning = game.addInning();
+        halfInningRepository.save(halfInning);
     }
 
     public boolean checkPlayer(User user, Game game) {

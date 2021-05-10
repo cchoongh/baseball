@@ -29,13 +29,12 @@ public class GameController {
 //        return teamRepository.findById(2L).orElseThrow(IllegalStateException::new).getUserId();
 //    }
 
-    @PostMapping("{gameId}/team/{teamId}")
+    @PostMapping("/{gameId}/team/{teamId}")
     public ResponseDto selectTeam(@PathVariable Long gameId, @PathVariable Long teamId, HttpSession session) {
         User user = HttpSessionUtils.getLoginUser(session).orElseThrow(IllegalStateException::new);
         return gameService.selectTeam(user, gameId, teamId) ? ResponseDto.ok() : ResponseDto.selected();
     }
 
-    //이닝을 만들고
     @GetMapping("/{gameId}/start")
     public void startGame(@PathVariable Long gameId, HttpSession session) {
         User user = HttpSessionUtils.getLoginUser(session).orElseThrow(IllegalStateException::new);

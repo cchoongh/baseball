@@ -1,5 +1,6 @@
 package com.team18.baseball.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.Id;
 
 import java.util.*;
@@ -8,7 +9,7 @@ import java.util.stream.Collectors;
 public class Game {
     @Id
     private final Long id;
-    private List<HalfInning> halfInningList = new ArrayList<>();
+    private List<HalfInning> halfInnings = new ArrayList<>();
     private Map<String, GameHasTeam> teams = new HashMap<>();
     private Long homeUserId;
     private Long awayUserId;
@@ -26,27 +27,30 @@ public class Game {
         return id;
     }
 
-    public List<HalfInning> getHalfInningList() {
-        return halfInningList;
+    public List<HalfInning> getHalfInnings() {
+        return halfInnings;
     }
 
 //    public Map<String, GameHasTeam> getTeams() {
 //        return teams;
 //    }
 
-
+    @JsonIgnore
     public Long getHomeUserId() {
         return homeUserId;
     }
 
+    @JsonIgnore
     public Long getAwayUserId() {
         return awayUserId;
     }
 
+    @JsonIgnore
     private GameHasTeam getHomeTeamInfo() {
         return teams.get(TeamType.HOME.toString());
     }
 
+    @JsonIgnore
     private GameHasTeam getAwayTeamInfo() {
         return teams.get(TeamType.AWAY.toString());
     }
@@ -61,6 +65,7 @@ public class Game {
 //        return gameHasTeam;
 //    }
 
+    @JsonIgnore
     public Map<String, Long> getTeamIdsInGame() {
         return teams.entrySet().stream()
                 .collect(Collectors.toMap(Map.Entry::getKey,
@@ -92,7 +97,7 @@ public class Game {
     }
 
     public boolean isPlaying() {
-        return halfInningList.size() != 0;
+        return halfInnings.size() != 0;
     }
 
 //    private void addHomeTeam(Team team) {
@@ -107,17 +112,31 @@ public class Game {
     public String toString() {
         return "Game{" +
                 "id=" + id +
-                ", halfInningList=" + halfInningList +
+                ", halfInningList=" + halfInnings +
                 ", teams=" + teams +
                 '}';
     }
 
     public void addUserId(Long teamId, Long userId) {
         String teamType = checkTeamType(teamId).orElseThrow(IllegalStateException::new);
-        if(teamType.equals(TeamType.HOME.toString())) {
+        if((teamType.equals(TeamType.HOME.toString())) && (this.homeUserId == null)) {
             this.homeUserId = userId;
-        } else {
+        }
+
+        if((teamType.equals(TeamType.AWAY.toString())) && (this.homeUserId == null)) {
             this.awayUserId = userId;
         }
+    }
+
+    public HalfInning addInning() {
+        if(halfInnings.size() == 0) {
+            return HalfInning.create(1,  InningType.TOP.toString());
+        }
+
+        HalfInning lastInning = halfInnings.get(halfInnings.size()-1);
+        if(lastInning.getInningType().equals(InningType.TOP.toString())) {
+            return HalfInning.create(lastInning.getInning(), InningType.BOTTOM.toString());
+        }
+        return HalfInning.create(lastInning.getInning() + 1, InningType.TOP.toString());
     }
 }

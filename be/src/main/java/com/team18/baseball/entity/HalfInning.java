@@ -21,12 +21,18 @@ public class HalfInning {
         this.isEnd = isEnd;
     }
 
-    public static final HalfInning create(int inning, String inningType,
-                                              int score,
-                                              boolean isEnd) {
+    public static final HalfInning create(int inning, String inningType) {
         return new HalfInning(null,
                 inning, inningType,
-                score,
-                isEnd);
+                0,
+                false);
+    }
+
+    public int getInning() {
+        return inning;
+    }
+
+    public String getInningType() {
+        return inningType;
     }
 }
