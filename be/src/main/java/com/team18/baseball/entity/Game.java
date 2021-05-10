@@ -46,12 +46,12 @@ public class Game {
     }
 
     @JsonIgnore
-    private GameHasTeam getHomeTeamInfo() {
+    public GameHasTeam getHomeTeamInfo() {
         return teams.get(TeamType.HOME.toString());
     }
 
     @JsonIgnore
-    private GameHasTeam getAwayTeamInfo() {
+    public GameHasTeam getAwayTeamInfo() {
         return teams.get(TeamType.AWAY.toString());
     }
 
@@ -86,14 +86,14 @@ public class Game {
 
     //2명의 유저가 이 게임을 선택했는가
     public boolean hasTwoUsers() {
-        return homeTeamExist() && awayTeamExist();
+        return homeUserExist() && awayUserExist();
     }
 
-    private boolean homeTeamExist() {
+    private boolean homeUserExist() {
         return this.homeUserId != null;
     }
 
-    private boolean awayTeamExist() {
+    private boolean awayUserExist() {
         return this.awayUserId != null;
     }
 

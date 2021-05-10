@@ -33,4 +33,8 @@ public class Player {
     public int getUniformNumber() {
         return uniformNumber;
     }
+
+    public boolean isPitcher() {
+        return isPitcher;
+    }
 }

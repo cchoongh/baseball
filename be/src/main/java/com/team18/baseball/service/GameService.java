@@ -1,8 +1,6 @@
 package com.team18.baseball.service;
 
-import com.team18.baseball.dto.GameInfo;
-import com.team18.baseball.dto.TeamSelectionData;
-import com.team18.baseball.dto.TeamsInGame;
+import com.team18.baseball.dto.*;
 import com.team18.baseball.entity.*;
 import com.team18.baseball.repository.GameRepository;
 import com.team18.baseball.repository.HalfInningRepository;
@@ -34,7 +32,7 @@ public class GameService {
         return TeamsInGame.from(game.getId(), homeData, awayData);
     }
 
-    public TeamSelectionData getTeamSelectionData(Game game, TeamType teamType) {
+    private TeamSelectionData getTeamSelectionData(Game game, TeamType teamType) {
         Long teamId = game.getTeamIdsInGame().get(teamType.toString());
         Team team = teamRepository.findById(teamId).orElseThrow(IllegalStateException::new);
         return TeamSelectionData.from(team);
@@ -47,19 +45,21 @@ public class GameService {
         if (!game.teamExists(teamId)) {
             throw new IllegalStateException();
         }
+
         //user가 team을 선택한다.
         Team team = teamRepository.findById(teamId).orElseThrow(IllegalStateException::new);
         if (!team.selectTeam(user.getId())) {
             return false;
         }
         teamRepository.save(team);
+
         // game에 userId를 기록한다.
         game.addUserId(teamId, user.getId());
         gameRepository.save(game);
         return true;
     }
 
-    public void start(User user, Long gameId) {
+    public StartGameInfo start(User user, Long gameId) {
         Game game = gameRepository.findById(gameId).orElseThrow(IllegalStateException::new);
 
         //메소드 묶어줘야겠다.
@@ -80,7 +80,19 @@ public class GameService {
         //이닝을 생성하고 game 정보를 로드한다.
         HalfInning halfInning = game.addInning();
         gameRepository.save(game);
+
         //응답객체를 만든다.
         GameInfo gameInfo = GameInfo.from(game, halfInning);
+        //home팀은 항상 bottom에서 공격
+        //away팀일 항상 top에서 공격
+        GameHasTeam homeTeamInfo = game.getHomeTeamInfo();
+        GameHasTeam awayTeamInfo = game.getAwayTeamInfo();
+        Team homeTeam = teamRepository.findById(homeTeamInfo.getId()).orElseThrow(IllegalStateException::new);
+        Team awayTeam = teamRepository.findById(awayTeamInfo.getId()).orElseThrow(IllegalStateException::new);
+        TeamInfo fieldingInfo = TeamInfo.from(homeTeam, TeamType.HOME, homeTeamInfo.getScore());
+        TeamInfo battingInfo = TeamInfo.from(awayTeam, TeamType.AWAY, homeTeamInfo.getScore());
+
+        return StartGameInfo.from(gameInfo, fieldingInfo, battingInfo);
+
     }
 }

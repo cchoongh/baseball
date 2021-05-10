@@ -35,6 +35,10 @@ public class Team {
         return userId;
     }
 
+    public List<Player> getPlayers() {
+        return players;
+    }
+
     public boolean selectTeam(Long userId) {
         if(this.userId != null) {
             return false;

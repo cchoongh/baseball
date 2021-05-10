@@ -1,6 +1,7 @@
 package com.team18.baseball.controller;
 
 import com.team18.baseball.HttpSessionUtils;
+import com.team18.baseball.dto.StartGameInfo;
 import com.team18.baseball.response.Response;
 import com.team18.baseball.dto.TeamsInGame;
 import com.team18.baseball.entity.User;
@@ -36,10 +37,8 @@ public class GameController {
     }
 
     @GetMapping("/{gameId}/start")
-    public void startGame(@PathVariable Long gameId, HttpSession session) {
+    public StartGameInfo startGame(@PathVariable Long gameId, HttpSession session) {
         User user = HttpSessionUtils.getLoginUser(session).orElseThrow(IllegalStateException::new);
-        gameService.start(user, gameId);
-
+        return gameService.start(user, gameId);
     }
-
 }
