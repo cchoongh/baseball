@@ -1,29 +1,32 @@
 package com.team18.baseball.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Batter {
-    private Long id;
-    private String name;
-    private int uniformNumber;
+    private Long batterId;
+    private String batterName;
+    private int batterUniformNumber;
     private String pitchResult;
-    private boolean out;
+    private boolean isOut;
 
-    public Long getId() {
-        return id;
+    public Long getBatterId() {
+        return batterId;
     }
 
-    public String getName() {
-        return name;
+    public String getBatterName() {
+        return batterName;
     }
 
-    public int getUniformNumber() {
-        return uniformNumber;
+    public int getBatterUniformNumber() {
+        return batterUniformNumber;
     }
 
     public String getPitchResult() {
         return pitchResult;
     }
 
+    @JsonProperty("is_out")
     public boolean isOut() {
-        return out;
+        return isOut;
     }
 }

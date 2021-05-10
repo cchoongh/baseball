@@ -1,19 +1,19 @@
 package com.team18.baseball.dto.request;
 
 public class Base {
-    private int first;
-    private int second;
-    private int third;
+    private int firstBasePlayer;
+    private int secondBasePlayer;
+    private int thirdBasePlayer;
 
-    public int getFirst() {
-        return first;
+    public int getFirstBasePlayer() {
+        return firstBasePlayer;
     }
 
-    public int getSecond() {
-        return second;
+    public int getSecondBasePlayer() {
+        return secondBasePlayer;
     }
 
-    public int getThird() {
-        return third;
+    public int getThirdBasePlayer() {
+        return thirdBasePlayer;
     }
 }

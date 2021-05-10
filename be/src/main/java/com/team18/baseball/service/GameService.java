@@ -5,6 +5,7 @@ import com.team18.baseball.dto.request.PitchResult;
 import com.team18.baseball.entity.*;
 import com.team18.baseball.repository.GameRepository;
 import com.team18.baseball.repository.HalfInningRepository;
+import com.team18.baseball.repository.PitchResultRepository;
 import com.team18.baseball.repository.TeamRepository;
 import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Service;
@@ -16,11 +17,13 @@ public class GameService {
     private final GameRepository gameRepository;
     private final TeamRepository teamRepository;
     private final HalfInningRepository halfInningRepository;
+    private final PitchResultRepository pitchResultRepository;
 
-    public GameService(GameRepository gameRepository, TeamRepository teamRepository, HalfInningRepository halfInningRepository) {
+    public GameService(GameRepository gameRepository, TeamRepository teamRepository, HalfInningRepository halfInningRepository, PitchResultRepository pitchResultRepository) {
         this.gameRepository = gameRepository;
         this.teamRepository = teamRepository;
         this.halfInningRepository= halfInningRepository;
+        this.pitchResultRepository = pitchResultRepository;
     }
 
     public List<TeamsInGame> getTeamsInGameList() {
@@ -105,9 +108,17 @@ public class GameService {
         lastHalfInning.update(pitchResult, teamType);
         halfInningRepository.save(lastHalfInning);
 
-        Game gameResult = gameRepository.findById(gameId).orElseThrow(IllegalStateException::new);
-        System.out.println(halfInnings.size());
+        pitchResultRepository.save(pitchResult);
         return halfInnings.get(halfInnings.size()-1);
+    }
+
+    public PitchResult getPitchResult(User user, Long gameId, PitchResult pitchResult) {
+        //위의 메소드랑 중복
+        Game game = gameRepository.findById(gameId).orElseThrow(IllegalStateException::new);
+        if(!game.isPlaying()) {
+            throw new IllegalStateException();
+        }
+        return pitchResultRepository.findById(pitchResultRepository.count()).orElseThrow(IllegalStateException::new);
     }
 
     //이닝이 끝났다고 post 할 때

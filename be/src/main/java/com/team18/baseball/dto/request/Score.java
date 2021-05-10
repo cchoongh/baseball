@@ -1,14 +1,14 @@
 package com.team18.baseball.dto.request;
 
 public class Score {
-    private int fielding_team;
-    private int batting_team;
+    private int fieldingScore;
+    private int battingScore;
 
-    public int getFielding_team() {
-        return fielding_team;
+    public int getFieldingScore() {
+        return fieldingScore;
     }
 
-    public int getBatting_team() {
-        return batting_team;
+    public int getBattingScore() {
+        return battingScore;
     }
 }

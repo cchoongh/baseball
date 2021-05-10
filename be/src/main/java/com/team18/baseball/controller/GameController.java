@@ -47,7 +47,12 @@ public class GameController {
     @PostMapping("/{gameId}/pitch")
     public HalfInning pitch(@RequestBody PitchResult pitchResult, @PathVariable Long gameId, HttpSession session) {
         User user = HttpSessionUtils.getLoginUser(session).orElseThrow(IllegalStateException::new);
-        System.out.println("야호");
         return gameService.pitch(user, gameId, pitchResult);
+    }
+
+    @GetMapping("/{gameId}/pitchResult")
+    public PitchResult getPitchResult(@RequestBody PitchResult pitchResult, @PathVariable Long gameId, HttpSession session) {
+        User user = HttpSessionUtils.getLoginUser(session).orElseThrow(IllegalStateException::new);
+        return gameService.getPitchResult(user, gameId, pitchResult);
     }
 }
