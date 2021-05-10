@@ -2,6 +2,7 @@ package com.team18.baseball.controller;
 
 import com.team18.baseball.HttpSessionUtils;
 import com.team18.baseball.dto.Batter;
+import com.team18.baseball.dto.PitchResult;
 import com.team18.baseball.dto.StartGameInfo;
 import com.team18.baseball.response.Response;
 import com.team18.baseball.dto.TeamsInGame;
@@ -27,11 +28,9 @@ public class GameController {
     }
 
     @PostMapping("/test")
-    public Batter test(Batter batter) {
-        System.out.println("야호");
-        return batter;
+    public PitchResult test(@RequestBody PitchResult pitchResult) {
+        return pitchResult;
     }
-
 
     @PostMapping("/{gameId}/team/{teamId}")
     public Response selectTeam(@PathVariable Long gameId, @PathVariable Long teamId, HttpSession session) {

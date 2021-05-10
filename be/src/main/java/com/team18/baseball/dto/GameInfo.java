@@ -1,6 +1,5 @@
 package com.team18.baseball.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.team18.baseball.entity.Game;
 import com.team18.baseball.entity.HalfInning;
 
@@ -23,7 +22,6 @@ public class GameInfo {
         return id;
     }
 
-    @JsonProperty("current_inning")
     public int getCurrentInning() {
         return currentInning;
     }
