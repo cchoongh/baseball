@@ -70,6 +70,11 @@ public class Game {
 //    }
 
     @JsonIgnore
+    public HalfInning getLastHalfInning() {
+        return halfInnings.get(halfInnings.size()-1);
+    }
+
+    @JsonIgnore
     public Map<String, Long> getTeamIdsInGame() {
         return teams.entrySet().stream()
                 .collect(Collectors.toMap(Map.Entry::getKey,

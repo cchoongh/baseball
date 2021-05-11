@@ -103,9 +103,18 @@ public class GameService {
         return Optional.of(StartGameInfo.from(gameInfo, fieldingInfo, battingInfo));
     }
 
-//    public ScoreDTO getScore() {
+    public ScoreDTO getScore(Long gameId) {
+        Game game = gameRepository.findById(gameId).orElseThrow(IllegalStateException::new);
+        List<HalfInning> halfInnings = game.getHalfInnings();
+        //boolean isUserHomeTeam, boolean isUserBatting
+        String inningType = game.getLastHalfInning().getInningType();// 현재 초/말
+//        if(inningType.equals())
 //
-//    }
+//        ScoreDTO result = ScoreDTO.create();
+//        result.makeHomeScore(halfInnings);
+//        return ;
+        return null;
+    }
 
     public PlateAppearanceDTO getPlayersPlateAppearance(Long gameId) {
         Game game = gameRepository.findById(gameId).orElseThrow(IllegalStateException::new);
