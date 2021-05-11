@@ -13,7 +13,7 @@ public class Game {
     private Map<String, GameHasTeam> teams = new HashMap<>();
     private Long homeUserId;
     private Long awayUserId;
-
+    private boolean isEnd = false;
 
     Game(Long id) {
         this.id = id;
@@ -33,6 +33,10 @@ public class Game {
 
     public Map<String, GameHasTeam> getTeams() {
         return teams;
+    }
+
+    public boolean isEnd() {
+        return isEnd;
     }
 
     @JsonIgnore
@@ -85,7 +89,7 @@ public class Game {
     }
 
     //2명의 유저가 이 게임을 선택했는가
-    public boolean hasTwoUsers() {
+    private boolean hasTwoUsers() {
         return homeUserExist() && awayUserExist();
     }
 
@@ -133,7 +137,7 @@ public class Game {
         }
     }
 
-    public HalfInning addInning() {
+    public HalfInning addHalfInning() {
         if(halfInnings.size() == 0) {
             HalfInning halfInning = HalfInning.create(1,  InningType.TOP.toString());
             halfInnings.add(halfInning);

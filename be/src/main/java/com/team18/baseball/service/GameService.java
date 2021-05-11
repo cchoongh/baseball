@@ -2,10 +2,12 @@ package com.team18.baseball.service;
 
 import com.team18.baseball.dto.*;
 import com.team18.baseball.dto.PlateAppearanceInfo;
+import com.team18.baseball.dto.request.PitchResult;
 import com.team18.baseball.entity.*;
 import com.team18.baseball.repository.GameRepository;
 import com.team18.baseball.repository.HalfInningRepository;
 import com.team18.baseball.repository.PlateAppearanceRepository;
+import com.team18.baseball.repository.PitchResultRepository;
 import com.team18.baseball.repository.TeamRepository;
 import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Service;
@@ -19,13 +21,16 @@ public class GameService {
     private final TeamRepository teamRepository;
     private final HalfInningRepository halfInningRepository;
     private final PlateAppearanceRepository plateAppearanceRepository;
+    private final PitchResultRepository pitchResultRepository;
 
     public GameService(GameRepository gameRepository, TeamRepository teamRepository,
-                       HalfInningRepository halfInningRepository, PlateAppearanceRepository plateAppearanceRepository) {
+                       HalfInningRepository halfInningRepository, PlateAppearanceRepository plateAppearanceRepository,
+                       PitchResultRepository pitchResultRepository) {
         this.gameRepository = gameRepository;
         this.teamRepository = teamRepository;
-        this.halfInningRepository = halfInningRepository;
         this.plateAppearanceRepository = plateAppearanceRepository;
+        this.halfInningRepository = halfInningRepository;
+        this.pitchResultRepository = pitchResultRepository;
     }
 
     public List<TeamsInGame> getTeamsInGameList() {
@@ -45,6 +50,9 @@ public class GameService {
     }
 
     public boolean selectTeam(User user, Long gameId, Long teamId) {
+        //user가 이미 팀을 선택했는지 확인한다
+//        teamRepository.findByUserId(user.getId()).ifPresent(() -> Il
+
         // 이 게임이 존재하는 게임인지 확인한다.
         Game game = gameRepository.findById(gameId).orElseThrow(IllegalStateException::new);
         // 이 게임이 해당 팀을 갖고 있는지 확인한다
@@ -127,4 +135,40 @@ public class GameService {
         return PlateAppearanceDTO.from(homePAInfos, awayPAInfos);
     }
 
+
+    public HalfInning pitch(User user, Long gameId, PitchResult pitchResult) {
+        //위의 메소드랑 중복
+        Game game = gameRepository.findById(gameId).orElseThrow(IllegalStateException::new);
+        if(!game.isPlaying()) {
+            throw new IllegalStateException();
+        }
+
+        //user가 pitch turn인지 체크한다.  (home이면 top일 때 수비)
+        TeamType teamType = game.checkUser(user.getId());
+
+        //pitch 결과를 halfInning에 반영한다. (이닝 추가할 때, 9회말 9회 끝이면 추가 예정.. 검증 로직.. 검증 많아..)
+        List<HalfInning> halfInnings = game.getHalfInnings();
+        HalfInning lastHalfInning = halfInnings.get(halfInnings.size() - 1);
+        lastHalfInning.update(pitchResult, teamType);
+        halfInningRepository.save(lastHalfInning);
+
+        pitchResultRepository.save(pitchResult);
+        return halfInnings.get(halfInnings.size()-1);
+    }
+
+    public PitchResult getPitchResult(User user, Long gameId) {
+        //위의 메소드랑 중복
+        Game game = gameRepository.findById(gameId).orElseThrow(IllegalStateException::new);
+        if(!game.isPlaying()) {
+            throw new IllegalStateException();
+        }
+        return pitchResultRepository.findById(pitchResultRepository.count()).orElseThrow(IllegalStateException::new);
+    }
+
+    //이닝이 끝났다고 post 할 때
+    //결과를 game score에 반영, inning end 반영
+
+    // 게임 end라고 post 해주세용
+
+    //게임 종료 추가
 }

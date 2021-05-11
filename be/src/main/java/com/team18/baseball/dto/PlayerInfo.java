@@ -6,7 +6,6 @@ import com.team18.baseball.entity.Player;
 public class PlayerInfo {
     private final Long id;
     private final String name;
-    @JsonProperty("uniform_number")
     private final int uniformNumber;
 
     PlayerInfo(Long id, String name, int uniformNumber) {
@@ -27,7 +26,6 @@ public class PlayerInfo {
         return name;
     }
 
-    @JsonProperty("uniform_number")
     public int getUniformNumber() {
         return uniformNumber;
     }

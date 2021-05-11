@@ -1,6 +1,7 @@
 DROP TABLE IF EXISTS plate_appearance;
 DROP TABLE IF EXISTS inning_type;
 DROP TABLE IF EXISTS `half_inning`;
+DROP TABLE IF EXISTS `pitch_result`;
 DROP TABLE IF EXISTS player;
 DROP TABLE IF EXISTS `game_has_team`;
 DROP TABLE IF EXISTS team;
@@ -19,6 +20,7 @@ CREATE TABLE game
     id int auto_increment,
     `home_user_id` int,
     `away_user_id` int,
+    `is_end` boolean default false not null,
     primary key (id)
 );
 
@@ -68,26 +70,24 @@ CREATE TABLE half_inning
     foreign key (game) references game (id)
 );
 
---
--- CREATE TABLE half_inning_save
--- (
---     id          int                auto_increment,
---     game        int                not null,
---     game_key    int,
---     inning      int                   not null,
---     inning_type varchar(50)           not null,
---     first_base  boolean default false not null,
---     second_base boolean default false not null,
---     third_base  boolean default false not null,
---     score       int                   not null,
---     strike      int                   not null,
---     `ball`      int                   not null,
---     `out`       int                   not null,
---     `is_end`    boolean default false not null,
---     batter_id   int                   not null,
---     primary key (id),
---     foreign key (game) references game (id)
--- );
+CREATE TABLE `pitch_result`
+(
+    `id`          int                auto_increment,
+    `batter_id`        int     not null,
+    `batter_name`        varchar(50)      not null,
+    `batter_uniform_number`      int                   not null,
+    `pitch_result` varchar(50)           not null,
+    `is_out`    boolean default false not null,
+    `first_base_player`  int not null,
+    `second_base_player` int not null,
+    `third_base_player` int not null,
+    `strike`      int                   not null,
+    `ball`      int                   not null,
+     `out`       int                   not null,
+     `batting_score` int,
+     `fielding_score` int,
+    primary key (id)
+);
 
 CREATE TABLE plate_appearance
 (
@@ -113,11 +113,3 @@ CREATE TABLE plate_appearance
 --     primary key (id),
 --     foreign key (plate_appearance_id) references plate_appearance (id)
 -- );
-
-
-CREATE TABLE inning_type
-(
-    `half_inning`      INT,
-    `inning_type_enum` CHAR(10),
-    FOREIGN KEY (`half_inning`) REFERENCES `half_inning` (id)
-)

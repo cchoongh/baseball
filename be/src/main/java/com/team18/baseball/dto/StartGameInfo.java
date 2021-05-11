@@ -17,17 +17,14 @@ public class StartGameInfo {
         return new StartGameInfo(gameInfo, fieldingTeam, batting_team);
     }
 
-    @JsonProperty("game_info")
     public GameInfo getGameInfo() {
         return gameInfo;
     }
 
-    @JsonProperty("fielding_team")
     public TeamInfo getFieldingTeam() {
         return fieldingTeam;
     }
 
-    @JsonProperty("batting_team")
     public TeamInfo getBattingTeam() {
         return battingTeam;
     }

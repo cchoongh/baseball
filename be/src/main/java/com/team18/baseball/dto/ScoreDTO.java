@@ -48,14 +48,14 @@ public class ScoreDTO {
         }
     }
 
-    public int getHomeTotal() {
+    public int setHomeTotal() {
         for (Integer homeScore : homeScoreList) {
             homeTotal += homeScore;
         }
         return homeTotal;
     }
 
-    public int getAwayTotal() {
+    public int setAwayTotal() {
         for (Integer awayScore : awayScoreList) {
             awayTotal += awayScore;
         }
