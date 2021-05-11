@@ -2,7 +2,7 @@ package com.team18.baseball.service;
 
 import com.team18.baseball.dto.*;
 import com.team18.baseball.dto.PlateAppearanceInfo;
-import com.team18.baseball.dto.request.PitchResult;
+import com.team18.baseball.dto.pitcherResult.PitchResult;
 import com.team18.baseball.entity.*;
 import com.team18.baseball.repository.GameRepository;
 import com.team18.baseball.repository.HalfInningRepository;
@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class GameService {
@@ -73,25 +74,21 @@ public class GameService {
         return true;
     }
 
-    public StartGameInfo start(User user, Long gameId) {
+    public Optional<StartGameInfo> start(User user, Long gameId) {
         Game game = gameRepository.findById(gameId).orElseThrow(IllegalStateException::new);
 
         //메소드 묶어줘야겠다.
         //2명의 유저가 이 게임을 선택했는가.
-        if (!game.hasTwoUsers()) {
-            throw new IllegalStateException();
-        }
+       if(!game.isReadyToStart()) {
+           throw new IllegalStateException();
+       }
         //그 중 한 명이 해당 user 인가
-        if (!game.checkUser(user.getId())) {
-            throw new IllegalStateException();
-        }
-        //game이 이미 진행 중일 때 예외발생
-        if ( game.isPlaying()) {
-            throw new IllegalStateException();
-        }
+        game.checkUser(user.getId());
+
         //이닝을 생성하고 game 정보를 로드한다.
-        HalfInning halfInning = game.addInning();
+        HalfInning halfInning = game.addHalfInning();
         gameRepository.save(game);
+
         //응답객체를 만든다.
         GameInfo gameInfo = GameInfo.from(game, halfInning);
         //home팀은 항상 bottom에서 공격
@@ -103,7 +100,7 @@ public class GameService {
         TeamInfo fieldingInfo = TeamInfo.from(homeTeam, TeamType.HOME, homeTeamInfo.getScore());
         TeamInfo battingInfo = TeamInfo.from(awayTeam, TeamType.AWAY, homeTeamInfo.getScore());
 
-        return StartGameInfo.from(gameInfo, fieldingInfo, battingInfo);
+        return Optional.of(StartGameInfo.from(gameInfo, fieldingInfo, battingInfo));
     }
 
 //    public ScoreDTO getScore() {

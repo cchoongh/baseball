@@ -102,7 +102,7 @@ public class Game {
     }
 
     public boolean isPlaying() {
-        return halfInnings.size() != 0;
+        return isStarted() && (!isEnd);
     }
 
 //    private void addHomeTeam(Team team) {
@@ -113,8 +113,22 @@ public class Game {
 //        this.teams.put(TeamType.AWAY.toString(), GameHasTeam.create(team.getId()));
 //    }
 
-    public boolean checkUser(Long userId) {
-        return (homeUserId.equals(userId)) || ((awayUserId.equals(userId)));
+    public TeamType checkUser(Long userId) {
+        if (homeUserId.equals(userId)) {
+            return TeamType.HOME;
+        }
+        if (awayUserId.equals(userId)) {
+            return TeamType.AWAY;
+        }
+        throw new IllegalStateException();
+    }
+
+    public boolean isReadyToStart() {
+        return hasTwoUsers() && !isStarted() && !isEnd;
+    }
+
+    private boolean isStarted() {
+        return halfInnings.size() != 0;
     }
 
     @Override
