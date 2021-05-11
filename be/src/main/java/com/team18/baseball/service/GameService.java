@@ -171,6 +171,8 @@ public class GameService {
         Team team = teamRepository.findByUserId(user.getId()).orElseThrow(IllegalStateException::new);
         team.unselect();
         game.deleteUser(user.getId());
+        teamRepository.save(team);
+        gameRepository.save(game);
     }
 
     //이닝이 끝났다고 post 할 때

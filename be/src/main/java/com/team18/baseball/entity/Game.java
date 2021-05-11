@@ -153,10 +153,10 @@ public class Game {
     }
 
     public void deleteUser(Long userId) {
-        if(homeUserId.equals(userId)) {
+        if((homeUserId != null ) && (homeUserId.equals(userId))) {
             this.homeUserId = null;
         }
-        if(awayUserId.equals(userId)) {
+        if((awayUserId != null) && (awayUserId.equals(userId))) {
             this.awayUserId = null;
         }
     }
