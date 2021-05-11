@@ -4,7 +4,6 @@ import com.team18.baseball.HttpSessionUtils;
 import com.team18.baseball.dto.StartGameInfo;
 import com.team18.baseball.dto.TeamsInGame;
 import com.team18.baseball.dto.pitcherResult.PitchResult;
-import com.team18.baseball.entity.HalfInning;
 import com.team18.baseball.entity.User;
 import com.team18.baseball.response.ResponseBody;
 import com.team18.baseball.service.GameService;
@@ -39,6 +38,13 @@ public class GameController {
         return gameService.selectTeam(user, gameId, teamId) ? ResponseBody.selectOk() : ResponseBody.selectFail();
     }
 
+    @PostMapping("/{gameId}/team/{teamId}/unselect")
+    public void unselectTeam(@PathVariable Long gameId, @PathVariable Long teamId, HttpSession session) {
+        User user = HttpSessionUtils.getLoginUser(session).orElseThrow(IllegalStateException::new);
+        gameService.unselectTeam(user, gameId, teamId);
+    }
+
+
     @GetMapping("/{gameId}/start")
     public ResponseBody<Object> startGame(@PathVariable Long gameId, HttpSession session) {
         User user = HttpSessionUtils.getLoginUser(session).orElseThrow(IllegalStateException::new);
@@ -47,9 +53,9 @@ public class GameController {
     }
 
     @PostMapping("/{gameId}/pitch")
-    public HalfInning pitch(@RequestBody PitchResult pitchResult, @PathVariable Long gameId, HttpSession session) {
+    public void pitch(@RequestBody PitchResult pitchResult, @PathVariable Long gameId, HttpSession session) {
         User user = HttpSessionUtils.getLoginUser(session).orElseThrow(IllegalStateException::new);
-        return gameService.pitch(user, gameId, pitchResult);
+        gameService.pitch(user, gameId, pitchResult);
     }
 
     @GetMapping("/{gameId}/pitchResult")

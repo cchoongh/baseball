@@ -59,4 +59,8 @@ public class Team {
     public int hashCode() {
         return Objects.hash(getId());
     }
+
+    public void unselect() {
+        this.userId = null;
+    }
 }

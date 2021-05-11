@@ -127,7 +127,7 @@ public class GameService {
         return Optional.of(StartGameInfo.from(gameInfo, fieldingInfo, battingInfo));
     }
 
-    public HalfInning pitch(User user, Long gameId, PitchResult pitchResult) {
+    public void pitch(User user, Long gameId, PitchResult pitchResult) {
         //위의 메소드랑 중복
         Game game = gameRepository.findById(gameId).orElseThrow(IllegalStateException::new);
         if(!game.checkStatus().equals(PlayingStatus.IS_PLAYING.name())) {
@@ -144,7 +144,6 @@ public class GameService {
         halfInningRepository.save(lastHalfInning);
 
         pitchResultRepository.save(pitchResult);
-        return halfInnings.get(halfInnings.size()-1);
     }
 
     public PitchResult getPitchResult(User user, Long gameId) {
@@ -154,6 +153,24 @@ public class GameService {
             throw new IllegalStateException();
         }
         return pitchResultRepository.findById(pitchResultRepository.count()).orElseThrow(IllegalStateException::new);
+    }
+
+    public void unselectTeam(User user, Long gameId, Long teamId) {
+        // 중복
+        // 이 게임이 존재하는 게임인지 확인한다.
+        Game game = gameRepository.findById(gameId).orElseThrow(IllegalStateException::new);
+        // 이 게임이 해당 팀을 갖고 있는지 확인한다
+        if (!game.teamExists(teamId)) {
+            throw new IllegalStateException();
+        }
+        // game의 상태를 확인한다
+        if (!game.checkStatus().equals(PlayingStatus.READY.name())) {
+            throw new IllegalStateException();
+        }
+        //user가 teamId를 갖고 있는지 확인한다.
+        Team team = teamRepository.findByUserId(user.getId()).orElseThrow(IllegalStateException::new);
+        team.unselect();
+        game.deleteUser(user.getId());
     }
 
     //이닝이 끝났다고 post 할 때

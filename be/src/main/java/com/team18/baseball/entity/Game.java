@@ -152,6 +152,15 @@ public class Game {
         }
     }
 
+    public void deleteUser(Long userId) {
+        if(homeUserId.equals(userId)) {
+            this.homeUserId = null;
+        }
+        if(awayUserId.equals(userId)) {
+            this.awayUserId = null;
+        }
+    }
+
     public HalfInning addHalfInning() {
         if(halfInnings.size() == 0) {
             HalfInning halfInning = HalfInning.create(1,  InningType.TOP.name());
@@ -173,4 +182,5 @@ public class Game {
     public void changeStatus(PlayingStatus isPlaying) {
         this.playingStatus = isPlaying.name();
     }
+
 }
