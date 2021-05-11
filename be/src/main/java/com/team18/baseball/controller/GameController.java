@@ -34,13 +34,13 @@ public class GameController {
 //    }
 
     @PostMapping("/{gameId}/team/{teamId}")
-    public ResponseBody selectTeam(@PathVariable Long gameId, @PathVariable Long teamId, HttpSession session) {
+    public ResponseBody<Object> selectTeam(@PathVariable Long gameId, @PathVariable Long teamId, HttpSession session) {
         User user = HttpSessionUtils.getLoginUser(session).orElseThrow(IllegalStateException::new);
         return gameService.selectTeam(user, gameId, teamId) ? ResponseBody.selectOk() : ResponseBody.selectFail();
     }
 
     @GetMapping("/{gameId}/start")
-    public StartGameInfo startGame(@PathVariable Long gameId, HttpSession session) {
+    public ResponseBody<Object> startGame(@PathVariable Long gameId, HttpSession session) {
         User user = HttpSessionUtils.getLoginUser(session).orElseThrow(IllegalStateException::new);
         Optional<StartGameInfo> startGameInfo = gameService.start(user, gameId);
         if(startGameInfo.isPresent()) {
