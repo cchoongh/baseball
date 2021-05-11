@@ -47,8 +47,8 @@ public class ResponseBody<T> {
 
     enum Status {
         SELECT_OK("팀이 선택되었습니다."),
-        SELECT_FAIL(""),
-        START_OK("게임이 시작됩니다"),
+        SELECT_FAIL("다른 유저가 선택한 팀입니다. 다른 팀을 선택하세요"),
+        START_OK("게임이 시작되었습니다"),
         START_FAIL("상대팀 유저를 기다리는 중입니다");
 
 

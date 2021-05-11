@@ -9,14 +9,17 @@ import java.util.stream.Collectors;
 public class Game {
     @Id
     private final Long id;
-    private List<HalfInning> halfInnings = new ArrayList<>();
-    private Map<String, GameHasTeam> teams = new HashMap<>();
+    private List<HalfInning> halfInnings;
+    private Map<String, GameHasTeam> teams;
     private Long homeUserId;
     private Long awayUserId;
-    private String playingStatus = PlayingStatus.READY.name();
+    private String playingStatus;
 
     Game(Long id) {
         this.id = id;
+        halfInnings = new ArrayList<>();
+        teams = new HashMap<>();
+        playingStatus = PlayingStatus.READY.name();
     }
 
     public static final Game create() {
@@ -57,6 +60,11 @@ public class Game {
     @JsonIgnore
     public GameHasTeam getAwayTeamInfo() {
         return teams.get(TeamType.AWAY.toString());
+    }
+
+    @JsonIgnore
+    public HalfInning getLastHalfInning() {
+        return halfInnings.get(halfInnings.size()-1);
     }
 
 
@@ -151,7 +159,7 @@ public class Game {
             return halfInning;
         }
 
-        HalfInning lastInning = halfInnings.get(halfInnings.size()-1);
+        HalfInning lastInning = getLastHalfInning();
         if(lastInning.getInningType().equals(InningType.TOP.name())) {
             HalfInning halfInning = HalfInning.create(lastInning.getInning(), InningType.BOTTOM.name());
             halfInnings.add(halfInning);

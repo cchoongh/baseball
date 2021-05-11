@@ -56,7 +56,7 @@ CREATE TABLE player
     foreign key (team) references team (id)
 );
 
-CREATE TABLE half_inning
+CREATE TABLE `half_inning`
 (
     `id`          int                auto_increment,
     `game`        int                not null,
@@ -64,7 +64,7 @@ CREATE TABLE half_inning
     `inning`      int                   not null,
     `inning_type` varchar(50)           not null,
     `score`       int                   not null,
-    `is_end`    boolean default false not null,
+    `playing_status`  varchar(50) not null,
     primary key (id),
     foreign key (game) references game (id)
 );

@@ -81,9 +81,25 @@ public class GameService {
         //메소드 묶어줘야겠다.
         //2명의 유저가 이 게임을 선택했는가.
         //
-        if(!game.checkStatus().equals(PlayingStatus.READY.name())){
+        if(game.checkStatus().equals(PlayingStatus.END.name())){
             throw new IllegalStateException();
         }
+
+        if(game.checkStatus().equals(PlayingStatus.IS_PLAYING.name())){
+            GameInfo gameInfo = GameInfo.from(game, game.getLastHalfInning());
+            //home팀은 항상 bottom에서 공격
+            //away팀일 항상 top에서 공격
+            GameHasTeam homeTeamInfo = game.getHomeTeamInfo();
+            GameHasTeam awayTeamInfo = game.getAwayTeamInfo();
+            Team homeTeam = teamRepository.findById(homeTeamInfo.getId()).orElseThrow(IllegalStateException::new);
+            Team awayTeam = teamRepository.findById(awayTeamInfo.getId()).orElseThrow(IllegalStateException::new);
+            TeamInfo fieldingInfo = TeamInfo.from(homeTeam, TeamType.HOME, homeTeamInfo.getScore());
+            TeamInfo battingInfo = TeamInfo.from(awayTeam, TeamType.AWAY, homeTeamInfo.getScore());
+
+            return Optional.of(StartGameInfo.from(gameInfo, fieldingInfo, battingInfo));
+        }
+
+
        if(!game.hasTwoUsers()) {
            return Optional.empty();
        }
@@ -93,11 +109,9 @@ public class GameService {
 
         //이닝을 생성하고 game 정보를 로드한다.
         HalfInning halfInning = game.addHalfInning();
-        gameRepository.save(game);
-
-
-        //game 상태 변화
+         //game 상태 변화
         game.changeStatus(PlayingStatus.IS_PLAYING);
+        gameRepository.save(game);
 
         //응답객체를 만든다.
         GameInfo gameInfo = GameInfo.from(game, halfInning);
