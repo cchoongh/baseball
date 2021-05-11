@@ -19,6 +19,7 @@ CREATE TABLE game
     `home_user_id` int,
     `away_user_id` int,
     `is_end` boolean default false not null,
+    `playing_status` varchar(50) not null,
     primary key (id)
 );
 

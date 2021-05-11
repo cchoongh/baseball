@@ -34,23 +34,31 @@ public class GameService {
     private TeamsInGame getTeamsInGame(Game game) {
         TeamSelectionData homeData = getTeamSelectionData(game, TeamType.HOME);
         TeamSelectionData awayData = getTeamSelectionData(game, TeamType.AWAY);
-        return TeamsInGame.from(game.getId(), homeData, awayData);
+        return TeamsInGame.from(game.getId(), game.checkStatus(), homeData, awayData);
     }
 
     private TeamSelectionData getTeamSelectionData(Game game, TeamType teamType) {
-        Long teamId = game.getTeamIdsInGame().get(teamType.toString());
+        Long teamId = game.getTeamIdsInGame().get(teamType.name());
         Team team = teamRepository.findById(teamId).orElseThrow(IllegalStateException::new);
         return TeamSelectionData.from(team);
     }
 
     public boolean selectTeam(User user, Long gameId, Long teamId) {
-        //user가 이미 팀을 선택했는지 확인한다
-//        teamRepository.findByUserId(user.getId()).ifPresent(() -> Il
+//        user가 이미 팀을 선택했는지 확인한다
+        if(teamRepository.findByUserId(user.getId()).isPresent()) {
+            System.out.println(user.getId());
+            System.out.println(teamRepository.findByUserId(user.getId()).get().getUserId());
+            throw new IllegalStateException();
+        }
 
         // 이 게임이 존재하는 게임인지 확인한다.
         Game game = gameRepository.findById(gameId).orElseThrow(IllegalStateException::new);
         // 이 게임이 해당 팀을 갖고 있는지 확인한다
         if (!game.teamExists(teamId)) {
+            throw new IllegalStateException();
+        }
+        // game의 상태를 확인한다
+        if (!game.checkStatus().equals(PlayingStatus.READY.name())) {
             throw new IllegalStateException();
         }
 
@@ -60,10 +68,10 @@ public class GameService {
             return false;
         }
         teamRepository.save(team);
-
-        // game에 userId를 기록한다.
-        game.addUserId(teamId, user.getId());
+        // game에 userId를 기록한다. // 이것을 game에 userId기록을 start 이후로 넘긴다
+        game.addUserId(team.getId(), user.getId());
         gameRepository.save(game);
+
         return true;
     }
 
@@ -72,15 +80,24 @@ public class GameService {
 
         //메소드 묶어줘야겠다.
         //2명의 유저가 이 게임을 선택했는가.
-       if(!game.isReadyToStart()) {
-           throw new IllegalStateException();
+        //
+        if(!game.checkStatus().equals(PlayingStatus.READY.name())){
+            throw new IllegalStateException();
+        }
+       if(!game.hasTwoUsers()) {
+           return Optional.empty();
        }
         //그 중 한 명이 해당 user 인가
-        game.checkUser(user.getId());
+        TeamType teamType = game.checkUser(user.getId());
+       // --------- ,여기 위까지가 검증로기 ----- 아래가 START 되는 것
 
         //이닝을 생성하고 game 정보를 로드한다.
         HalfInning halfInning = game.addHalfInning();
         gameRepository.save(game);
+
+
+        //game 상태 변화
+        game.changeStatus(PlayingStatus.IS_PLAYING);
 
         //응답객체를 만든다.
         GameInfo gameInfo = GameInfo.from(game, halfInning);
@@ -99,7 +116,7 @@ public class GameService {
     public HalfInning pitch(User user, Long gameId, PitchResult pitchResult) {
         //위의 메소드랑 중복
         Game game = gameRepository.findById(gameId).orElseThrow(IllegalStateException::new);
-        if(!game.isPlaying()) {
+        if(!game.checkStatus().equals(PlayingStatus.IS_PLAYING.name())) {
             throw new IllegalStateException();
         }
 
@@ -119,7 +136,7 @@ public class GameService {
     public PitchResult getPitchResult(User user, Long gameId) {
         //위의 메소드랑 중복
         Game game = gameRepository.findById(gameId).orElseThrow(IllegalStateException::new);
-        if(!game.isPlaying()) {
+        if(!game.checkStatus().equals(PlayingStatus.IS_PLAYING.name())) {
             throw new IllegalStateException();
         }
         return pitchResultRepository.findById(pitchResultRepository.count()).orElseThrow(IllegalStateException::new);

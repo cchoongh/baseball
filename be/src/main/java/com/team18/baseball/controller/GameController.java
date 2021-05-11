@@ -43,9 +43,7 @@ public class GameController {
     public ResponseBody<Object> startGame(@PathVariable Long gameId, HttpSession session) {
         User user = HttpSessionUtils.getLoginUser(session).orElseThrow(IllegalStateException::new);
         Optional<StartGameInfo> startGameInfo = gameService.start(user, gameId);
-        if(startGameInfo.isPresent()) {
-            return
-        };
+        return startGameInfo.<ResponseBody<Object>>map(ResponseBody::startOk).orElseGet(ResponseBody::startFail);
     }
 
     @PostMapping("/{gameId}/pitch")

@@ -13,7 +13,7 @@ public class Game {
     private Map<String, GameHasTeam> teams = new HashMap<>();
     private Long homeUserId;
     private Long awayUserId;
-    private boolean isEnd = false;
+    private String playingStatus = PlayingStatus.READY.name();
 
     Game(Long id) {
         this.id = id;
@@ -35,8 +35,8 @@ public class Game {
 //        return teams;
 //    }
 
-    public boolean isEnd() {
-        return isEnd;
+    public String checkStatus() {
+        return playingStatus;
     }
 
     @JsonIgnore
@@ -58,6 +58,7 @@ public class Game {
     public GameHasTeam getAwayTeamInfo() {
         return teams.get(TeamType.AWAY.toString());
     }
+
 
     //    public GameHasTeam getTeamInGameInfo(TeamType teamType) {
 //        GameHasTeam gameHasTeam;
@@ -89,7 +90,7 @@ public class Game {
     }
 
     //2명의 유저가 이 게임을 선택했는가
-    private boolean hasTwoUsers() {
+    public boolean hasTwoUsers() {
         return homeUserExist() && awayUserExist();
     }
 
@@ -99,10 +100,6 @@ public class Game {
 
     private boolean awayUserExist() {
         return this.awayUserId != null;
-    }
-
-    public boolean isPlaying() {
-        return isStarted() && (!isEnd);
     }
 
 //    private void addHomeTeam(Team team) {
@@ -123,11 +120,7 @@ public class Game {
         throw new IllegalStateException();
     }
 
-    public boolean isReadyToStart() {
-        return hasTwoUsers() && !isStarted() && !isEnd;
-    }
-
-    private boolean isStarted() {
+    public boolean isStarted() {
         return halfInnings.size() != 0;
     }
 
@@ -142,30 +135,34 @@ public class Game {
 
     public void addUserId(Long teamId, Long userId) {
         String teamType = checkTeamType(teamId).orElseThrow(IllegalStateException::new);
-        if((teamType.equals(TeamType.HOME.toString())) && (this.homeUserId == null)) {
+        if((teamType.equals(TeamType.HOME.name())) && (this.homeUserId == null)) {
             this.homeUserId = userId;
         }
 
-        if((teamType.equals(TeamType.AWAY.toString())) && (this.awayUserId == null)) {
+        if((teamType.equals(TeamType.AWAY.name())) && (this.awayUserId == null)) {
             this.awayUserId = userId;
         }
     }
 
     public HalfInning addHalfInning() {
         if(halfInnings.size() == 0) {
-            HalfInning halfInning = HalfInning.create(1,  InningType.TOP.toString());
+            HalfInning halfInning = HalfInning.create(1,  InningType.TOP.name());
             halfInnings.add(halfInning);
             return halfInning;
         }
 
         HalfInning lastInning = halfInnings.get(halfInnings.size()-1);
-        if(lastInning.getInningType().equals(InningType.TOP.toString())) {
-            HalfInning halfInning = HalfInning.create(lastInning.getInning(), InningType.BOTTOM.toString());
+        if(lastInning.getInningType().equals(InningType.TOP.name())) {
+            HalfInning halfInning = HalfInning.create(lastInning.getInning(), InningType.BOTTOM.name());
             halfInnings.add(halfInning);
             return halfInning;
         }
-        HalfInning halfInning = HalfInning.create(lastInning.getInning() + 1, InningType.TOP.toString());
+        HalfInning halfInning = HalfInning.create(lastInning.getInning() + 1, InningType.TOP.name());
         halfInnings.add(halfInning);
         return halfInning;
+    }
+
+    public void changeStatus(PlayingStatus isPlaying) {
+        this.playingStatus = isPlaying.name();
     }
 }
