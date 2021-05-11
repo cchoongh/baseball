@@ -43,6 +43,9 @@ public class GameService {
     }
 
     public boolean selectTeam(User user, Long gameId, Long teamId) {
+        //user가 이미 팀을 선택했는지 확인한다
+//        teamRepository.findByUserId(user.getId()).ifPresent(() -> Il
+
         // 이 게임이 존재하는 게임인지 확인한다.
         Game game = gameRepository.findById(gameId).orElseThrow(IllegalStateException::new);
         // 이 게임이 해당 팀을 갖고 있는지 확인한다

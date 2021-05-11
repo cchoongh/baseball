@@ -27,10 +27,10 @@ public class GameController {
         return gameService.getTeamsInGameList();
     }
 
-    @PostMapping("/test")
-    public PitchResult test(@RequestBody PitchResult pitchResult) {
-        return pitchResult;
-    }
+//    @PostMapping("/test")
+//    public PitchResult test(@RequestBody PitchResult pitchResult) {
+//        return pitchResult;
+//    }
 
     @PostMapping("/{gameId}/team/{teamId}")
     public ResponseBody selectTeam(@PathVariable Long gameId, @PathVariable Long teamId, HttpSession session) {

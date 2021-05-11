@@ -32,6 +32,10 @@ public class ResponseBody {
         }
     }
 
+    public Status getStatus() {
+        return status;
+    }
+
     public String getMessage() {
         return message;
     }
