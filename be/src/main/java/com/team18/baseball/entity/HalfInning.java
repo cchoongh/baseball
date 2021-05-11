@@ -1,6 +1,6 @@
 package com.team18.baseball.entity;
 
-import com.team18.baseball.dto.request.PitchResult;
+import com.team18.baseball.dto.pitcherResult.PitchResult;
 import org.springframework.data.annotation.Id;
 
 public class HalfInning {

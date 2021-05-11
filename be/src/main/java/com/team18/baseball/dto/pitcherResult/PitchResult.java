@@ -1,4 +1,4 @@
-package com.team18.baseball.dto.request;
+package com.team18.baseball.dto.pitcherResult;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Embedded;

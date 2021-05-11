@@ -1,4 +1,4 @@
-package com.team18.baseball.dto.request;
+package com.team18.baseball.dto.pitcherResult;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

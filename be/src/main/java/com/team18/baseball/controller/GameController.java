@@ -3,7 +3,7 @@ package com.team18.baseball.controller;
 import com.team18.baseball.HttpSessionUtils;
 import com.team18.baseball.dto.StartGameInfo;
 import com.team18.baseball.dto.TeamsInGame;
-import com.team18.baseball.dto.request.PitchResult;
+import com.team18.baseball.dto.pitcherResult.PitchResult;
 import com.team18.baseball.entity.HalfInning;
 import com.team18.baseball.entity.User;
 import com.team18.baseball.response.ResponseBody;
@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/games")
@@ -33,15 +34,18 @@ public class GameController {
 //    }
 
     @PostMapping("/{gameId}/team/{teamId}")
-    public ResponseBody selectTeam(@PathVariable Long gameId, @PathVariable Long teamId, HttpSession session) {
+    public ResponseBody<Object> selectTeam(@PathVariable Long gameId, @PathVariable Long teamId, HttpSession session) {
         User user = HttpSessionUtils.getLoginUser(session).orElseThrow(IllegalStateException::new);
         return gameService.selectTeam(user, gameId, teamId) ? ResponseBody.selectOk() : ResponseBody.selectFail();
     }
 
     @GetMapping("/{gameId}/start")
-    public StartGameInfo startGame(@PathVariable Long gameId, HttpSession session) {
+    public ResponseBody<Object> startGame(@PathVariable Long gameId, HttpSession session) {
         User user = HttpSessionUtils.getLoginUser(session).orElseThrow(IllegalStateException::new);
-        return gameService.start(user, gameId);
+        Optional<StartGameInfo> startGameInfo = gameService.start(user, gameId);
+        if(startGameInfo.isPresent()) {
+            return
+        };
     }
 
     @PostMapping("/{gameId}/pitch")

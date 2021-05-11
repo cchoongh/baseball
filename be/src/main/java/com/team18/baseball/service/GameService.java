@@ -1,7 +1,7 @@
 package com.team18.baseball.service;
 
 import com.team18.baseball.dto.*;
-import com.team18.baseball.dto.request.PitchResult;
+import com.team18.baseball.dto.pitcherResult.PitchResult;
 import com.team18.baseball.entity.*;
 import com.team18.baseball.repository.GameRepository;
 import com.team18.baseball.repository.HalfInningRepository;
@@ -11,6 +11,7 @@ import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class GameService {
@@ -66,7 +67,7 @@ public class GameService {
         return true;
     }
 
-    public StartGameInfo start(User user, Long gameId) {
+    public Optional<StartGameInfo> start(User user, Long gameId) {
         Game game = gameRepository.findById(gameId).orElseThrow(IllegalStateException::new);
 
         //메소드 묶어줘야겠다.
@@ -92,7 +93,7 @@ public class GameService {
         TeamInfo fieldingInfo = TeamInfo.from(homeTeam, TeamType.HOME, homeTeamInfo.getScore());
         TeamInfo battingInfo = TeamInfo.from(awayTeam, TeamType.AWAY, homeTeamInfo.getScore());
 
-        return StartGameInfo.from(gameInfo, fieldingInfo, battingInfo);
+        return Optional.of(StartGameInfo.from(gameInfo, fieldingInfo, battingInfo));
     }
 
     public HalfInning pitch(User user, Long gameId, PitchResult pitchResult) {
