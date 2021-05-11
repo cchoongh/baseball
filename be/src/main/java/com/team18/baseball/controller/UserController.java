@@ -17,18 +17,10 @@ public class UserController {
         this.userRepository = userRepository;
     }
 
-    @PostMapping("/users/{id}/login")
+    @PostMapping("/users/{id}")
     public String login(@PathVariable Long id, HttpSession session) {
         User user =userRepository.findById(id).orElseThrow(IllegalStateException::new);
         session.setAttribute("sessionedUser", user);
         return "Login Success!";
     }
-
-    @PostMapping("/users/{id}/logout")
-    public String logout(@PathVariable Long id, HttpSession session) {
-        User user =userRepository.findById(id).orElseThrow(IllegalStateException::new);
-        session.removeAttribute("sessionedUser");
-        return "Logout Success!";
-    }
-
 }

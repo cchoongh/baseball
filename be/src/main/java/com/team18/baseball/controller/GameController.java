@@ -38,12 +38,11 @@ public class GameController {
         return gameService.selectTeam(user, gameId, teamId) ? ResponseBody.selectOk() : ResponseBody.selectFail();
     }
 
-    @PostMapping("/{gameId}/team/{teamId}/unselect")
+    @PutMapping("/{gameId}/team/{teamId}")
     public void unselectTeam(@PathVariable Long gameId, @PathVariable Long teamId, HttpSession session) {
         User user = HttpSessionUtils.getLoginUser(session).orElseThrow(IllegalStateException::new);
         gameService.unselectTeam(user, gameId, teamId);
     }
-
 
     @GetMapping("/{gameId}/start")
     public ResponseBody<Object> startGame(@PathVariable Long gameId, HttpSession session) {
