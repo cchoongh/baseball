@@ -1,8 +1,6 @@
 package com.team18.baseball.entity.game;
 
 import com.team18.baseball.entity.GameHasTeam;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.Id;
 
 import java.util.*;
@@ -52,6 +50,10 @@ public class Game {
         return teams.entrySet().stream()
                 .collect(Collectors.toMap(Map.Entry::getKey,
                         e -> e.getValue().getTeamId()));
+    }
+
+    public List<HalfInning> getHalfInnings() {
+        return halfInnings;
     }
 
     public Long getHomeTeamId() {

@@ -119,15 +119,16 @@ public class GameService {
 
     public ScoreDTO getScore(Long gameId) {
         Game game = gameRepository.findById(gameId).orElseThrow(IllegalStateException::new);
-        List<HalfInning> halfInnings = game.getHalfInnings();
-        //boolean isUserHomeTeam, boolean isUserBatting
-        String inningType = game.getLastHalfInning().getInningType();// 현재 초/말
-//        if(inningType.equals())
-//
-//        ScoreDTO result = ScoreDTO.create();
-//        result.makeHomeScore(halfInnings);
-//        return ;
-        return null;
+        Long homeTeamId = game.getHomeTeamId();
+        Long awayTeamId = game.getAwayTeamId();
+        Team homeTeam = teamRepository.findById(homeTeamId).orElseThrow(IllegalStateException::new);
+        Team awayTeam = teamRepository.findById(awayTeamId).orElseThrow(IllegalStateException::new);
+        String homeName = homeTeam.getName();
+        String awayName = awayTeam.getName();
+        ScoreDTO scoreDTO = new ScoreDTO(homeName, awayName);
+        scoreDTO.makeHomeScore(game);
+        scoreDTO.makeAwayScore(game);
+        return scoreDTO;
     }
 
     public PlateAppearanceDTO getPlayersPlateAppearance(Long gameId) {

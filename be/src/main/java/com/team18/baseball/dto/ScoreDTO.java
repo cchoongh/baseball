@@ -1,5 +1,6 @@
 package com.team18.baseball.dto;
 
+import com.team18.baseball.entity.game.Game;
 import com.team18.baseball.entity.game.HalfInning;
 import com.team18.baseball.entity.game.InningType;
 import com.team18.baseball.entity.game.PlayingStatus;
@@ -11,17 +12,17 @@ public class ScoreDTO {
 
     private String homeName;
     private String awayName;
-    //    private boolean isUserHomeTeam;
-//    // user의 id를 가져와서 teams의 homeUserId와 일치하면 home
-//    private String battingTeam;
-//    // 홈 팀은 top(초) 에 항상 수비(fielding)다. away 팀은 top에 항상 공격이다.
-//    // 초 에 수비인 팀 = home, 초에 공격인 팀 = away
     private int homeScore;
     private int awayScore;
     private List<Integer> homeScoreList;
     private List<Integer> awayScoreList;
     private int homeTotal;
     private int awayTotal;
+
+    public ScoreDTO(String homeName, String awayName) {
+        this.homeName = homeName;
+        this.awayName = awayName;
+    }
 
     private ScoreDTO(String homeName, String awayName, List<Integer> homeScoreList,
                      List<Integer> awayScoreList, int homeTotal, int awayTotal) {
@@ -39,9 +40,8 @@ public class ScoreDTO {
     }
 
 
-    public List<Integer> makeHomeScore(List<HalfInning> halfInnings) {
-        // 홈 팀은 top(초) 에 항상 수비(fielding)다. away 팀은 top에- (반대)
-        // HalfInning의 score를 가져올 때 inningType이 top(초)이면 그 score는 away팀 스코어이다. (bottom이면 반대)
+    public List<Integer> makeHomeScore(Game game) {
+        List<HalfInning> halfInnings = game.getHalfInnings();
         List<Integer> homeScoreList = new ArrayList<>();
         for (HalfInning halfInning : halfInnings) {
             int score = halfInning.getScore();
@@ -52,10 +52,13 @@ public class ScoreDTO {
                 if (playingStatus.equals(PlayingStatus.END)) homeScoreList.add(awayScore);
             }
         }
+        this.homeScoreList = homeScoreList;
+        setHomeTotal();
         return homeScoreList;
     }
 
-    public List<Integer> makeAwayScore(List<HalfInning> halfInnings) {
+    public List<Integer> makeAwayScore(Game game) {
+        List<HalfInning> halfInnings = game.getHalfInnings();
         List<Integer> awayScoreList = new ArrayList<>();
         for (HalfInning halfInning : halfInnings) {
             int score = halfInning.getScore();
@@ -66,6 +69,8 @@ public class ScoreDTO {
                 if (playingStatus.equals(PlayingStatus.END)) awayScoreList.add(homeScore);
             }
         }
+        this.awayScoreList = awayScoreList;
+        setAwayTotal();
         return awayScoreList;
     }
 
@@ -80,6 +85,38 @@ public class ScoreDTO {
         for (Integer awayScore : awayScoreList) {
             awayTotal += awayScore;
         }
+        return awayTotal;
+    }
+
+    public String getHomeName() {
+        return homeName;
+    }
+
+    public String getAwayName() {
+        return awayName;
+    }
+
+    public int getHomeScore() {
+        return homeScore;
+    }
+
+    public int getAwayScore() {
+        return awayScore;
+    }
+
+    public List<Integer> getHomeScoreList() {
+        return homeScoreList;
+    }
+
+    public List<Integer> getAwayScoreList() {
+        return awayScoreList;
+    }
+
+    public int getHomeTotal() {
+        return homeTotal;
+    }
+
+    public int getAwayTotal() {
         return awayTotal;
     }
 }

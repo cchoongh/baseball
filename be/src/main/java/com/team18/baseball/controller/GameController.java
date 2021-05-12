@@ -1,6 +1,7 @@
 package com.team18.baseball.controller;
 
 import com.team18.baseball.HttpSessionUtils;
+import com.team18.baseball.dto.ScoreDTO;
 import com.team18.baseball.dto.startGameInfo.StartGameInfo;
 import com.team18.baseball.dto.teamsInGame.TeamsInGame;
 import com.team18.baseball.dto.pitchResult.PitchResult;
@@ -60,9 +61,9 @@ public class GameController {
     }
 
     @GetMapping("/{gameId}/score")
-    public void getScore(@PathVariable Long gameId, HttpSession session) {
+    public ScoreDTO getScore(@PathVariable Long gameId, HttpSession session) {
         User user = HttpSessionUtils.getLoginUser(session).orElseThrow(IllegalStateException::new);
-        // gameService.get
+        return gameService.getScore(gameId);
     }
 
     @GetMapping("/{gameId}/players")
@@ -72,13 +73,10 @@ public class GameController {
 
     }
 
-
-
 //    @PostMapping("/{gameId}/halfInning")
 //    public void completeHalfInning(@PathVariable Long gameId, HttpSession session) {
 //        User user = HttpSessionUtils.getLoginUser(session).orElseThrow(IllegalStateException::new);
 //        gameService.completeHalfInning(gameId, user);
 //    }
-
 
 }
