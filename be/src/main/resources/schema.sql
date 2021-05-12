@@ -97,7 +97,7 @@ CREATE TABLE plate_appearance
     player_name varchar(45) not null,
     at_bat int not null,
     hit    int not null,
-    out    int not null,
+    `out`    int not null,
     primary key (id)
     -- foreign key (player_id) references player (id)
 );
