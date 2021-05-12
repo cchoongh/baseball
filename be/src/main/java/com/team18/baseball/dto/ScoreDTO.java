@@ -96,14 +96,6 @@ public class ScoreDTO {
         return awayName;
     }
 
-    public int getHomeScore() {
-        return homeScore;
-    }
-
-    public int getAwayScore() {
-        return awayScore;
-    }
-
     public List<Integer> getHomeScoreList() {
         return homeScoreList;
     }
