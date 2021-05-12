@@ -1,6 +1,6 @@
-package com.team18.baseball.entity;
+package com.team18.baseball.entity.game;
 
-import com.team18.baseball.dto.pitcherResult.PitchResult;
+import com.team18.baseball.dto.pitchResult.PitchResult;
 import org.springframework.data.annotation.Id;
 
 public class HalfInning {
@@ -51,8 +51,8 @@ public class HalfInning {
     }
 
     //home팀이면은 top일 때 pitch가능
-    public void update(PitchResult pitchResult, TeamType teamType) {
-        if(isPlaying()) {
+    public void updatePitchResult(PitchResult pitchResult, TeamType teamType) {
+        if(!isPlaying()) {
             throw new IllegalStateException();
         }
         if((teamType == TeamType.HOME) && (inningType.equals(InningType.BOTTOM.toString()))) {
@@ -65,4 +65,7 @@ public class HalfInning {
     }
 
 
+    public void end() {
+        this.playingStatus = PlayingStatus.END.name();
+    }
 }

@@ -1,9 +1,9 @@
 package com.team18.baseball.controller;
 
 import com.team18.baseball.HttpSessionUtils;
-import com.team18.baseball.dto.StartGameInfo;
-import com.team18.baseball.dto.TeamsInGame;
-import com.team18.baseball.dto.pitcherResult.PitchResult;
+import com.team18.baseball.dto.startGameInfo.StartGameInfo;
+import com.team18.baseball.dto.teamsInGame.TeamsInGame;
+import com.team18.baseball.dto.pitchResult.PitchResult;
 import com.team18.baseball.entity.User;
 import com.team18.baseball.response.ResponseBody;
 import com.team18.baseball.service.GameService;
@@ -16,6 +16,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/games")
 public class GameController {
+
     private final GameService gameService;
 
     public GameController(GameService gameService) {
@@ -26,11 +27,6 @@ public class GameController {
     public List<TeamsInGame> getGames() {
         return gameService.getTeamsInGameList();
     }
-
-//    @PostMapping("/test")
-//    public PitchResult test(@RequestBody PitchResult pitchResult) {
-//        return pitchResult;
-//    }
 
     @PostMapping("/{gameId}/team/{teamId}")
     public ResponseBody<Object> selectTeam(@PathVariable Long gameId, @PathVariable Long teamId, HttpSession session) {
@@ -59,7 +55,15 @@ public class GameController {
 
     @GetMapping("/{gameId}/pitchResult")
     public PitchResult getPitchResult(@PathVariable Long gameId, HttpSession session) {
-        User user = HttpSessionUtils.getLoginUser(session).orElseThrow(IllegalStateException::new);
-        return gameService.getPitchResult(user, gameId);
+        HttpSessionUtils.getLoginUser(session).orElseThrow(IllegalStateException::new);
+        return gameService.getPitchResult(gameId);
     }
+
+//    @PostMapping("/{gameId}/halfInning")
+//    public void completeHalfInning(@PathVariable Long gameId, HttpSession session) {
+//        User user = HttpSessionUtils.getLoginUser(session).orElseThrow(IllegalStateException::new);
+//        gameService.completeHalfInning(gameId, user);
+//    }
+
+
 }

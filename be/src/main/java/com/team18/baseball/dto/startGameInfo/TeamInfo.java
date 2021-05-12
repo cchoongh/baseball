@@ -1,9 +1,9 @@
-package com.team18.baseball.dto;
+package com.team18.baseball.dto.startGameInfo;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.team18.baseball.entity.Player;
 import com.team18.baseball.entity.Team;
-import com.team18.baseball.entity.TeamType;
+import com.team18.baseball.entity.game.TeamType;
 
 import java.util.ArrayList;
 import java.util.List;

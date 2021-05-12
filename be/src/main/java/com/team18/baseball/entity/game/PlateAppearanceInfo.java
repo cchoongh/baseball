@@ -1,4 +1,4 @@
-package com.team18.baseball.entity;
+package com.team18.baseball.entity.game;
 
 public class PlateAppearanceInfo {
     private final Long id;

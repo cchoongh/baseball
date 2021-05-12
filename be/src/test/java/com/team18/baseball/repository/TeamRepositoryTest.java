@@ -32,7 +32,7 @@ class TeamRepositoryTest {
     private void selectTeam(Long userId, Long teamId) {
         User user = userRepository.findById(userId).orElseThrow(RuntimeException::new);
         Team team = teamRepository.findById(teamId).orElseThrow(RuntimeException::new);
-        team.selectTeam(userId);
+        team.selectedBy(userId);
         teamRepository.save(team);
         Team foundTeam = teamRepository.findById(teamId).orElseThrow(RuntimeException::new);
         assertThat(foundTeam.getUserId()).isEqualTo(userId);

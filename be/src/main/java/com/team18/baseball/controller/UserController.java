@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 @RestController
 public class UserController {
     private final UserRepository userRepository;
+    public static final String USER_SESSION_KEY = "sessionedUser";
 
     public UserController(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -19,8 +20,8 @@ public class UserController {
 
     @PostMapping("/users/{id}")
     public String login(@PathVariable Long id, HttpSession session) {
-        User user =userRepository.findById(id).orElseThrow(IllegalStateException::new);
-        session.setAttribute("sessionedUser", user);
+        User user = userRepository.findById(id).orElseThrow(IllegalStateException::new);
+        session.setAttribute(USER_SESSION_KEY, user);
         return "Login Success!";
     }
 }

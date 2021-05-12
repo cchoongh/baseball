@@ -1,4 +1,4 @@
-package com.team18.baseball.dto.pitcherResult;
+package com.team18.baseball.dto.pitchResult;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Embedded;
@@ -15,8 +15,12 @@ public class PitchResult {
     @Embedded.Nullable
     private Score score;
 
-    public PitchResult() {
+    PitchResult() {
         this.id = null;
+    }
+
+    public static final PitchResult create() {
+        return new PitchResult();
     }
 
     public Batter getBatter() {

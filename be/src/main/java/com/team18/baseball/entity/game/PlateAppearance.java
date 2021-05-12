@@ -1,4 +1,4 @@
-package com.team18.baseball.entity;
+package com.team18.baseball.entity.game;
 
 import org.springframework.data.annotation.Id;
 

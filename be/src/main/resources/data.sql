@@ -17,12 +17,12 @@ VALUES (1, "hanwha"),
        (6, "lg");
 
 INSERT INTO game_has_team(team_id, game, game_key, score)
-VALUES (1, 1, "AWAY", 0),
-       (2, 1, "HOME", 0),
-       (3, 2, "AWAY", 0),
-       (4, 2, "HOME", 0),
-       (5, 3, "AWAY", 0),
-       (1, 3, "HOME", 0);
+VALUES (1, 1, "HOME", 0),
+       (2, 1, "AWAY", 0),
+       (3, 2, "HOME", 0),
+       (4, 2, "AWAY", 0),
+       (5, 3, "HOME", 0),
+       (1, 3, "AWAY", 0);
 
 INSERT INTO player(`name`, team, `uniform_number`, is_pitcher)
 VALUES ("김종수", 1, 1, true),

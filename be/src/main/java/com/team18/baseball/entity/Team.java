@@ -39,28 +39,22 @@ public class Team {
         return players;
     }
 
-    public boolean selectTeam(Long userId) {
-        if(this.userId != null) {
+    public boolean selectedBy(Long userId) {
+        if(selected()) {
             return false;
         }
         this.userId = userId;
         return true;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Team)) return false;
-        Team team = (Team) o;
-        return getId().equals(team.getId());
+    public boolean selected() {
+        return this.userId != null;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId());
-    }
-
-    public void unselect() {
+    public void unselect(Long userId) {
+        if (!this.userId.equals(userId)) {
+            throw new IllegalStateException();
+        }
         this.userId = null;
     }
 }

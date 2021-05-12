@@ -1,21 +1,20 @@
-package com.team18.baseball.dto;
+package com.team18.baseball.dto.teamsInGame;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.team18.baseball.entity.Team;
 
-public class TeamSelectionData {
+public class TeamInGameData {
     private final Long id;
     private final String name;
     private final Boolean selected;
 
-    private TeamSelectionData(Long id, String name, Boolean selected) {
+    private TeamInGameData(Long id, String name, Boolean selected) {
         this.id = id;
         this.name = name;
         this.selected = selected;
     }
 
-    public static TeamSelectionData from(Team team) {
-        return new TeamSelectionData(team.getId(), team.getName(), false);
+    public static TeamInGameData from(Team team) {
+        return new TeamInGameData(team.getId(), team.getName(), team.selected());
     }
 
     public Long getId() {

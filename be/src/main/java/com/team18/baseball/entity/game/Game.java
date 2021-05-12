@@ -1,4 +1,6 @@
-package com.team18.baseball.entity;
+package com.team18.baseball.entity.game;
+
+import com.team18.baseball.entity.GameHasTeam;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.Id;
@@ -7,6 +9,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Game {
+
     @Id
     private final Long id;
     private List<HalfInning> halfInnings;
@@ -34,10 +37,6 @@ public class Game {
         return halfInnings;
     }
 
-//    public Map<String, GameHasTeam> getTeams() {
-//        return teams;
-//    }
-
     public String checkStatus() {
         return playingStatus;
     }
@@ -53,51 +52,55 @@ public class Game {
     }
 
     @JsonIgnore
-    public GameHasTeam getHomeTeamInfo() {
-        return teams.get(TeamType.HOME.toString());
-    }
-
-    @JsonIgnore
-    public GameHasTeam getAwayTeamInfo() {
-        return teams.get(TeamType.AWAY.toString());
+    public GameHasTeam getGameHasTeam(TeamType teamType) {
+        return teams.get(teamType.toString());
     }
 
     @JsonIgnore
     public HalfInning getLastHalfInning() {
+        if (halfInnings.size() < 1) {
+            throw new IllegalStateException();
+        }
         return halfInnings.get(halfInnings.size()-1);
     }
 
-
-    //    public GameHasTeam getTeamInGameInfo(TeamType teamType) {
-//        GameHasTeam gameHasTeam;
-//        if (teamType == TeamType.HOME) {
-//            gameHasTeam = getHomeTeamInfo();
-//        } else {
-//            gameHasTeam = getAwayTeamInfo();
-//        }
-//        return gameHasTeam;
-//    }
-
     @JsonIgnore
-    public Map<String, Long> getTeamIdsInGame() {
+    public Map<String, Long> getTeamIds() {
         return teams.entrySet().stream()
                 .collect(Collectors.toMap(Map.Entry::getKey,
                         e -> e.getValue().getTeamId()));
     }
 
+    @JsonIgnore
+    public Long getHomeTeamId() {
+        return getTeamIds().get(TeamType.HOME.name());
+    }
+
+    @JsonIgnore
+    public Long getAwayTeamId() {
+        return getTeamIds().get(TeamType.AWAY.name());
+    }
+
     private Optional<String> checkTeamType(Long teamId) {
-        return getTeamIdsInGame().entrySet()
+        return getTeamIds().entrySet()
                 .stream()
                 .filter(e -> Objects.equals(e.getValue(), teamId))
                 .map(Map.Entry::getKey)
                 .findFirst();
     }
 
-    public boolean teamExists(Long teamId) {
-        return getTeamIdsInGame().containsValue(teamId);
+
+    public boolean hasTeam(Long teamId) {
+        return getTeamIds().containsValue(teamId);
     }
 
-    //2명의 유저가 이 게임을 선택했는가
+    public TeamType getTeamType(Long teamId) {
+        if(!getTeamIds().containsValue(teamId)) {
+            throw new IllegalStateException();
+        }
+        return TeamType.valueOf(checkTeamType(teamId).get());
+    }
+
     public boolean hasTwoUsers() {
         return homeUserExist() && awayUserExist();
     }
@@ -110,35 +113,19 @@ public class Game {
         return this.awayUserId != null;
     }
 
-//    private void addHomeTeam(Team team) {
-//        this.teams.put(TeamType.HOME.toString(), GameHasTeam.create(team.getId()));
-//    }
-//
-//    private void addAwayTeam(Team team) {
-//        this.teams.put(TeamType.AWAY.toString(), GameHasTeam.create(team.getId()));
-//    }
 
-    public TeamType checkUser(Long userId) {
-        if (homeUserId.equals(userId)) {
-            return TeamType.HOME;
+    public Optional<TeamType> checkUser(Long userId) {
+        if ((homeUserId != null) && (homeUserId.equals(userId))) {
+            return Optional.of(TeamType.HOME);
         }
-        if (awayUserId.equals(userId)) {
-            return TeamType.AWAY;
+        if ((awayUserId != null) && (awayUserId.equals(userId))) {
+            return Optional.of(TeamType.AWAY);
         }
-        throw new IllegalStateException();
+        return Optional.empty();
     }
 
     public boolean isStarted() {
         return halfInnings.size() != 0;
-    }
-
-    @Override
-    public String toString() {
-        return "Game{" +
-                "id=" + id +
-                ", halfInningList=" + halfInnings +
-                ", teams=" + teams +
-                '}';
     }
 
     public void addUserId(Long teamId, Long userId) {
@@ -179,8 +166,21 @@ public class Game {
         return halfInning;
     }
 
+    public HalfInning addFirstHalfInning() {
+        if(halfInnings.size() != 0) {
+            throw new IllegalStateException();
+        }
+        HalfInning halfInning = HalfInning.create(1,  InningType.TOP.name());
+        halfInnings.add(halfInning);
+        changeStatus(PlayingStatus.IS_PLAYING);
+        return halfInning;
+    }
+
     public void changeStatus(PlayingStatus isPlaying) {
         this.playingStatus = isPlaying.name();
     }
 
+    public void end() {
+        this.changeStatus(PlayingStatus.END);
+    }
 }
