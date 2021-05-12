@@ -2,7 +2,6 @@ package com.team18.baseball.service;
 
 import com.team18.baseball.dto.*;
 import com.team18.baseball.dto.PlateAppearanceInfo;
-import com.team18.baseball.dto.pitcherResult.PitchResult;
 import com.team18.baseball.entity.*;
 import com.team18.baseball.dto.pitchResult.PitchResult;
 import com.team18.baseball.dto.startGameInfo.GameInfo;
@@ -13,13 +12,8 @@ import com.team18.baseball.dto.teamsInGame.TeamsInGame;
 import com.team18.baseball.entity.GameHasTeam;
 import com.team18.baseball.entity.Team;
 import com.team18.baseball.entity.User;
-import com.team18.baseball.entity.game.Game;
-import com.team18.baseball.entity.game.PlayingStatus;
-import com.team18.baseball.entity.game.TeamType;
-import com.team18.baseball.repository.GameRepository;
-import com.team18.baseball.repository.HalfInningRepository;
-import com.team18.baseball.repository.PlateAppearanceRepository;
-import com.team18.baseball.repository.PitchResultRepository;
+import com.team18.baseball.entity.game.*;
+import com.team18.baseball.repository.*;
 import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Service;
 
@@ -36,16 +30,12 @@ public class GameService {
     private final PlateAppearanceRepository plateAppearanceRepository;
     private final PitchResultRepository pitchResultRepository;
 
-    public GameService(GameRepository gameRepository, TeamRepository teamRepository,
-                       HalfInningRepository halfInningRepository, PlateAppearanceRepository plateAppearanceRepository,
-                       PitchResultRepository pitchResultRepository) {
     private final TeamService teamService;
     private final HalfInningService halfInningService;
 
-    public GameService(GameRepository gameRepository,
-                       PitchResultRepository pitchResultRepository,
-                       TeamService teamService,
-                       HalfInningService halfInningService) {
+    public GameService(GameRepository gameRepository, TeamRepository teamRepository,
+                       HalfInningRepository halfInningRepository, PlateAppearanceRepository plateAppearanceRepository,
+                       PitchResultRepository pitchResultRepository, TeamService teamService, HalfInningService halfInningService) {
         this.gameRepository = gameRepository;
         this.teamRepository = teamRepository;
         this.plateAppearanceRepository = plateAppearanceRepository;
@@ -142,8 +132,8 @@ public class GameService {
 
     public PlateAppearanceDTO getPlayersPlateAppearance(Long gameId) {
         Game game = gameRepository.findById(gameId).orElseThrow(IllegalStateException::new);
-        GameHasTeam gameHasHomeTeam = game.getHomeTeamInfo();
-        GameHasTeam gameHasAwayTeam = game.getAwayTeamInfo();
+        GameHasTeam gameHasHomeTeam = game.getGameHasTeam(TeamType.HOME);
+        GameHasTeam gameHasAwayTeam = game.getGameHasTeam(TeamType.AWAY);
         Long homeTeamId = gameHasHomeTeam.getTeamId();
         Long awayTeamId = gameHasAwayTeam.getTeamId();
         Team homeTeam = teamRepository.findById(homeTeamId).orElseThrow(IllegalStateException::new);
@@ -153,21 +143,18 @@ public class GameService {
         List<PlateAppearanceInfo> homePAInfos = new ArrayList<>();
         List<PlateAppearanceInfo> awayPAInfos = new ArrayList<>();
         for(Player player : homePlayers) {
-            PlateAppearance homePA = plateAppearanceRepository.findByPlayerId(player.getId());
-            PlateAppearanceInfo homePAInfo = PlateAppearanceInfo.from(homePA);
-            homePAInfos.add(homePAInfo);
+//            PlateAppearance homePA = plateAppearanceRepository.findByPlayerId(player.getId());
+//            PlateAppearanceInfo homePAInfo = PlateAppearanceInfo.from(homePA);
+//            homePAInfos.add(homePAInfo);
         }
         for(Player player : awayPlayers) {
-            PlateAppearance awayPA = plateAppearanceRepository.findByPlayerId(player.getId());
-            PlateAppearanceInfo awayPAInfo = PlateAppearanceInfo.from(awayPA);
-            awayPAInfos.add(awayPAInfo);
+//            PlateAppearance awayPA = plateAppearanceRepository.findByPlayerId(player.getId());
+//            PlateAppearanceInfo awayPAInfo = PlateAppearanceInfo.from(awayPA);
+//            awayPAInfos.add(awayPAInfo);
         }
         return PlateAppearanceDTO.from(homePAInfos, awayPAInfos);
     }
 
-
-    public HalfInning pitch(User user, Long gameId, PitchResult pitchResult) {
-        //위의 메소드랑 중복
     private Game getGameAndHasNotStatus(Long gameId, PlayingStatus notStatus) {
         Game game = gameRepository.findById(gameId).orElseThrow(IllegalStateException::new);
         if(game.checkStatus().equals(notStatus.name())){

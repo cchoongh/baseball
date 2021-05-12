@@ -1,6 +1,8 @@
 package com.team18.baseball.dto;
 
-import com.team18.baseball.entity.*;
+import com.team18.baseball.entity.game.HalfInning;
+import com.team18.baseball.entity.game.InningType;
+import com.team18.baseball.entity.game.PlayingStatus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,10 +46,10 @@ public class ScoreDTO {
         for (HalfInning halfInning : halfInnings) {
             int score = halfInning.getScore();
             String inningType = halfInning.getInningType();
-            boolean isEnd = halfInning.isEnd();
+            String playingStatus = halfInning.getPlayingStatus();
             if (inningType.equals(InningType.BOTTOM.toString())) {
                 homeScore = score;
-                if (isEnd) homeScoreList.add(awayScore);
+                if (playingStatus.equals(PlayingStatus.END)) homeScoreList.add(awayScore);
             }
         }
         return homeScoreList;
@@ -58,10 +60,10 @@ public class ScoreDTO {
         for (HalfInning halfInning : halfInnings) {
             int score = halfInning.getScore();
             String inningType = halfInning.getInningType();
-            boolean isEnd = halfInning.isEnd();
+            String playingStatus = halfInning.getPlayingStatus();
             if (inningType.equals(InningType.TOP.toString())) {
                 awayScore = score;
-                if (isEnd) awayScoreList.add(homeScore);
+                if (playingStatus.equals(PlayingStatus.END)) awayScoreList.add(homeScore);
             }
         }
         return awayScoreList;

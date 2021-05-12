@@ -50,21 +50,6 @@ public class HalfInning {
         return score;
     }
 
-    public boolean isEnd() {
-        return isEnd;
-    }
-
-    @Override
-    public String toString() {
-        return "HalfInning{" +
-                "id=" + id +
-                ", inning=" + inning +
-                ", inningType='" + inningType + '\'' +
-                ", score=" + score +
-                ", isEnd=" + isEnd +
-                '}';
-    }
-
     //home팀이면은 top일 때 pitch가능
     public void updatePitchResult(PitchResult pitchResult, TeamType teamType) {
         if(!isPlaying()) {
@@ -79,6 +64,9 @@ public class HalfInning {
         score = pitchResult.getScore().getBattingScore();
     }
 
+    public String getPlayingStatus() {
+        return playingStatus;
+    }
 
     public void end() {
         this.playingStatus = PlayingStatus.END.name();
