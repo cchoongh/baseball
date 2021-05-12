@@ -1,6 +1,7 @@
 package com.team18.baseball.service;
 
 import com.team18.baseball.dto.pitchResult.PitchResult;
+import com.team18.baseball.dto.pitchResult.PitchResultDto;
 import com.team18.baseball.entity.game.HalfInning;
 import com.team18.baseball.entity.game.TeamType;
 import com.team18.baseball.repository.HalfInningRepository;

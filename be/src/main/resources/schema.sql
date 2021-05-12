@@ -8,14 +8,14 @@ DROP TABLE IF EXISTS `user`;
 
 CREATE TABLE `user`
 (
-    id int auto_increment,
-    github_id varchar(50),
+    `id` int auto_increment,
+    `github_id` varchar(50),
     primary key (id)
 );
 
 CREATE TABLE game
 (
-    id int auto_increment,
+    `id` int auto_increment,
     `home_user_id` int,
     `away_user_id` int,
     `is_end` boolean default false not null,
@@ -25,9 +25,9 @@ CREATE TABLE game
 
 CREATE TABLE team
 (
-    id         int         auto_increment,
-    user_id int,
-    `name`     varchar(50) not null,
+    `id` int auto_increment,
+    `user_id` int,
+    `name` varchar(50) not null,
     primary key (id),
     foreign key (user_id) references `user` (id)
 );
@@ -44,47 +44,57 @@ CREATE TABLE `game_has_team`
     foreign key (game) references game (id)
 );
 
-CREATE TABLE player
+CREATE TABLE `player`
 (
-    id              int                   auto_increment,
-    team            int                   not null,
-    team_key        int,
-    `name`          varchar(50)           not null,
+    `id` int auto_increment,
+    `team` int not null,
+    `team_key` int,
+    `name` varchar(50) not null,
     `uniform_number` int,
-    is_pitcher boolean default false not null,
+    `is_pitcher` boolean default false not null,
     primary key (id),
     foreign key (team) references team (id)
 );
 
 CREATE TABLE `half_inning`
 (
-    `id`          int                auto_increment,
-    `game`        int                not null,
-    `game_key`    int,
-    `inning`      int                   not null,
-    `inning_type` varchar(50)           not null,
-    `score`       int                   not null,
-    `playing_status`  varchar(50) not null,
+    `id` int auto_increment,
+    `game` int not null,
+    `game_key` int,
+    `inning` int not null,
+    `inning_type` varchar(50) not null,
+    `score` int not null,
+    `playing_status` varchar(50) not null,
     primary key (id),
     foreign key (game) references game (id)
 );
 
 CREATE TABLE `pitch_result`
 (
-    `id`          int                auto_increment,
-    `batter_id`        int     not null,
-    `batter_name`        varchar(50)      not null,
-    `batter_uniform_number`      int                   not null,
-    `pitch_result` varchar(50)           not null,
-    `is_out`    boolean default false not null,
-    `first_base_player`  int not null,
-    `second_base_player` int not null,
-    `third_base_player` int not null,
-    `strike`      int                   not null,
-    `ball`      int                   not null,
-     `out`       int                   not null,
-     `batting_score` int,
-     `fielding_score` int,
+    `id` int auto_increment,
+    `home_id` int not null,
+    `away_id` int not null,
+    `batting_team_id` int not null,
+    `pitch_result` varchar(50) not null,
+    `player_id` int not null,
+    `player_name` varchar(50) not null,
+    `player_uniform_number` int not null,
+    `is_out` boolean default false not null,
+    `first_player` int,
+    `first_mode` varchar(50),
+    `second_player` int,
+    `second_mode` varchar(50),
+    `third_player` int,
+    `third_mode` varchar(50),
+    `fourth_player` int,
+    `fourth_mode` varchar(50),
+    `strike` int not null,
+    `ball` int not null,
+    `out` int not null,
+    `batting_score` int,
+    `fielding_score` int,
+    `home_score` int,
+    `away_score` int,
     primary key (id)
 );
 

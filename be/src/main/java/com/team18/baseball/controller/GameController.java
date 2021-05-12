@@ -1,9 +1,10 @@
 package com.team18.baseball.controller;
 
 import com.team18.baseball.HttpSessionUtils;
+import com.team18.baseball.dto.pitchResult.PitchResult;
 import com.team18.baseball.dto.startGameInfo.StartGameInfo;
 import com.team18.baseball.dto.teamsInGame.TeamsInGame;
-import com.team18.baseball.dto.pitchResult.PitchResult;
+import com.team18.baseball.dto.pitchResult.PitchResultDto;
 import com.team18.baseball.entity.User;
 import com.team18.baseball.response.ResponseBody;
 import com.team18.baseball.service.GameService;
@@ -28,13 +29,13 @@ public class GameController {
         return gameService.getTeamsInGameList();
     }
 
-    @PostMapping("/{gameId}/team/{teamId}")
+    @PostMapping("/{gameId}/teams/{teamId}")
     public ResponseBody<Object> selectTeam(@PathVariable Long gameId, @PathVariable Long teamId, HttpSession session) {
         User user = HttpSessionUtils.getLoginUser(session).orElseThrow(IllegalStateException::new);
         return gameService.selectTeam(user, gameId, teamId) ? ResponseBody.selectOk() : ResponseBody.selectFail();
     }
 
-    @PutMapping("/{gameId}/team/{teamId}")
+    @PutMapping("/{gameId}/teams/{teamId}")
     public void unselectTeam(@PathVariable Long gameId, @PathVariable Long teamId, HttpSession session) {
         User user = HttpSessionUtils.getLoginUser(session).orElseThrow(IllegalStateException::new);
         gameService.unselectTeam(user, gameId, teamId);
@@ -48,13 +49,13 @@ public class GameController {
     }
 
     @PostMapping("/{gameId}/pitch")
-    public void pitch(@RequestBody PitchResult pitchResult, @PathVariable Long gameId, HttpSession session) {
+    public void pitch(@RequestBody PitchResultDto pitchResultDto, @PathVariable Long gameId, HttpSession session) {
         User user = HttpSessionUtils.getLoginUser(session).orElseThrow(IllegalStateException::new);
-        gameService.pitch(user, gameId, pitchResult);
+        gameService.pitch(user, gameId, pitchResultDto);
     }
 
     @GetMapping("/{gameId}/pitchResult")
-    public PitchResult getPitchResult(@PathVariable Long gameId, HttpSession session) {
+    public PitchResultDto getPitchResult(@PathVariable Long gameId, HttpSession session) {
         HttpSessionUtils.getLoginUser(session).orElseThrow(IllegalStateException::new);
         return gameService.getPitchResult(gameId);
     }

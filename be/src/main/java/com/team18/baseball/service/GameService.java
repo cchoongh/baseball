@@ -2,6 +2,7 @@ package com.team18.baseball.service;
 
 import com.team18.baseball.TeamRoleUtils;
 import com.team18.baseball.dto.pitchResult.PitchResult;
+import com.team18.baseball.dto.pitchResult.PitchResultDto;
 import com.team18.baseball.dto.startGameInfo.GameInfo;
 import com.team18.baseball.dto.startGameInfo.StartGameInfo;
 import com.team18.baseball.dto.startGameInfo.TeamInfo;
@@ -12,7 +13,6 @@ import com.team18.baseball.entity.Team;
 import com.team18.baseball.entity.User;
 import com.team18.baseball.entity.game.Game;
 import com.team18.baseball.entity.game.PlayingStatus;
-import com.team18.baseball.entity.game.TeamRole;
 import com.team18.baseball.entity.game.TeamType;
 import com.team18.baseball.repository.GameRepository;
 import com.team18.baseball.repository.PitchResultRepository;
@@ -121,16 +121,19 @@ public class GameService {
         return game;
     }
 
-    public void pitch(User user, Long gameId, PitchResult pitchResult) {
+    public void pitch(User user, Long gameId, PitchResultDto pitchResultDto) {
+        PitchResult pitchResult = PitchResult.from(pitchResultDto);
+        pitchResult.addPlayerInfo(pitchResultDto.getRunners());
         Game game = getGameAndHasStatus(gameId, PlayingStatus.IS_PLAYING);
         TeamType teamType = game.checkUser(user.getId()).orElseThrow(IllegalStateException::new);
         halfInningService.update(game.getLastHalfInning(), pitchResult, teamType);
         pitchResultRepository.save(pitchResult);
     }
 
-    public PitchResult getPitchResult(Long gameId) {
-        Game game = getGameAndHasStatus(gameId, PlayingStatus.IS_PLAYING);
-        return pitchResultRepository.findById(pitchResultRepository.count()).orElseThrow(IllegalStateException::new);
+    public PitchResultDto getPitchResult(Long gameId) {
+        getGameAndHasStatus(gameId, PlayingStatus.IS_PLAYING);
+        PitchResult pitchResult = pitchResultRepository.findById(pitchResultRepository.count()).orElseThrow(IllegalStateException::new);
+        return PitchResultDto.from(pitchResult);
     }
 
     public void unselectTeam(User user, Long gameId, Long teamId) {
