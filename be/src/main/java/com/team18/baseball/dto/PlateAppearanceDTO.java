@@ -4,23 +4,23 @@ import java.util.List;
 
 public class PlateAppearanceDTO {
 
-    private final List<PlateAppearanceInfo> away;
-    private final List<PlateAppearanceInfo> home;
+    private final List<PlateAppearanceInfoDTO> away;
+    private final List<PlateAppearanceInfoDTO> home;
 
-    private PlateAppearanceDTO(List<PlateAppearanceInfo> away, List<PlateAppearanceInfo> home) {
+    private PlateAppearanceDTO(List<PlateAppearanceInfoDTO> away, List<PlateAppearanceInfoDTO> home) {
         this.away = away;
         this.home = home;
     }
 
-    public static PlateAppearanceDTO from(List<PlateAppearanceInfo> away, List<PlateAppearanceInfo> home) {
+    public static PlateAppearanceDTO from(List<PlateAppearanceInfoDTO> away, List<PlateAppearanceInfoDTO> home) {
         return new PlateAppearanceDTO(away, home);
     }
 
-    public List<PlateAppearanceInfo> getAway() {
+    public List<PlateAppearanceInfoDTO> getAway() {
         return away;
     }
 
-    public List<PlateAppearanceInfo> getHome() {
+    public List<PlateAppearanceInfoDTO> getHome() {
         return home;
     }
 }
