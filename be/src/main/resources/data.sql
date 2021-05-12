@@ -22,11 +22,11 @@ VALUES (1, 1, "HOME", 0),
        (3, 2, "HOME", 0),
        (4, 2, "AWAY", 0),
        (5, 3, "HOME", 0),
-       (1, 3, "AWAY", 0);
+       (6, 3, "AWAY", 0);
 
 INSERT INTO player(`name`, team, `uniform_number`, is_pitcher)
-VALUES ("김종수", 1, 1, true),
-       ("남지민", 1, 2, false),
+VALUES ("김오잉", 1, 1, true),
+       ("남치수", 1, 2, false),
        ("임준섭", 1, 3, false),
        ("김종식", 1, 4, true),
        ("남색", 1, 5, false),

@@ -41,7 +41,7 @@ public class TeamInfo {
             }
             batters.add(playerInfo);
         }
-        return new TeamInfo(team.getId(), team.getName(), teamRole.toString(), score, pitcher, batters);
+        return new TeamInfo(team.getId(), team.getName(), teamRole.name(), score, pitcher, batters);
     }
 
     public Long getId() {

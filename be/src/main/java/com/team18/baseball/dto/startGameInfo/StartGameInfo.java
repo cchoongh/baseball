@@ -2,13 +2,13 @@ package com.team18.baseball.dto.startGameInfo;
 
 public class StartGameInfo {
     private final GameInfo gameInfo;
-    private final TeamInfo homeTeam;
-    private final TeamInfo awayTeam;
+    private final TeamInfo home;
+    private final TeamInfo away;
 
-    private StartGameInfo(GameInfo gameInfo, TeamInfo homeTeam, TeamInfo batting_team) {
+    private StartGameInfo(GameInfo gameInfo, TeamInfo home, TeamInfo away) {
         this.gameInfo = gameInfo;
-        this.homeTeam = homeTeam;
-        this.awayTeam = batting_team;
+        this.home = home;
+        this.away = away;
     }
 
     public static StartGameInfo from(GameInfo gameInfo, TeamInfo homeTeam, TeamInfo awayTeam) {
@@ -19,11 +19,11 @@ public class StartGameInfo {
         return gameInfo;
     }
 
-    public TeamInfo getHomeTeam() {
-        return homeTeam;
+    public TeamInfo getHome() {
+        return home;
     }
 
-    public TeamInfo getAwayTeam() {
-        return awayTeam;
+    public TeamInfo getAway() {
+        return away;
     }
 }
