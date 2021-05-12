@@ -1,7 +1,7 @@
 package com.team18.baseball.service;
 
 import com.team18.baseball.dto.*;
-import com.team18.baseball.dto.PlateAppearanceInfo;
+import com.team18.baseball.dto.PlateAppearanceInfoDTO;
 import com.team18.baseball.entity.*;
 import com.team18.baseball.dto.pitchResult.PitchResult;
 import com.team18.baseball.dto.startGameInfo.GameInfo;
@@ -139,20 +139,22 @@ public class GameService {
         Long awayTeamId = gameHasAwayTeam.getTeamId();
         Team homeTeam = teamRepository.findById(homeTeamId).orElseThrow(IllegalStateException::new);
         Team awayTeam = teamRepository.findById(awayTeamId).orElseThrow(IllegalStateException::new);
+        String homeTeamName = homeTeam.getName();
+        String awayTeamName = awayTeam.getName();
         List<Player> homePlayers = homeTeam.getPlayers();
         List<Player> awayPlayers = awayTeam.getPlayers();
-        List<PlateAppearanceInfo> homePAInfos = new ArrayList<>();
-        List<PlateAppearanceInfo> awayPAInfos = new ArrayList<>();
-        for(Player player : homePlayers) {
+        List<PlateAppearanceInfoDTO> homePAInfos = new ArrayList<>();
+        List<PlateAppearanceInfoDTO> awayPAInfos = new ArrayList<>();
+//        for(Player player : homePlayers) {
 //            PlateAppearance homePA = plateAppearanceRepository.findByPlayerId(player.getId());
 //            PlateAppearanceInfo homePAInfo = PlateAppearanceInfo.from(homePA);
 //            homePAInfos.add(homePAInfo);
-        }
-        for(Player player : awayPlayers) {
+//        }
+//        for(Player player : awayPlayers) {
 //            PlateAppearance awayPA = plateAppearanceRepository.findByPlayerId(player.getId());
 //            PlateAppearanceInfo awayPAInfo = PlateAppearanceInfo.from(awayPA);
 //            awayPAInfos.add(awayPAInfo);
-        }
+//        }
         return PlateAppearanceDTO.from(homePAInfos, awayPAInfos);
     }
 

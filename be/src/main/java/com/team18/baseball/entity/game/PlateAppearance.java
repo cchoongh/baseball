@@ -1,44 +1,18 @@
 package com.team18.baseball.entity.game;
 
-import org.springframework.data.annotation.Id;
+import java.util.List;
 
 public class PlateAppearance {
-    @Id
-    private final Long id;
-    private final String playerName;
-    private final int atBat;
-    private final int hit;
-    private final int out;
 
-    PlateAppearance(Long id, String playerName, int atBat, int hit, int out) {
-        this.id = id;
-        this.playerName = playerName;
-        this.atBat = atBat;
-        this.hit = hit;
-        this.out = out;
+    private final List<PlateAppearanceInfo> away;
+    private final List<PlateAppearanceInfo> home;
+
+    private PlateAppearance(List<PlateAppearanceInfo> away, List<PlateAppearanceInfo> home) {
+        this.away = away;
+        this.home = home;
     }
 
-    public static PlateAppearance create(Long id, String playerName, int atBat, int hit, int out) {
-        return new PlateAppearance(id, playerName,  atBat, hit, out);
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getPlayerName() {
-        return playerName;
-    }
-
-    public int getAtBat() {
-        return atBat;
-    }
-
-    public int getHit() {
-        return hit;
-    }
-
-    public int getOut() {
-        return out;
+    public static PlateAppearance create(List<PlateAppearanceInfo> away, List<PlateAppearanceInfo> home) {
+        return new PlateAppearance(away, home);
     }
 }
