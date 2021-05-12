@@ -131,7 +131,7 @@ public class GameService {
         return scoreDTO;
     }
 
-    public PlateAppearanceDTO getPlayersPlateAppearance(Long gameId) {
+    public PlateAppearanceDTO getPlateAppearance(Long gameId) {
         Game game = gameRepository.findById(gameId).orElseThrow(IllegalStateException::new);
         GameHasTeam gameHasHomeTeam = game.getGameHasTeam(TeamType.HOME);
         GameHasTeam gameHasAwayTeam = game.getGameHasTeam(TeamType.AWAY);
