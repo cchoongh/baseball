@@ -41,6 +41,10 @@ public class Game {
         return teams.get(teamType.toString());
     }
 
+    public List<HalfInning> getHalfInnings() {
+        return this.halfInnings;
+    }
+
     public HalfInning getLastHalfInning() {
         if (halfInnings.size() < 1) {
             throw new IllegalStateException();

@@ -1,5 +1,6 @@
 package com.team18.baseball.service;
 
+import com.team18.baseball.TeamRoleUtils;
 import com.team18.baseball.dto.pitchResult.PitchResult;
 import com.team18.baseball.dto.startGameInfo.GameInfo;
 import com.team18.baseball.dto.startGameInfo.StartGameInfo;
@@ -11,6 +12,7 @@ import com.team18.baseball.entity.Team;
 import com.team18.baseball.entity.User;
 import com.team18.baseball.entity.game.Game;
 import com.team18.baseball.entity.game.PlayingStatus;
+import com.team18.baseball.entity.game.TeamRole;
 import com.team18.baseball.entity.game.TeamType;
 import com.team18.baseball.repository.GameRepository;
 import com.team18.baseball.repository.PitchResultRepository;
@@ -99,16 +101,16 @@ public class GameService {
     }
 
     private StartGameInfo getStartGameInfo(Game game) {
-        TeamInfo fieldingInfo = getTeamInfo(game, TeamType.HOME);
-        TeamInfo battingInfo = getTeamInfo(game, TeamType.AWAY);
+        TeamInfo homeTeamInfo = getTeamInfo(game, TeamType.HOME);
+        TeamInfo awayTeamInfo = getTeamInfo(game, TeamType.AWAY);
         return StartGameInfo.from( GameInfo.from(game, game.getLastHalfInning())
-                , fieldingInfo, battingInfo);
+                , homeTeamInfo, awayTeamInfo);
     }
 
     private TeamInfo getTeamInfo(Game game, TeamType teamType) {
         GameHasTeam gameHasTeam = game.getGameHasTeam(teamType);
         Team team = teamService.findTeam(gameHasTeam.getTeamId());
-        return TeamInfo.from(team, TeamType.HOME, gameHasTeam.getScore());
+        return TeamInfo.from(team, TeamRoleUtils.checkTeamRole(teamType, game.getHalfInnings().size()), gameHasTeam.getScore());
     }
 
     private Game getGameAndHasNotStatus(Long gameId, PlayingStatus notStatus) {
@@ -122,7 +124,6 @@ public class GameService {
     public void pitch(User user, Long gameId, PitchResult pitchResult) {
         Game game = getGameAndHasStatus(gameId, PlayingStatus.IS_PLAYING);
         TeamType teamType = game.checkUser(user.getId()).orElseThrow(IllegalStateException::new);
-
         halfInningService.update(game.getLastHalfInning(), pitchResult, teamType);
         pitchResultRepository.save(pitchResult);
     }
