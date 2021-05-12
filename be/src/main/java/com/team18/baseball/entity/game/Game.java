@@ -33,30 +33,14 @@ public class Game {
         return id;
     }
 
-    public List<HalfInning> getHalfInnings() {
-        return halfInnings;
-    }
-
     public String checkStatus() {
         return playingStatus;
     }
 
-    @JsonIgnore
-    public Long getHomeUserId() {
-        return homeUserId;
-    }
-
-    @JsonIgnore
-    public Long getAwayUserId() {
-        return awayUserId;
-    }
-
-    @JsonIgnore
     public GameHasTeam getGameHasTeam(TeamType teamType) {
         return teams.get(teamType.toString());
     }
 
-    @JsonIgnore
     public HalfInning getLastHalfInning() {
         if (halfInnings.size() < 1) {
             throw new IllegalStateException();
@@ -64,19 +48,16 @@ public class Game {
         return halfInnings.get(halfInnings.size()-1);
     }
 
-    @JsonIgnore
-    public Map<String, Long> getTeamIds() {
+    private Map<String, Long> getTeamIds() {
         return teams.entrySet().stream()
                 .collect(Collectors.toMap(Map.Entry::getKey,
                         e -> e.getValue().getTeamId()));
     }
 
-    @JsonIgnore
     public Long getHomeTeamId() {
         return getTeamIds().get(TeamType.HOME.name());
     }
 
-    @JsonIgnore
     public Long getAwayTeamId() {
         return getTeamIds().get(TeamType.AWAY.name());
     }
@@ -89,17 +70,16 @@ public class Game {
                 .findFirst();
     }
 
-
     public boolean hasTeam(Long teamId) {
         return getTeamIds().containsValue(teamId);
     }
 
-    public TeamType getTeamType(Long teamId) {
-        if(!getTeamIds().containsValue(teamId)) {
-            throw new IllegalStateException();
-        }
-        return TeamType.valueOf(checkTeamType(teamId).get());
-    }
+//    public TeamType getTeamType(Long teamId) {
+//        if(!getTeamIds().containsValue(teamId)) {
+//            throw new IllegalStateException();
+//        }
+//        return TeamType.valueOf(checkTeamType(teamId).get());
+//    }
 
     public boolean hasTwoUsers() {
         return homeUserExist() && awayUserExist();
@@ -124,10 +104,6 @@ public class Game {
         return Optional.empty();
     }
 
-    public boolean isStarted() {
-        return halfInnings.size() != 0;
-    }
-
     public void addUserId(Long teamId, Long userId) {
         String teamType = checkTeamType(teamId).orElseThrow(IllegalStateException::new);
         if((teamType.equals(TeamType.HOME.name())) && (this.homeUserId == null)) {
@@ -148,39 +124,28 @@ public class Game {
         }
     }
 
-    public HalfInning addHalfInning() {
-        if(halfInnings.size() == 0) {
-            HalfInning halfInning = HalfInning.create(1,  InningType.TOP.name());
-            halfInnings.add(halfInning);
-            return halfInning;
-        }
+//    public HalfInning addHalfInning() {
+//        HalfInning lastInning = getLastHalfInning();
+//        if(lastInning.getInningType().equals(InningType.TOP.name())) {
+//            HalfInning halfInning = HalfInning.create(lastInning.getInning(), InningType.BOTTOM.name());
+//            halfInnings.add(halfInning);
+//            return halfInning;
+//        }
+//        HalfInning halfInning = HalfInning.create(lastInning.getInning() + 1, InningType.TOP.name());
+//        halfInnings.add(halfInning);
+//        return halfInning;
+//    }
 
-        HalfInning lastInning = getLastHalfInning();
-        if(lastInning.getInningType().equals(InningType.TOP.name())) {
-            HalfInning halfInning = HalfInning.create(lastInning.getInning(), InningType.BOTTOM.name());
-            halfInnings.add(halfInning);
-            return halfInning;
-        }
-        HalfInning halfInning = HalfInning.create(lastInning.getInning() + 1, InningType.TOP.name());
-        halfInnings.add(halfInning);
-        return halfInning;
-    }
-
-    public HalfInning addFirstHalfInning() {
+    public void addFirstHalfInning() {
         if(halfInnings.size() != 0) {
             throw new IllegalStateException();
         }
         HalfInning halfInning = HalfInning.create(1,  InningType.TOP.name());
         halfInnings.add(halfInning);
         changeStatus(PlayingStatus.IS_PLAYING);
-        return halfInning;
     }
 
     public void changeStatus(PlayingStatus isPlaying) {
         this.playingStatus = isPlaying.name();
-    }
-
-    public void end() {
-        this.changeStatus(PlayingStatus.END);
     }
 }
