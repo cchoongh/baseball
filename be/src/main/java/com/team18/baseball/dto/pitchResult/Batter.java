@@ -4,20 +4,18 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.team18.baseball.entity.Player;
 
 public class Batter {
-    private Long batterId;
-    private String batterName;
-    private int batterUniformNumber;
-    private String pitchResult;
+    private Long playerId;
+    private String playerName;
+    private int playerUniformNumber;
     private boolean isOut;
 
     Batter() {
     }
 
-    Batter(Long batterId, String batterName, int batterUniformNumber) {
-        this.batterId = batterId;
-        this.batterName = batterName;
-        this.batterUniformNumber = batterUniformNumber;
-        this.pitchResult = null;
+    Batter(Long playerId, String playerName, int playerUniformNumber) {
+        this.playerId = playerId;
+        this.playerName = playerName;
+        this.playerUniformNumber = playerUniformNumber;
         this.isOut = false;
     }
 
@@ -25,20 +23,16 @@ public class Batter {
         return new Batter(player.getId(), player.getName(), player.getUniformNumber());
     }
 
-    public Long getBatterId() {
-        return batterId;
+    public Long getPlayerId() {
+        return playerId;
     }
 
-    public String getBatterName() {
-        return batterName;
+    public String getPlayerName() {
+        return playerName;
     }
 
-    public int getBatterUniformNumber() {
-        return batterUniformNumber;
-    }
-
-    public String getPitchResult() {
-        return pitchResult;
+    public int getPlayerUniformNumber() {
+        return playerUniformNumber;
     }
 
     @JsonProperty("is_out")
