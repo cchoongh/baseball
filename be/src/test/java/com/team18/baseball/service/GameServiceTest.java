@@ -1,6 +1,9 @@
 package com.team18.baseball.service;
 
 import com.team18.baseball.entity.*;
+import com.team18.baseball.entity.game.Game;
+import com.team18.baseball.entity.game.HalfInning;
+import com.team18.baseball.entity.game.InningType;
 import com.team18.baseball.repository.GameRepository;
 import com.team18.baseball.repository.HalfInningRepository;
 import com.team18.baseball.repository.TeamRepository;
@@ -71,7 +74,7 @@ class GameServiceTest {
 
         gameService.selectTeam(user2, gameId, team2Id);
 
-        game.teamExists(team2Id);
+        game.hasTeam(team2Id);
         gameService.start(user, gameId);
 
         HalfInning halfInning = halfInningRepository.findById(1L).orElseThrow(IllegalStateException::new);

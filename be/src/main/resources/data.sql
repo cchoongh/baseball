@@ -3,10 +3,10 @@ VALUES ("kkk@honux.com"),
        ("jjj@honux.com"),
        ("qqq@honux.com");
 
-INSERT INTO game(id, home_user_id, away_user_id)
-VALUES (1, null, null),
-       (2, null, null),
-       (3, null, null);
+INSERT INTO game(id, home_user_id, away_user_id, `playing_status`)
+VALUES (1, null, null, "READY"),
+       (2, null, null, "READY"),
+       (3, null, null, "READY");
 
 INSERT INTO team (id, `name`)
 VALUES (1, "hanwha"),
@@ -17,12 +17,12 @@ VALUES (1, "hanwha"),
        (6, "lg");
 
 INSERT INTO game_has_team(team_id, game, game_key, score)
-VALUES (1, 1, "AWAY", 0),
-       (2, 1, "HOME", 0),
-       (3, 2, "AWAY", 0),
-       (4, 2, "HOME", 0),
-       (5, 3, "AWAY", 0),
-       (1, 3, "HOME", 0);
+VALUES (1, 1, "HOME", 0),
+       (2, 1, "AWAY", 0),
+       (3, 2, "HOME", 0),
+       (4, 2, "AWAY", 0),
+       (5, 3, "HOME", 0),
+       (1, 3, "AWAY", 0);
 
 INSERT INTO player(`name`, team, `uniform_number`, is_pitcher)
 VALUES ("김종수", 1, 1, true),

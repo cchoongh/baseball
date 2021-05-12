@@ -1,7 +1,7 @@
-package com.team18.baseball.dto;
+package com.team18.baseball.dto.startGameInfo;
 
-import com.team18.baseball.entity.Game;
-import com.team18.baseball.entity.HalfInning;
+import com.team18.baseball.entity.game.Game;
+import com.team18.baseball.entity.game.HalfInning;
 
 public class GameInfo {
     private final Long id;

@@ -1,6 +1,5 @@
-package com.team18.baseball.dto;
+package com.team18.baseball.dto.startGameInfo;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.team18.baseball.entity.Player;
 
 public class PlayerInfo {
