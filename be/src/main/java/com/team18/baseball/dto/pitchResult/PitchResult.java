@@ -59,31 +59,19 @@ public class PitchResult {
     }
 
     public void addPlayerInfo(Runner[] runners) {
-        if(runners.length == 1) {
+        if(runners.length >= 1) {
             this.first_player = runners[0].getPlayerId();
             this.first_mode = runners[0].getMode();
         }
-        if(runners.length == 2) {
-            this.first_player = runners[0].getPlayerId();
-            this.first_mode = runners[0].getMode();
+        if(runners.length >= 2) {
             this.second_player = runners[1].getPlayerId();
             this.second_mode = runners[1].getMode();
         }
-        if(runners.length == 3) {
-            this.first_player = runners[0].getPlayerId();
-            this.first_mode = runners[0].getMode();
-            this.second_player = runners[1].getPlayerId();
-            this.second_mode = runners[1].getMode();
+        if(runners.length >= 3) {
             this.third_player = runners[2].getPlayerId();
             this.third_mode = runners[2].getMode();
         }
-        if(runners.length == 3) {
-            this.first_player = runners[0].getPlayerId();
-            this.first_mode = runners[0].getMode();
-            this.second_player = runners[1].getPlayerId();
-            this.second_mode = runners[1].getMode();
-            this.third_player = runners[2].getPlayerId();
-            this.third_mode = runners[2].getMode();
+        if(runners.length == 4) {
             this.fourth_player = runners[3].getPlayerId();
             this.fourth_mode = runners[3].getMode();
         }
