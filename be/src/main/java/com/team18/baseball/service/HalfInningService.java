@@ -15,8 +15,8 @@ public class HalfInningService {
         this.halfInningRepository = halfInningRepository;
     }
 
-    public void update(HalfInning lastHalfInning, PitchResult pitchResult, TeamType teamType) {
-        lastHalfInning.updatePitchResult(pitchResult, teamType);
+    public void update(HalfInning lastHalfInning, PitchResult pitchResult) {
+        lastHalfInning.updatePitchResult(pitchResult);
         halfInningRepository.save(lastHalfInning);
     }
 }

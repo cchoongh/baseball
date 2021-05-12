@@ -13,6 +13,7 @@ import com.team18.baseball.entity.Team;
 import com.team18.baseball.entity.User;
 import com.team18.baseball.entity.game.Game;
 import com.team18.baseball.entity.game.PlayingStatus;
+import com.team18.baseball.entity.game.TeamRole;
 import com.team18.baseball.entity.game.TeamType;
 import com.team18.baseball.repository.GameRepository;
 import com.team18.baseball.repository.PitchResultRepository;
@@ -26,19 +27,16 @@ import java.util.Optional;
 public class GameService {
 
     private final GameRepository gameRepository;
-    private final PitchResultRepository pitchResultRepository;
 
     private final TeamService teamService;
-    private final HalfInningService halfInningService;
+    private final PitchResultService pitchResultService;
 
     public GameService(GameRepository gameRepository, 
-                       PitchResultRepository pitchResultRepository,
                        TeamService teamService,
-                       HalfInningService halfInningService) {
+                       PitchResultService pitchResultService) {
         this.gameRepository = gameRepository;
-        this.pitchResultRepository = pitchResultRepository;
         this.teamService = teamService;
-        this.halfInningService = halfInningService;
+        this.pitchResultService = pitchResultService;
     }
 
     public List<TeamsInGame> getTeamsInGameList() {
@@ -122,18 +120,18 @@ public class GameService {
     }
 
     public void pitch(User user, Long gameId, PitchResultDto pitchResultDto) {
-        PitchResult pitchResult = PitchResult.from(pitchResultDto);
-        pitchResult.addPlayerInfo(pitchResultDto.getRunners());
         Game game = getGameAndHasStatus(gameId, PlayingStatus.IS_PLAYING);
         TeamType teamType = game.checkUser(user.getId()).orElseThrow(IllegalStateException::new);
-        halfInningService.update(game.getLastHalfInning(), pitchResult, teamType);
-        pitchResultRepository.save(pitchResult);
+        if(TeamRoleUtils.checkTeamRole(teamType, game.getHalfInnings().size()) == TeamRole.BATTING) {
+            throw new IllegalStateException();
+        }
+        PitchResult pitchResult = PitchResult.from(pitchResultDto);
+        pitchResultService.pitch(pitchResult, pitchResultDto.getRunners(), game.getLastHalfInning());
     }
 
     public PitchResultDto getPitchResult(Long gameId) {
         getGameAndHasStatus(gameId, PlayingStatus.IS_PLAYING);
-        PitchResult pitchResult = pitchResultRepository.findById(pitchResultRepository.count()).orElseThrow(IllegalStateException::new);
-        return PitchResultDto.from(pitchResult);
+        return PitchResultDto.from(pitchResultService.getLastPitchResult());
     }
 
     public void unselectTeam(User user, Long gameId, Long teamId) {

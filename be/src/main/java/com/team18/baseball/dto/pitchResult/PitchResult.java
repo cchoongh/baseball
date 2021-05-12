@@ -34,6 +34,7 @@ public class PitchResult {
 
    public PitchResult(Long homeId, Long awayId, Long battingTeamId, String pitchResult,
                       Batter batter, BallCount ballCount, Score score) {
+       this.id = null;
        this.homeId = homeId;
        this.awayId = awayId;
        this.battingTeamId = battingTeamId;
