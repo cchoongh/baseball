@@ -95,16 +95,15 @@ public class GameController {
         gameService.endGame(user, gameId);
     }
 
-//    @PostMapping("/{gameId}/batterRecord/user/{userId}")
-//    public List<BattingRecord> recordBatting(@RequestBody List<BattingRecord> battingRecordBoard, @PathVariable Long gameId, @PathVariable Long userId) {
-//        User user = userRepository.findById(userId).orElseThrow(IllegalStateException::new);
-//        gameService.recordBatting(user, gameId, battingRecordBoard);
-//        return battingRecordBoard;
-//    }
+    @PostMapping("/{gameId}/batterRecord/user/{userId}")
+    public void recordBatting(@RequestBody List<BattingRecord> battingRecordBoard, @PathVariable Long gameId, @PathVariable Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(IllegalStateException::new);
+        gameService.recordBatting(user, gameId, battingRecordBoard);
+    }
 
-//    @GetMapping("/{gameId}/batterBoard/user/{userId}")
-//    public List<BattingRecord> getBatterRecord(@PathVariable Long gameId, @PathVariable Long userId) {
-//        User user = userRepository.findById(userId).orElseThrow(IllegalStateException::new);
-//        return gameService.getBattingBoard(user, gameId);
-//    }
+    @GetMapping("/{gameId}/batterBoard/user/{userId}")
+    public List<BattingRecord> getBatterRecord(@PathVariable Long gameId, @PathVariable Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(IllegalStateException::new);
+        return gameService.getBattingBoard(user, gameId);
+    }
 }

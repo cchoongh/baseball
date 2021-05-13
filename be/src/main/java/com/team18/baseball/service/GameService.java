@@ -138,7 +138,7 @@ public class GameService {
         Game game = getGameAndHasStatus(gameId, PlayingStatus.IS_PLAYING);
         TeamType teamType = game.checkUser(user.getId()).orElseThrow(IllegalStateException::new);
 
-        if (TeamRoleUtils.checkTeamRole(teamType, game.getHalfInnings().size()) == TeamTurn.BATTING) {
+        if (TeamRoleUtils.checkTeamRole(teamType, game.getHalfInnings().size()) == TeamRole.BATTING) {
             throw new IllegalStateException();
         }
 
@@ -147,7 +147,11 @@ public class GameService {
 
     public PitchResultDto getPitchResult(Long gameId) {
         getGameAndHasStatus(gameId, PlayingStatus.IS_PLAYING);
-        return PitchResultDto.from(pitchResultService.getLastPitchResult());
+        Optional<PitchResult> lastPitchResult = pitchResultService.getLastPitchResult();
+        if(lastPitchResult.isPresent()) {
+            return PitchResultDto.from(lastPitchResult.get());
+        }
+        return PitchResultDto.createNull();
     }
 
     public void unselectTeam(User user, Long gameId, Long teamId) {
@@ -178,7 +182,7 @@ public class GameService {
     }
 
     public PlateAppearanceDTO getPlateAppearance(Long gameId) {
-        Game game = gameRepository.findById(gameId).orElseThrow(IllegalStateException::new);
+        Game game = getGameAndHasStatus(gameId, PlayingStatus.IS_PLAYING);
         GameHasTeam gameHasHomeTeam = game.getGameHasTeam(TeamType.HOME);
         GameHasTeam gameHasAwayTeam = game.getGameHasTeam(TeamType.AWAY);
         Long homeTeamId = gameHasHomeTeam.getTeamId();
@@ -189,13 +193,13 @@ public class GameService {
         String awayTeamName = awayTeam.getName();
         List<Player> homePlayers = homeTeam.getPlayers();
         List<Player> awayPlayers = awayTeam.getPlayers();
-        PitchResult lastPitchResult = pitchResultService.getLastPitchResult();
-        if(lastPitchResult == null) {
-
+        Optional<PitchResult> lastPitchResult = pitchResultService.getLastPitchResult();
+        if(!lastPitchResult.isPresent()) {
+            return PlateAppearanceDTO.createNull();
         }
 
-        List<PlayersDTO> homePlayersDTO = makePlayersDTO(homePlayers, lastPitchResult);
-        List<PlayersDTO> awayPlayersDTO = makePlayersDTO(awayPlayers, lastPitchResult);
+        List<PlayersDTO> homePlayersDTO = makePlayersDTO(homePlayers, lastPitchResult.get());
+        List<PlayersDTO> awayPlayersDTO = makePlayersDTO(awayPlayers, lastPitchResult.get());
         PlateAppearanceInfoDTO homePAInfos = PlateAppearanceInfoDTO.create(homeTeamName, homePlayersDTO);
         PlateAppearanceInfoDTO awayPAInfos = PlateAppearanceInfoDTO.create(awayTeamName, awayPlayersDTO);
         return PlateAppearanceDTO.create(awayPAInfos, homePAInfos);
@@ -220,7 +224,7 @@ public class GameService {
             if(lastPitchResult.getBatter().isOut()) {
                 PlayerOut++;
             }
-            int homePlayerAverage = PlayerHit/playerAtBat;
+            int homePlayerAverage = (PlayerHit + playerAtBat) / 2;
             PlayersDTO playersDTO = PlayersDTO.create(homePlayerId, homePlayerName, playerAtBat, PlayerHit, PlayerOut, homePlayerAverage);
             playersDTOs.add(playersDTO);
         }
@@ -257,6 +261,25 @@ public class GameService {
         gameRepository.save(game);
         teamService.unselect(game.getGameHasTeam(TeamType.AWAY).getTeamId(), game.getAwayUserId());
         teamService.unselect(game.getGameHasTeam(TeamType.HOME).getTeamId(), game.getHomeUserId());
+    }
+
+    public void getBatterBoard(User user, Long gameId) {
+    }
+
+    public void recordBatting(User user, Long gameId, List<BattingRecord> battingRecordBoard) {
+        Game game = getGameAndHasStatus(gameId, PlayingStatus.IS_PLAYING);
+        TeamType teamType = game.checkUser(user.getId()).orElseThrow(IllegalStateException::new);
+        if (TeamRoleUtils.checkTeamRole(teamType, game.getHalfInnings().size()) == TeamRole.BATTING) {
+            throw new IllegalStateException();
+        }
+
+        halfInningService.addBattingRecord(battingRecordBoard, game.getLastHalfInning().getId());
+    }
+
+    public List<BattingRecord> getBattingBoard(User user, Long gameId) {
+        Game game = getGameAndHasStatus(gameId, PlayingStatus.IS_PLAYING);
+        game.checkUser(user.getId()).orElseThrow(IllegalStateException::new);
+        return halfInningService.getBattingBoard(game.getLastHalfInning().getId());
     }
 
 //    private void recordHalfInningScore(Game game, int lastHalfInningIndex) {

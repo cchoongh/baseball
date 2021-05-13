@@ -103,13 +103,15 @@ CREATE TABLE `pitch_result`
 
 CREATE TABLE `batting_record`
 (
-    `id`             int auto_increment,
-    `half_inning` int,
+    `id`              int auto_increment,
+    `half_inning`     int,
     `half_inning_key` int,
-    `player_id`      int,
-    `action`         varchar(50),
-    `strike`         int,
-    `ball`           int,
+    `player_id`       int,
+    `action`          varchar(50),
+    `nth_batter`      int,
+    `batter_name`     varchar(50),
+    `strike`          int,
+    `ball`            int,
     primary key (id)
 );
 

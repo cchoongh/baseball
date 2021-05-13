@@ -5,6 +5,8 @@ import com.team18.baseball.dto.pitchResultDto.Runner;
 import com.team18.baseball.repository.PitchResultRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class PitchResultService {
     private final PitchResultRepository pitchResultRepository;
@@ -21,10 +23,7 @@ public class PitchResultService {
         return pitchResultRepository.save(pitchResult);
     }
 
-    public PitchResult getLastPitchResult() {
-        Long count = pitchResultRepository.count();
-        if (count == 0) return new PitchResult();
-        PitchResult pitchResult = pitchResultRepository.findById(pitchResultRepository.count()).orElseThrow(IllegalStateException::new);
-        return pitchResult;
+    public Optional<PitchResult> getLastPitchResult() {
+        return pitchResultRepository.findById(pitchResultRepository.count());
     }
 }

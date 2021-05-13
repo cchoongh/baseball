@@ -1,8 +1,8 @@
 package com.team18.baseball.dto;
 public class PlateAppearanceDTO {
 
-    private final PlateAppearanceInfoDTO away;
-    private final PlateAppearanceInfoDTO home;
+    private PlateAppearanceInfoDTO away;
+    private PlateAppearanceInfoDTO home;
 
     private PlateAppearanceDTO(PlateAppearanceInfoDTO away, PlateAppearanceInfoDTO home) {
         this.away = away;
@@ -11,6 +11,10 @@ public class PlateAppearanceDTO {
 
     public static PlateAppearanceDTO create(PlateAppearanceInfoDTO away, PlateAppearanceInfoDTO home) {
         return new PlateAppearanceDTO(away, home);
+    }
+
+    public static PlateAppearanceDTO createNull() {
+        return new PlateAppearanceDTO(PlateAppearanceInfoDTO.createNull(), PlateAppearanceInfoDTO.createNull());
     }
 
     public PlateAppearanceInfoDTO getAway() {

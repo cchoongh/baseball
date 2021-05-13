@@ -1,12 +1,15 @@
 package com.team18.baseball.dto;
 
 public class PlayersDTO {
-    private final Long playerId;
-    private final String playerName;
-    private final int atBat;
-    private final int hit;
-    private final int out;
-    private final int average;
+    private Long playerId;
+    private String playerName;
+    private int atBat;
+    private int hit;
+    private int out;
+    private int average;
+
+    private PlayersDTO() {
+    }
 
     private PlayersDTO(Long playerId, String playerName, int atBat, int hit, int out, int average) {
         this.playerId = playerId;
@@ -19,6 +22,10 @@ public class PlayersDTO {
 
     public static PlayersDTO create(Long playerId, String playerName, int atBat, int hit, int out, int average) {
         return new PlayersDTO(playerId, playerName, atBat, hit, out, average);
+    }
+
+    public static PlayersDTO createNull() {
+        return new PlayersDTO();
     }
 
     public Long getPlayerId() {

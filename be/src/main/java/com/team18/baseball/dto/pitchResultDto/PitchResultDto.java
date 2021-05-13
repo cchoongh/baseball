@@ -46,6 +46,12 @@ public class PitchResultDto {
                 pitchResult.getScore());
     }
 
+    public static final PitchResultDto createNull() {
+        return new PitchResultDto();
+    }
+
+
+
     public Long getHomeId() {
         return homeId;
     }
