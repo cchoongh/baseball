@@ -96,10 +96,9 @@ public class GameController {
     }
 
     @PostMapping("/{gameId}/batterRecord/user/{userId}")
-    public List<BattingRecord> recordBatting(@RequestBody List<BattingRecord> battingRecordBoard, @PathVariable Long gameId, @PathVariable Long userId) {
+    public void recordBatting(@RequestBody List<BattingRecord> battingRecordBoard, @PathVariable Long gameId, @PathVariable Long userId) {
         User user = userRepository.findById(userId).orElseThrow(IllegalStateException::new);
         gameService.recordBatting(user, gameId, battingRecordBoard);
-        return battingRecordBoard;
     }
 
     @GetMapping("/{gameId}/batterBoard/user/{userId}")

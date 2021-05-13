@@ -6,28 +6,15 @@ import org.springframework.data.relational.core.mapping.Embedded;
 public class BattingRecord {
     @Id
     private Long id;
-
     private int playerId;
-
     private String action;
-    @Embedded.Nullable
-    private BallCount ballCount;
+    private int nthBatter;
+    private String batterName;
+    private int strike;
+    private int ball;
 
-    public BattingRecord() {
+    BattingRecord() {
         id = null;
-    }
-
-    BattingRecord(int playerId,
-                  String action, BallCount ballCount) {
-        this.id = null;
-        this.playerId = playerId;
-        this.action = action;
-        this.ballCount = ballCount;
-    }
-
-    public static BattingRecord create(int playerId,
-                                       String action, BallCount ballCount) {
-        return new BattingRecord(playerId, action, ballCount);
     }
 
     public int getPlayerId() {
@@ -38,7 +25,19 @@ public class BattingRecord {
         return action;
     }
 
-    public BallCount getBallCount() {
-        return ballCount;
+    public int getNth_batter() {
+        return nthBatter;
+    }
+
+    public String getBatterName() {
+        return batterName;
+    }
+
+    public int getStrike() {
+        return strike;
+    }
+
+    public int getBall() {
+        return ball;
     }
 }
