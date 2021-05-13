@@ -1,26 +1,41 @@
 package com.team18.baseball.dto;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PlateAppearanceInfoDTO {
     private String teamName;
     private List<PlayersDTO> players;
 
+    private PlateAppearanceInfoDTO(List<PlayersDTO> players) {
+        this.players = players;
+        this.teamName = null;
+    }
+
     private PlateAppearanceInfoDTO(String teamName, List<PlayersDTO> players) {
         this.teamName = teamName;
         this.players = players;
     }
 
-    public PlateAppearanceInfoDTO create(String teamName, List<PlayersDTO> players) {
+    public static PlateAppearanceInfoDTO create(String teamName, List<PlayersDTO> players) {
         return new PlateAppearanceInfoDTO(teamName, players);
     }
 
-    // pa 에서 paInfo로
-    // Long id, String playerName, int atBat, int hit, int out
-//    public static PlateAppearanceInfo from(PlateAppearance plateAppearance) {
-//        return new PlateAppearanceInfo(plateAppearance.getId(), plateAppearance.getPlayerName(),
-//                plateAppearance.getAtBat(), plateAppearance.getHit(), plateAppearance.getOut());
-//
-//    }
+    public static PlateAppearanceInfoDTO createNull() {
+        List<PlayersDTO> players = new ArrayList<>();
+        for (int i = 0; i < 9; i++) {
+             players.add(PlayersDTO.createNull());
+        }
+        return new PlateAppearanceInfoDTO(players);
+    }
+
+
+    public String getTeamName() {
+        return teamName;
+    }
+
+    public List<PlayersDTO> getPlayers() {
+        return players;
+    }
 }

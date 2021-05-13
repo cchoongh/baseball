@@ -75,8 +75,8 @@ public class GameController {
         return gameService.getScore(user, gameId);
     }
 
-    @GetMapping("/{gameId}/players/user/{userId}")
-    public void getPlayers(@PathVariable Long gameId, @PathVariable Long userId) {
+    @GetMapping("/{gameId}/pa/user/{userId}")
+    public void getPlateAppearance(@PathVariable Long gameId, @PathVariable Long userId) {
         User user = userRepository.findById(userId).orElseThrow(IllegalStateException::new);
 //        User user = HttpSessionUtils.getLoginUser(session).orElseThrow(IllegalStateException::new);
         gameService.getPlateAppearance(gameId);
