@@ -1,9 +1,6 @@
 package com.team18.baseball.entity.game;
 
 import com.team18.baseball.entity.GameHasTeam;
-import com.team18.baseball.utils.InningType;
-import com.team18.baseball.utils.PlayingStatus;
-import com.team18.baseball.utils.TeamType;
 import org.springframework.data.annotation.Id;
 
 import java.util.*;

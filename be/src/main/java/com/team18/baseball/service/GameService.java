@@ -1,10 +1,10 @@
 package com.team18.baseball.service;
 
+import com.team18.baseball.TeamRoleUtils;
 import com.team18.baseball.dto.*;
 import com.team18.baseball.dto.PlateAppearanceInfoDTO;
 import com.team18.baseball.entity.battingBoard.BattingRecord;
 import com.team18.baseball.entity.*;
-import com.team18.baseball.utils.*;
 import com.team18.baseball.dto.pitchResultDto.PitchResult;
 import com.team18.baseball.dto.pitchResultDto.PitchResultDto;
 import com.team18.baseball.dto.startGameInfo.GameInfo;
@@ -270,7 +270,7 @@ public class GameService {
         Game game = getGameAndHasStatus(gameId, PlayingStatus.IS_PLAYING);
         TeamType teamType = game.checkUser(user.getId()).orElseThrow(IllegalStateException::new);
         if (TeamRoleUtils.checkTeamRole(teamType, game.getHalfInnings().size()) == TeamRole.BATTING) {
-            TeamTurn teamTurn = TeamRoleUtils.checkTeamRole(teamType, game.getHalfInnings().size());
+            TeamRole teamRole = TeamRoleUtils.checkTeamRole(teamType, game.getHalfInnings().size());
             throw new IllegalStateException();
         }
 

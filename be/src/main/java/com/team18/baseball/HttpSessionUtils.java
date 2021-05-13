@@ -1,4 +1,4 @@
-package com.team18.baseball.utils;
+package com.team18.baseball;
 
 import com.team18.baseball.entity.User;
 

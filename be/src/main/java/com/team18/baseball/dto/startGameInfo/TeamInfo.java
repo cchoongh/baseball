@@ -2,7 +2,8 @@ package com.team18.baseball.dto.startGameInfo;
 
 import com.team18.baseball.entity.Player;
 import com.team18.baseball.entity.Team;
-import com.team18.baseball.utils.TeamTurn;
+import com.team18.baseball.entity.game.TeamRole;
+import com.team18.baseball.entity.game.TeamTurn;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +29,7 @@ public class TeamInfo {
         this.batters = batters;
     }
 
-    public static final TeamInfo from(Team team, TeamTurn teamTurn, int score) {
+    public static final TeamInfo from(Team team, TeamRole teamRole, int score) {
         PlayerInfo pitcher = null;
         List<PlayerInfo> batters = new ArrayList<>();
 
@@ -39,8 +40,9 @@ public class TeamInfo {
             }
             batters.add(playerInfo);
         }
-        return new TeamInfo(team.getId(), team.getName(), teamTurn.name(), score, pitcher, batters);
+        return new TeamInfo(team.getId(), team.getName(), teamRole.name(), score, pitcher, batters);
     }
+
 
     public Long getId() {
         return id;

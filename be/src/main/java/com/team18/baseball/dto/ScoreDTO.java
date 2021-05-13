@@ -2,8 +2,8 @@ package com.team18.baseball.dto;
 
 import com.team18.baseball.entity.game.Game;
 import com.team18.baseball.entity.game.HalfInning;
-import com.team18.baseball.utils.InningType;
-import com.team18.baseball.utils.PlayingStatus;
+import com.team18.baseball.entity.game.InningType;
+import com.team18.baseball.entity.game.PlayingStatus;
 
 import java.util.ArrayList;
 import java.util.List;
