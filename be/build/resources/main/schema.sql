@@ -1,9 +1,12 @@
+DROP TABLE IF EXISTS `batting_record`;
+DROP TABLE IF EXISTS `plate_appearance`;
+DROP TABLE IF EXISTS `inning_type`;
 DROP TABLE IF EXISTS `half_inning`;
 DROP TABLE IF EXISTS `pitch_result`;
-DROP TABLE IF EXISTS player;
+DROP TABLE IF EXISTS `player`;
 DROP TABLE IF EXISTS `game_has_team`;
-DROP TABLE IF EXISTS team;
-DROP TABLE IF EXISTS game;
+DROP TABLE IF EXISTS `team`;
+DROP TABLE IF EXISTS `game`;
 DROP TABLE IF EXISTS `user`;
 
 CREATE TABLE `user`
@@ -98,15 +101,32 @@ CREATE TABLE `pitch_result`
     primary key (id)
 );
 
--- CREATE TABLE plate_appearance
--- (
---     id     int not null auto_increment,
---     player int not null,
---     at_bat int not null,
---     hit    int not null,
---     out    int not null,
---     primary key (id)
--- );
+CREATE TABLE `batting_record`
+(
+    `id`              int auto_increment,
+    `half_inning`     int,
+    `half_inning_key` int,
+    `player_id`       int,
+    `action`          varchar(50),
+    `nth_batter`      int,
+    `batter_name`     varchar(50),
+    `strike`          int,
+    `ball`            int,
+    primary key (id)
+);
+
+
+CREATE TABLE plate_appearance
+(
+    id     int not null auto_increment,
+    -- player_id int not null,
+    player_name varchar(45) not null,
+    at_bat int not null,
+    hit    int not null,
+    `out`    int not null,
+    primary key (id)
+    -- foreign key (player_id) references player (id)
+);
 --
 -- CREATE TABLE plate_appearance_info
 -- (
