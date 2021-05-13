@@ -190,6 +190,7 @@ public class GameService {
         List<Player> homePlayers = homeTeam.getPlayers();
         List<Player> awayPlayers = awayTeam.getPlayers();
         PitchResult lastPitchResult = pitchResultService.getLastPitchResult();
+        //lastPitchResult.g
         List<PlateAppearanceInfoDTO> homePAInfos = new ArrayList<>();
         List<PlateAppearanceInfoDTO> awayPAInfos = new ArrayList<>();
 //        for(Player player : homePlayers) {
