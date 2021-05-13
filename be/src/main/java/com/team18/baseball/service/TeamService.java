@@ -33,9 +33,14 @@ public class TeamService {
         return teamRepository.findById(teamId).orElseThrow(IllegalStateException::new);
     }
 
-    public void unselect(Long teamId, Long userId) {
+    public void unselect(Long homeTeamId, Long awayTeamId) {
+       unselect(homeTeamId);
+       unselect(awayTeamId);
+    }
+
+    private void unselect(Long teamId) {
         Team team = findTeam(teamId);
-        team.unselect(userId);
+        team.unselect();
         teamRepository.save(team);
     }
 

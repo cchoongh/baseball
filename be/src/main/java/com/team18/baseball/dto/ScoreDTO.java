@@ -55,6 +55,12 @@ public class ScoreDTO {
                 if (playingStatus.equals(PlayingStatus.END.name())) {
                     homeScoreList.add(homeScore);
                 }
+                if(playingStatus.equals(PlayingStatus.IS_PLAYING.name())) {
+                    if(homeScoreList.size() == 0) {
+                        homeScoreList.add(0, homeScore);
+                    }
+                    homeScoreList.set(halfInning.getInning() - 1, homeScore);
+                }
 
             }
         }
@@ -73,6 +79,12 @@ public class ScoreDTO {
             if (inningType.equals(InningType.TOP.name())) {
                 awayScore = score;
                 if (playingStatus.equals(PlayingStatus.END.name())) awayScoreList.add(awayScore);
+                if(playingStatus.equals(PlayingStatus.IS_PLAYING.name())) {
+                    if(awayScoreList.size() == 0) {
+                        awayScoreList.add(0, awayScore);
+                    }
+                    awayScoreList.set(halfInning.getInning() - 1, awayScore);
+                }
             }
         }
         this.awayScoreList = awayScoreList;

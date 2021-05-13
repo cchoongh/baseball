@@ -63,7 +63,7 @@ public class ResponseBody<T> {
         START_OK("게임이 시작되었습니다"),
         START_FAIL("상대팀 유저를 기다리는 중입니다"),
         NEW_HALFINNING_OK("공격과 수비가 변경됩니다"),
-        NEW_HALFINNING_FAIL("경기가 종료되었습니다"),
+        NEW_HALFINNING_FAIL("경기 종료버튼을 눌러주세요"),
         ERROR("예외발생");
 
         private final String message;

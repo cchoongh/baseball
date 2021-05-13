@@ -51,10 +51,7 @@ public class Team {
         return this.userId != null;
     }
 
-    public void unselect(Long userId) {
-        if (!this.userId.equals(userId)) {
-            throw new IllegalStateException();
-        }
+    public void unselect() {
         this.userId = null;
     }
 }

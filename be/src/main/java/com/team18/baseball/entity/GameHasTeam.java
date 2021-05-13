@@ -33,4 +33,8 @@ public class GameHasTeam {
     public void recordScore(int score) {
         this.score = score;
     }
+
+    public void addScore(int score) {
+        this.score += score;
+    }
 }

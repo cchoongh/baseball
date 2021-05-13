@@ -155,7 +155,7 @@ public class GameService {
     public PitchResultDto getPitchResult(Long gameId) {
         getGameAndHasStatus(gameId, PlayingStatus.IS_PLAYING);
         Optional<PitchResult> lastPitchResult = pitchResultService.getLastPitchResult();
-        if(lastPitchResult.isPresent()) {
+        if (lastPitchResult.isPresent()) {
             return PitchResultDto.from(lastPitchResult.get());
         }
         return PitchResultDto.createNull();
@@ -178,7 +178,7 @@ public class GameService {
         game.checkUser(user.getId()).orElseThrow(IllegalStateException::new);
 
         Team homeTeam = teamService.findTeam(game.getHomeTeamId());
-        Team awayTeam =teamService.findTeam(game.getAwayTeamId());
+        Team awayTeam = teamService.findTeam(game.getAwayTeamId());
 
         String homeName = homeTeam.getName();
         String awayName = awayTeam.getName();
@@ -201,7 +201,7 @@ public class GameService {
         List<Player> homePlayers = homeTeam.getPlayers();
         List<Player> awayPlayers = awayTeam.getPlayers();
         Optional<PitchResult> lastPitchResult = pitchResultService.getLastPitchResult();
-        if(!lastPitchResult.isPresent()) {
+        if (!lastPitchResult.isPresent()) {
             return PlateAppearanceDTO.createNull();
         }
 
@@ -221,14 +221,14 @@ public class GameService {
             int playerAtBat = 0;
             int PlayerHit = 0;
             int PlayerOut = 0;
-            if(lastPitchResult.getBatter().getPlayerName().equals(homePlayerName)) {
+            if (lastPitchResult.getBatter().getPlayerName().equals(homePlayerName)) {
                 playerAtBat++;
             }
-            if(lastPitchResult.getBatter().getPlayerName().equals(homePlayerName)
+            if (lastPitchResult.getBatter().getPlayerName().equals(homePlayerName)
                     && lastPitchResult.getPitchResult().equals(BattingResult.BALL.name())) {
                 PlayerHit++;
             }
-            if(lastPitchResult.getBatter().isOut()) {
+            if (lastPitchResult.getBatter().isOut()) {
                 PlayerOut++;
             }
             int homePlayerAverage = (PlayerHit + playerAtBat) / 2;
@@ -243,14 +243,10 @@ public class GameService {
         Game game = getGameAndHasStatus(gameId, PlayingStatus.IS_PLAYING);
         game.checkUser(user.getId()).orElseThrow(IllegalStateException::new);
 
-
         halfInningService.end(game.getLastHalfInning());
 
         int lastHalfInningIndex = game.getLastHalfInningIndex();
         if ((lastHalfInningIndex == MAX_HALF_INNING_INDEX)) {
-            game.end();
-            gameRepository.save(game);
-            //18개 이닝에 대한 총점을 score 입력 //
             return false;
         }
 
@@ -264,13 +260,28 @@ public class GameService {
     public void endGame(User user, Long gameId) {
         Game game = getGameAndHasStatus(gameId, PlayingStatus.IS_PLAYING);
         game.checkUser(user.getId()).orElseThrow(IllegalStateException::new);
+
         game.end();
+        addTotalScore(game);
         gameRepository.save(game);
-        teamService.unselect(game.getGameHasTeam(TeamType.AWAY).getTeamId(), game.getAwayUserId());
-        teamService.unselect(game.getGameHasTeam(TeamType.HOME).getTeamId(), game.getHomeUserId());
+
+        teamService.unselect(game.getGameHasTeam(TeamType.AWAY).getTeamId(),
+                game.getGameHasTeam(TeamType.HOME).getTeamId());
     }
 
-    public void getBatterBoard(User user, Long gameId) {
+    private void addTotalScore(Game game) {
+        int homeScore = 0;
+        int awayScore = 0;
+        for( HalfInning halfInning : game.getHalfInnings()) {
+            if(halfInning.getInningType().equals(InningType.TOP.name())) {
+                homeScore += halfInning.getScore();
+            } else {
+                awayScore += halfInning.getScore();
+            }
+        }
+
+        game.getGameHasTeam(TeamType.HOME).addScore(homeScore);
+        game.getGameHasTeam(TeamType.AWAY).addScore(awayScore);
     }
 
     public void recordBatting(User user, Long gameId, List<BattingRecord> battingRecordBoard) {
