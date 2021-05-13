@@ -28,7 +28,7 @@ public class PitchResult {
     @Embedded.Nullable
     private Score score;
 
-    PitchResult() {
+    public PitchResult() {
         this.id = null;
     }
 

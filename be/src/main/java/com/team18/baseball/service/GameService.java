@@ -179,7 +179,7 @@ public class GameService {
     }
 
     public PlateAppearanceDTO getPlateAppearance(Long gameId) {
-        Game game = gameRepository.findById(gameId).orElseThrow(IllegalStateException::new);
+        Game game = getGameAndHasStatus(gameId, PlayingStatus.IS_PLAYING);
         GameHasTeam gameHasHomeTeam = game.getGameHasTeam(TeamType.HOME);
         GameHasTeam gameHasAwayTeam = game.getGameHasTeam(TeamType.AWAY);
         Long homeTeamId = gameHasHomeTeam.getTeamId();
@@ -217,7 +217,7 @@ public class GameService {
             if(lastPitchResult.getBatter().isOut()) {
                 PlayerOut++;
             }
-            int homePlayerAverage = PlayerHit/playerAtBat;
+            int homePlayerAverage = (PlayerHit + playerAtBat) / 2;
             PlayersDTO playersDTO = PlayersDTO.create(homePlayerId, homePlayerName, playerAtBat, PlayerHit, PlayerOut, homePlayerAverage);
             playersDTOs.add(playersDTO);
         }
