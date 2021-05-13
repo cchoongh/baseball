@@ -4,8 +4,7 @@ import com.team18.baseball.dto.*;
 import com.team18.baseball.dto.PlateAppearanceInfoDTO;
 import com.team18.baseball.entity.battingBoard.BattingRecord;
 import com.team18.baseball.entity.*;
-import com.team18.baseball.utils.PlayingStatus;
-import com.team18.baseball.utils.TeamRoleUtils;
+import com.team18.baseball.utils.*;
 import com.team18.baseball.dto.pitchResultDto.PitchResult;
 import com.team18.baseball.dto.pitchResultDto.PitchResultDto;
 import com.team18.baseball.dto.startGameInfo.GameInfo;
@@ -18,8 +17,6 @@ import com.team18.baseball.entity.Team;
 import com.team18.baseball.entity.User;
 import com.team18.baseball.entity.game.*;
 import com.team18.baseball.repository.*;
-import com.team18.baseball.utils.TeamTurn;
-import com.team18.baseball.utils.TeamType;
 import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +32,6 @@ public class GameService {
     private final GameRepository gameRepository;
     private final TeamRepository teamRepository;
     private final HalfInningRepository halfInningRepository;
-    private final PlateAppearanceRepository plateAppearanceRepository;
     private final PitchResultRepository pitchResultRepository;
 
     private final TeamService teamService;
@@ -46,7 +42,6 @@ public class GameService {
     public GameService(GameRepository gameRepository,
                        TeamRepository teamRepository,
                        HalfInningRepository halfInningRepository,
-                       PlateAppearanceRepository plateAppearanceRepository,
                        PitchResultRepository pitchResultRepository,
                        TeamService teamService,
                        PitchResultService pitchResultService,
@@ -54,7 +49,6 @@ public class GameService {
                        BatterRecordService batterRecordService) {
         this.gameRepository = gameRepository;
         this.teamRepository = teamRepository;
-        this.plateAppearanceRepository = plateAppearanceRepository;
         this.halfInningRepository = halfInningRepository;
         this.pitchResultRepository = pitchResultRepository;
 
@@ -187,21 +181,27 @@ public class GameService {
         return scoreDTO;
     }
 
-    public PlateAppearanceDTO getPlateAppearance(Long gameId) {
-        Game game = gameRepository.findById(gameId).orElseThrow(IllegalStateException::new);
+    public PlateAppearanceDTO getPlateAppearance(User user, Long gameId) {
+        Game game = getGameAndHasStatus(gameId, PlayingStatus.IS_PLAYING);
+        game.checkUser(user.getId()).orElseThrow(IllegalStateException::new);
+
         GameHasTeam gameHasHomeTeam = game.getGameHasTeam(TeamType.HOME);
         GameHasTeam gameHasAwayTeam = game.getGameHasTeam(TeamType.AWAY);
-        Long homeTeamId = gameHasHomeTeam.getTeamId();
-        Long awayTeamId = gameHasAwayTeam.getTeamId();
-        Team homeTeam = teamRepository.findById(homeTeamId).orElseThrow(IllegalStateException::new);
-        Team awayTeam = teamRepository.findById(awayTeamId).orElseThrow(IllegalStateException::new);
+
+        Team homeTeam = teamService.findTeam(gameHasHomeTeam.getTeamId());
+        Team awayTeam = teamService.findTeam(gameHasAwayTeam.getTeamId());
+
         String homeTeamName = homeTeam.getName();
         String awayTeamName = awayTeam.getName();
+
         List<Player> homePlayers = homeTeam.getPlayers();
         List<Player> awayPlayers = awayTeam.getPlayers();
+
         PitchResult lastPitchResult = pitchResultService.getLastPitchResult();
+
         List<PlayersDTO> homePlayersDTO = makePlayersDTO(homePlayers, lastPitchResult);
         List<PlayersDTO> awayPlayersDTO = makePlayersDTO(awayPlayers, lastPitchResult);
+
         PlateAppearanceInfoDTO homePAInfos = PlateAppearanceInfoDTO.create(homeTeamName, homePlayersDTO);
         PlateAppearanceInfoDTO awayPAInfos = PlateAppearanceInfoDTO.create(awayTeamName, awayPlayersDTO);
         return PlateAppearanceDTO.create(awayPAInfos, homePAInfos);
@@ -263,9 +263,6 @@ public class GameService {
         gameRepository.save(game);
         teamService.unselect(game.getGameHasTeam(TeamType.AWAY).getTeamId(), game.getAwayUserId());
         teamService.unselect(game.getGameHasTeam(TeamType.HOME).getTeamId(), game.getHomeUserId());
-    }
-
-    public void getBatterBoard(User user, Long gameId) {
     }
 
     public void recordBatting(User user, Long gameId, List<BattingRecord> battingRecordBoard) {

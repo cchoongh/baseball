@@ -79,7 +79,7 @@ public class GameController {
     public void getPlateAppearance(@PathVariable Long gameId, @PathVariable Long userId) {
         User user = userRepository.findById(userId).orElseThrow(IllegalStateException::new);
 //        User user = HttpSessionUtils.getLoginUser(session).orElseThrow(IllegalStateException::new);
-        gameService.getPlateAppearance(gameId);
+        gameService.getPlateAppearance(user, gameId);
     }
 
     @PostMapping("/{gameId}/halfInning/user/{userId}")
