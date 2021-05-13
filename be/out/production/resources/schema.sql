@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS `batter_record`;
+DROP TABLE IF EXISTS `batting_record`;
 DROP TABLE IF EXISTS `plate_appearance`;
 DROP TABLE IF EXISTS `inning_type`;
 DROP TABLE IF EXISTS `half_inning`;
@@ -101,10 +101,11 @@ CREATE TABLE `pitch_result`
     primary key (id)
 );
 
-CREATE TABLE `batter_record`
+CREATE TABLE `batting_record`
 (
     `id`             int auto_increment,
-    `half_inning_id` int,
+    `half_inning` int,
+    `half_inning_key` int,
     `player_id`      int,
     `action`         varchar(50),
     `strike`         int,

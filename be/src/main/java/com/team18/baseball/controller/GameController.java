@@ -1,9 +1,7 @@
 package com.team18.baseball.controller;
 
-import com.team18.baseball.HttpSessionUtils;
 import com.team18.baseball.dto.ScoreDTO;
-import com.team18.baseball.dto.batterBoard.BatterRecordDto;
-import com.team18.baseball.dto.pitchResult.PitchResult;
+import com.team18.baseball.entity.battingBoard.BattingRecord;
 import com.team18.baseball.dto.startGameInfo.StartGameInfo;
 import com.team18.baseball.dto.teamsInGame.TeamsInGame;
 import com.team18.baseball.dto.pitchResult.PitchResultDto;
@@ -13,7 +11,6 @@ import com.team18.baseball.response.ResponseBody;
 import com.team18.baseball.service.GameService;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Optional;
 
@@ -98,11 +95,16 @@ public class GameController {
         gameService.endGame(user, gameId);
     }
 
-    @PostMapping("/{gameId}/batterBoard/user/{userId}")
-    public List<BatterRecordDto> getBatterRecord(@RequestBody List<BatterRecordDto> batterRecordBoard, @PathVariable Long gameId, @PathVariable Long userId) {
+    @PostMapping("/{gameId}/batterRecord/user/{userId}")
+    public List<BattingRecord> recordBatting(@RequestBody List<BattingRecord> battingRecordBoard, @PathVariable Long gameId, @PathVariable Long userId) {
         User user = userRepository.findById(userId).orElseThrow(IllegalStateException::new);
-        gameService.recordBatting(user, gameId, batterRecordBoard);
-        return batterRecordBoard;
+        gameService.recordBatting(user, gameId, battingRecordBoard);
+        return battingRecordBoard;
     }
 
+    @GetMapping("/{gameId}/batterBoard/user/{userId}")
+    public List<BattingRecord> getBatterRecord(@PathVariable Long gameId, @PathVariable Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(IllegalStateException::new);
+        return gameService.getBattingBoard(user, gameId);
+    }
 }

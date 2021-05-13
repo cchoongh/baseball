@@ -1,4 +1,4 @@
-package com.team18.baseball.dto.batterBoard;
+package com.team18.baseball.entity.battingBoard;
 
 public class BallCount {
     private int strike;

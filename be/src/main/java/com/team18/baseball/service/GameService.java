@@ -2,7 +2,7 @@ package com.team18.baseball.service;
 
 import com.team18.baseball.dto.*;
 import com.team18.baseball.dto.PlateAppearanceInfoDTO;
-import com.team18.baseball.dto.batterBoard.BatterRecordDto;
+import com.team18.baseball.entity.battingBoard.BattingRecord;
 import com.team18.baseball.entity.*;
 import com.team18.baseball.TeamRoleUtils;
 import com.team18.baseball.dto.pitchResult.PitchResult;
@@ -37,7 +37,6 @@ public class GameService {
     private final TeamService teamService;
     private final PitchResultService pitchResultService;
     private final HalfInningService halfInningService;
-    private final BatterRecordService batterRecordService;
 
 
     public GameService(GameRepository gameRepository,
@@ -54,7 +53,6 @@ public class GameService {
         this.plateAppearanceRepository = plateAppearanceRepository;
         this.halfInningRepository = halfInningRepository;
         this.pitchResultRepository = pitchResultRepository;
-        this.batterRecordService = batterRecordService;
 
         this.teamService = teamService;
         this.pitchResultService = pitchResultService;
@@ -249,10 +247,20 @@ public class GameService {
     public void getBatterBoard(User user, Long gameId) {
     }
 
-    public void recordBatting(User user, Long gameId, List<BatterRecordDto> batterRecordBoard) {
+    public void recordBatting(User user, Long gameId, List<BattingRecord> battingRecordBoard) {
+        Game game = getGameAndHasStatus(gameId, PlayingStatus.IS_PLAYING);
+        TeamType teamType = game.checkUser(user.getId()).orElseThrow(IllegalStateException::new);
+        if (TeamRoleUtils.checkTeamRole(teamType, game.getHalfInnings().size()) == TeamRole.BATTING) {
+            throw new IllegalStateException();
+        }
+
+        halfInningService.addBattingRecord(battingRecordBoard, game.getLastHalfInning().getId());
+    }
+
+    public List<BattingRecord> getBattingBoard(User user, Long gameId) {
         Game game = getGameAndHasStatus(gameId, PlayingStatus.IS_PLAYING);
         game.checkUser(user.getId()).orElseThrow(IllegalStateException::new);
-        batterRecordService.saveBatterRecord(batterRecordBoard, game.getLastHalfInning().getId());
+        return halfInningService.getBattingBoard(game.getLastHalfInning().getId());
     }
 
 //    private void recordHalfInningScore(Game game, int lastHalfInningIndex) {
