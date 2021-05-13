@@ -16,4 +16,28 @@ public class Players {
         this.out = out;
         this.average = average;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getPlayerName() {
+        return playerName;
+    }
+
+    public int getAtBat() {
+        return atBat;
+    }
+
+    public int getHit() {
+        return hit;
+    }
+
+    public int getOut() {
+        return out;
+    }
+
+    public int getAverage() {
+        return average;
+    }
 }
