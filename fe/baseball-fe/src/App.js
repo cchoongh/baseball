@@ -8,9 +8,8 @@ import LoadingPage from './pages/LoadingPage/LoadingPage.js';
 import MainPage from './pages/MainPage/MainPage.js';
 import GamePage from './pages/GamePage/GamePage.js';
 
-const _initialState = {
+const _initialGlobalState = {
   userId: null,
-  // isLoading: false,
   gameId: null,
   playTeam: null,
   home: null,
@@ -18,7 +17,7 @@ const _initialState = {
 }
 
 function App() {
-  const [globalState, globalDispatch] = useReducer(globalReducer, _initialState);
+  const [globalState, globalDispatch] = useReducer(globalReducer, _initialGlobalState);
 
   const nextPage = () => {
     if (globalState.userId === null) return <LoginPage/>;
