@@ -24,7 +24,23 @@ VALUES (1, "hanwha"),
        (3, "kia"),
        (4, "samsung"),
        (5, "lotte"),
-       (6, "lg");
+       (6, "lg"),
+       (7, "hanzin"),
+       (8, "dooson"),
+       (9, "kila"),
+       (10, "samssssung"),
+       (11, "lottek"),
+       (12, "lgggg"),
+       (13, "hamha"),
+       (14, "san"),
+       (15, "a"),
+       (16, "amsung"),
+       (17, "lot"),
+       (18, "lggg"),
+       (19, "lgaa"),
+       (20, "lgoo");
+
+
 
 INSERT INTO game_has_team(team_id, game, game_key, score)
 VALUES (1, 1, "HOME", 0),
@@ -32,7 +48,23 @@ VALUES (1, 1, "HOME", 0),
        (3, 2, "HOME", 0),
        (4, 2, "AWAY", 0),
        (5, 3, "HOME", 0),
-       (6, 3, "AWAY", 0);
+       (6, 3, "AWAY", 0),
+       (7, 4, "HOME", 0),
+       (8, 4, "AWAY", 0),
+       (9, 5, "HOME", 0),
+       (10, 5, "AWAY", 0),
+       (11, 6, "HOME", 0),
+       (12, 6, "AWAY", 0),
+       (13, 7, "HOME", 0),
+       (14, 7, "AWAY", 0),
+       (15, 8, "HOME", 0),
+       (16, 8, "AWAY", 0),
+       (17, 9, "HOME", 0),
+       (18, 9, "AWAY", 0),
+       (19, 10, "HOME", 0),
+       (20, 10, "AWAY", 0);
+
+
 
 INSERT INTO player(`name`, team, `uniform_number`, is_pitcher)
 VALUES ("김오잉", 1, 1, true),
