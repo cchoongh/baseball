@@ -1,6 +1,6 @@
 package com.team18.baseball.entity.game;
 
-enum BattingResult {
+public enum BattingResult {
         STRIKE,
         BALL,
         HIT;

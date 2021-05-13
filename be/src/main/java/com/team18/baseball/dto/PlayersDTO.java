@@ -1,7 +1,5 @@
 package com.team18.baseball.dto;
 
-import com.team18.baseball.dto.pitchResult.PitchResult;
-
 public class PlayersDTO {
     private final Long playerId;
     private final String playerName;
@@ -19,10 +17,9 @@ public class PlayersDTO {
         this.average = average;
     }
 
-//    public static PlayersDTO makePlayersDTO(PitchResult pitchResult) {
-//        Long playerId = pitchResult
-//        PlayersDTO playersDTO = new PlayersDTO()
-//    }
+    public static PlayersDTO create(Long playerId, String playerName, int atBat, int hit, int out, int average) {
+        return new PlayersDTO(playerId, playerName, atBat, hit, out, average);
+    }
 
     public Long getPlayerId() {
         return playerId;

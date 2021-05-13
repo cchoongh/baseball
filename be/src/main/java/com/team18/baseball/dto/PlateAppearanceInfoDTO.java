@@ -12,7 +12,7 @@ public class PlateAppearanceInfoDTO {
         this.players = players;
     }
 
-    public PlateAppearanceInfoDTO create(String teamName, List<PlayersDTO> players) {
+    public static PlateAppearanceInfoDTO create(String teamName, List<PlayersDTO> players) {
         return new PlateAppearanceInfoDTO(teamName, players);
     }
 
