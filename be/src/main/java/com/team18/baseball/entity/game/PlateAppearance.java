@@ -4,15 +4,15 @@ import java.util.List;
 
 public class PlateAppearance {
 
-    private final List<PlateAppearanceInfo> away;
     private final List<PlateAppearanceInfo> home;
+    private final List<PlateAppearanceInfo> away;
 
-    private PlateAppearance(List<PlateAppearanceInfo> away, List<PlateAppearanceInfo> home) {
-        this.away = away;
+    private PlateAppearance(List<PlateAppearanceInfo> home, List<PlateAppearanceInfo> away) {
         this.home = home;
+        this.away = away;
     }
 
-    public static PlateAppearance create(List<PlateAppearanceInfo> away, List<PlateAppearanceInfo> home) {
-        return new PlateAppearance(away, home);
+    public static PlateAppearance create(List<PlateAppearanceInfo> home, List<PlateAppearanceInfo> away) {
+        return new PlateAppearance(home, away);
     }
 }

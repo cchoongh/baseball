@@ -117,46 +117,7 @@ public class GameService {
         return TeamInfo.from(team, TeamType.HOME, gameHasTeam.getScore());
     }
 
-    public ScoreDTO getScore(Long gameId) {
-        Game game = gameRepository.findById(gameId).orElseThrow(IllegalStateException::new);
-        Long homeTeamId = game.getHomeTeamId();
-        Long awayTeamId = game.getAwayTeamId();
-        Team homeTeam = teamRepository.findById(homeTeamId).orElseThrow(IllegalStateException::new);
-        Team awayTeam = teamRepository.findById(awayTeamId).orElseThrow(IllegalStateException::new);
-        String homeName = homeTeam.getName();
-        String awayName = awayTeam.getName();
-        ScoreDTO scoreDTO = new ScoreDTO(homeName, awayName);
-        scoreDTO.makeHomeScore(game);
-        scoreDTO.makeAwayScore(game);
-        return scoreDTO;
-    }
 
-    public PlateAppearanceDTO getPlateAppearance(Long gameId) {
-        Game game = gameRepository.findById(gameId).orElseThrow(IllegalStateException::new);
-        GameHasTeam gameHasHomeTeam = game.getGameHasTeam(TeamType.HOME);
-        GameHasTeam gameHasAwayTeam = game.getGameHasTeam(TeamType.AWAY);
-        Long homeTeamId = gameHasHomeTeam.getTeamId();
-        Long awayTeamId = gameHasAwayTeam.getTeamId();
-        Team homeTeam = teamRepository.findById(homeTeamId).orElseThrow(IllegalStateException::new);
-        Team awayTeam = teamRepository.findById(awayTeamId).orElseThrow(IllegalStateException::new);
-        String homeTeamName = homeTeam.getName();
-        String awayTeamName = awayTeam.getName();
-        List<Player> homePlayers = homeTeam.getPlayers();
-        List<Player> awayPlayers = awayTeam.getPlayers();
-        List<PlateAppearanceInfoDTO> homePAInfos = new ArrayList<>();
-        List<PlateAppearanceInfoDTO> awayPAInfos = new ArrayList<>();
-//        for(Player player : homePlayers) {
-//            PlateAppearance homePA = plateAppearanceRepository.findByPlayerId(player.getId());
-//            PlateAppearanceInfo homePAInfo = PlateAppearanceInfo.from(homePA);
-//            homePAInfos.add(homePAInfo);
-//        }
-//        for(Player player : awayPlayers) {
-//            PlateAppearance awayPA = plateAppearanceRepository.findByPlayerId(player.getId());
-//            PlateAppearanceInfo awayPAInfo = PlateAppearanceInfo.from(awayPA);
-//            awayPAInfos.add(awayPAInfo);
-//        }
-        return PlateAppearanceDTO.from(homePAInfos, awayPAInfos);
-    }
 
     private Game getGameAndHasNotStatus(Long gameId, PlayingStatus notStatus) {
         Game game = gameRepository.findById(gameId).orElseThrow(IllegalStateException::new);
@@ -190,6 +151,51 @@ public class GameService {
         game.deleteUser(userId);
         gameRepository.save(game);
     }
+
+    public ScoreDTO getScore(Long gameId) {
+        Game game = gameRepository.findById(gameId).orElseThrow(IllegalStateException::new);
+        Long homeTeamId = game.getHomeTeamId();
+        Long awayTeamId = game.getAwayTeamId();
+        Team homeTeam = teamRepository.findById(homeTeamId).orElseThrow(IllegalStateException::new);
+        Team awayTeam = teamRepository.findById(awayTeamId).orElseThrow(IllegalStateException::new);
+        String homeName = homeTeam.getName();
+        String awayName = awayTeam.getName();
+        ScoreDTO scoreDTO = new ScoreDTO(homeName, awayName);
+        scoreDTO.makeHomeScore(game);
+        scoreDTO.makeAwayScore(game);
+        return scoreDTO;
+    }
+
+    public PlateAppearanceDTO getPlateAppearance(Long gameId) {
+        Game game = gameRepository.findById(gameId).orElseThrow(IllegalStateException::new);
+        GameHasTeam gameHasHomeTeam = game.getGameHasTeam(TeamType.HOME);
+        GameHasTeam gameHasAwayTeam = game.getGameHasTeam(TeamType.AWAY);
+        Long homeTeamId = gameHasHomeTeam.getTeamId();
+        Long awayTeamId = gameHasAwayTeam.getTeamId();
+        Team homeTeam = teamRepository.findById(homeTeamId).orElseThrow(IllegalStateException::new);
+        Team awayTeam = teamRepository.findById(awayTeamId).orElseThrow(IllegalStateException::new);
+        String homeTeamName = homeTeam.getName();
+        String awayTeamName = awayTeam.getName();
+        List<Player> homePlayers = homeTeam.getPlayers();
+        List<Player> awayPlayers = awayTeam.getPlayers();
+
+
+        List<PlateAppearanceInfoDTO> homePAInfos = new ArrayList<>();
+        List<PlateAppearanceInfoDTO> awayPAInfos = new ArrayList<>();
+//        for(Player player : homePlayers) {
+//            PlateAppearance homePA = plateAppearanceRepository.findByPlayerId(player.getId());
+//            PlateAppearanceInfo homePAInfo = PlateAppearanceInfo.from(homePA);
+//            homePAInfos.add(homePAInfo);
+//        }
+//        for(Player player : awayPlayers) {
+//            PlateAppearance awayPA = plateAppearanceRepository.findByPlayerId(player.getId());
+//            PlateAppearanceInfo awayPAInfo = PlateAppearanceInfo.from(awayPA);
+//            awayPAInfos.add(awayPAInfo);
+//        }
+        //PlateAppearance result = PlateAppearance.create();
+        return PlateAppearanceDTO.from(homePAInfos, awayPAInfos);
+    }
+
 //
 //    public Optional<PitchResult> completeHalfInning(Long gameId, User user) {
 //        Game game = gameRepository.findById(gameId).orElseThrow(IllegalStateException::new);
