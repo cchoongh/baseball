@@ -6,7 +6,7 @@ public class GameHasTeam {
     @Id
     private final Long id;
     private final Long teamId;
-    private final int score;
+    private int score;
 
     GameHasTeam(Long id, Long teamId, int score) {
         this.id = id;
@@ -30,12 +30,7 @@ public class GameHasTeam {
         return score;
     }
 
-    @Override
-    public String toString() {
-        return "GameHasTeam{" +
-                "id=" + id +
-                ", teamId=" + teamId +
-                ", score=" + score +
-                '}';
+    public void recordScore(int score) {
+        this.score = score;
     }
 }

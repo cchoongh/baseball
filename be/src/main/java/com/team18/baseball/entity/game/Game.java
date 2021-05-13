@@ -39,6 +39,10 @@ public class Game {
         return teams.get(teamType.toString());
     }
 
+    public List<HalfInning> getHalfInnings() {
+        return this.halfInnings;
+    }
+
     public HalfInning getLastHalfInning() {
         if (halfInnings.size() < 1) {
             throw new IllegalStateException();
@@ -50,10 +54,6 @@ public class Game {
         return teams.entrySet().stream()
                 .collect(Collectors.toMap(Map.Entry::getKey,
                         e -> e.getValue().getTeamId()));
-    }
-
-    public List<HalfInning> getHalfInnings() {
-        return halfInnings;
     }
 
     public Long getHomeTeamId() {
@@ -126,17 +126,17 @@ public class Game {
         }
     }
 
-//    public HalfInning addHalfInning() {
-//        HalfInning lastInning = getLastHalfInning();
-//        if(lastInning.getInningType().equals(InningType.TOP.name())) {
-//            HalfInning halfInning = HalfInning.create(lastInning.getInning(), InningType.BOTTOM.name());
-//            halfInnings.add(halfInning);
-//            return halfInning;
-//        }
-//        HalfInning halfInning = HalfInning.create(lastInning.getInning() + 1, InningType.TOP.name());
-//        halfInnings.add(halfInning);
-//        return halfInning;
-//    }
+    public HalfInning addHalfInning() {
+        HalfInning lastInning = getLastHalfInning();
+        if(lastInning.getInningType().equals(InningType.TOP.name())) {
+            HalfInning halfInning = HalfInning.create(lastInning.getInning(), InningType.BOTTOM.name());
+            halfInnings.add(halfInning);
+            return halfInning;
+        }
+        HalfInning halfInning = HalfInning.create(lastInning.getInning() + 1, InningType.TOP.name());
+        halfInnings.add(halfInning);
+        return halfInning;
+    }
 
     public void addFirstHalfInning() {
         if(halfInnings.size() != 0) {
@@ -149,5 +149,13 @@ public class Game {
 
     public void changeStatus(PlayingStatus isPlaying) {
         this.playingStatus = isPlaying.name();
+    }
+
+    public void end() {
+        playingStatus = PlayingStatus.END.name();
+    }
+
+    public int getLastHalfInningIndex() {
+        return halfInnings.size();
     }
 }
