@@ -22,6 +22,9 @@ public class PitchResultService {
     }
 
     public PitchResult getLastPitchResult() {
-        return pitchResultRepository.findById(pitchResultRepository.count()).orElseThrow(IllegalStateException::new);
+        Long count = pitchResultRepository.count();
+        if (count == 0) return new PitchResult();
+        PitchResult pitchResult = pitchResultRepository.findById(pitchResultRepository.count()).orElseThrow(IllegalStateException::new);
+        return pitchResult;
     }
 }

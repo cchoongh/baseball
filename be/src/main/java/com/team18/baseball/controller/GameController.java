@@ -79,7 +79,7 @@ public class GameController {
     public void getPlateAppearance(@PathVariable Long gameId, @PathVariable Long userId) {
         User user = userRepository.findById(userId).orElseThrow(IllegalStateException::new);
 //        User user = HttpSessionUtils.getLoginUser(session).orElseThrow(IllegalStateException::new);
-        gameService.getPlateAppearance(user, gameId);
+        gameService.getPlateAppearance(gameId);
     }
 
     @PostMapping("/{gameId}/halfInning/user/{userId}")
@@ -95,16 +95,16 @@ public class GameController {
         gameService.endGame(user, gameId);
     }
 
-    @PostMapping("/{gameId}/batterRecord/user/{userId}")
-    public List<BattingRecord> recordBatting(@RequestBody List<BattingRecord> battingRecordBoard, @PathVariable Long gameId, @PathVariable Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(IllegalStateException::new);
-        gameService.recordBatting(user, gameId, battingRecordBoard);
-        return battingRecordBoard;
-    }
+//    @PostMapping("/{gameId}/batterRecord/user/{userId}")
+//    public List<BattingRecord> recordBatting(@RequestBody List<BattingRecord> battingRecordBoard, @PathVariable Long gameId, @PathVariable Long userId) {
+//        User user = userRepository.findById(userId).orElseThrow(IllegalStateException::new);
+//        gameService.recordBatting(user, gameId, battingRecordBoard);
+//        return battingRecordBoard;
+//    }
 
-    @GetMapping("/{gameId}/batterBoard/user/{userId}")
-    public List<BattingRecord> getBatterRecord(@PathVariable Long gameId, @PathVariable Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(IllegalStateException::new);
-        return gameService.getBattingBoard(user, gameId);
-    }
+//    @GetMapping("/{gameId}/batterBoard/user/{userId}")
+//    public List<BattingRecord> getBatterRecord(@PathVariable Long gameId, @PathVariable Long userId) {
+//        User user = userRepository.findById(userId).orElseThrow(IllegalStateException::new);
+//        return gameService.getBattingBoard(user, gameId);
+//    }
 }
