@@ -29,7 +29,21 @@ public class PitchResult {
     private Score score;
 
     public PitchResult() {
-        this.id = null;
+        this.homeId = 0L;
+        this.awayId = 0L;
+        this.battingTeamId = null;
+        this.pitchResult = null;
+        this.first_player = 0L;
+        this.first_mode = null;
+        this.second_player = 0L;
+        this.second_mode = null;
+        this.third_player = 0L;
+        this.third_mode = null;
+        this.fourth_player = 0L;
+        this.fourth_mode = null;
+        this.batter = null;
+        this.ballCount = null;
+        this.score = null;
     }
 
    public PitchResult(Long homeId, Long awayId, Long battingTeamId, String pitchResult,
