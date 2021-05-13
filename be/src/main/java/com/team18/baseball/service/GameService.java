@@ -227,6 +227,15 @@ public class GameService {
         return true;
     }
 
+    public void endGame(User user, Long gameId) {
+        Game game = getGameAndHasStatus(gameId, PlayingStatus.IS_PLAYING);
+        game.checkUser(user.getId()).orElseThrow(IllegalStateException::new);
+        game.end();
+        gameRepository.save(game);
+        teamService.unselect(game.getGameHasTeam(TeamType.AWAY).getTeamId(), game.getAwayUserId());
+        teamService.unselect(game.getGameHasTeam(TeamType.HOME).getTeamId(), game.getHomeUserId());
+    }
+
 //    private void recordHalfInningScore(Game game, int lastHalfInningIndex) {
 //        //마지막 마지막 인덱스가 홀수 일 때 home팀 수비 away팀 공격 -> away팀 점수
 //        if ((lastHalfInningIndex / 2) == 1) {

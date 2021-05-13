@@ -1,7 +1,10 @@
 INSERT INTO `user`(github_id)
 VALUES ("kkk@honux.com"),
        ("jjj@honux.com"),
-       ("qqq@honux.com");
+       ("qqq@honux.com"),
+       ("rrr@honux.com"),
+       ("ppp@honux.com"),
+       ("aaa@honux.com");
 
 INSERT INTO game(id, home_user_id, away_user_id, `playing_status`)
 VALUES (1, null, null, "READY"),
