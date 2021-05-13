@@ -1,4 +1,4 @@
-package com.team18.baseball.dto.pitchResult;
+package com.team18.baseball.dto.pitchResultDto;
 
 public class Runner {
     private Long playerId;

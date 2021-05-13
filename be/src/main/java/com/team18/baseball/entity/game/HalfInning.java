@@ -1,8 +1,12 @@
 package com.team18.baseball.entity.game;
 
-import com.team18.baseball.dto.pitchResult.PitchResult;
-import com.team18.baseball.dto.pitchResult.PitchResultDto;
+import com.team18.baseball.dto.pitchResultDto.PitchResult;
+import com.team18.baseball.entity.battingBoard.BattingRecord;
+import com.team18.baseball.utils.PlayingStatus;
 import org.springframework.data.annotation.Id;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class HalfInning {
     @Id
@@ -11,6 +15,7 @@ public class HalfInning {
     private final String inningType;
     private int score;
     private String playingStatus;
+    private List<BattingRecord> battingRecordBoard;
 
     HalfInning(Long id,
                int inning, String inningType) {
@@ -19,6 +24,7 @@ public class HalfInning {
         this.inningType = inningType;
         this.score = 0;
         this.playingStatus = PlayingStatus.IS_PLAYING.name();
+        this.battingRecordBoard = new ArrayList<>();
     }
 
     public static final HalfInning create(int inning, String inningType) {
@@ -26,13 +32,17 @@ public class HalfInning {
                 inning, inningType);
     }
 
-    public static final HalfInning createNext(HalfInning lastHalfInning) {
-        if(lastHalfInning.inningType.toString().equals(InningType.TOP.toString())) {
-            return new HalfInning(null,
-                    lastHalfInning.getInning(), InningType.BOTTOM.toString());
-        }
-        return new HalfInning(null,
-                lastHalfInning.getInning(), InningType.TOP.toString());
+//    public static final HalfInning createNext(HalfInning lastHalfInning) {
+//        if(lastHalfInning.inningType.toString().equals(InningType.TOP.toString())) {
+//            return new HalfInning(null,
+//                    lastHalfInning.getInning(), InningType.BOTTOM.toString());
+//        }
+//        return new HalfInning(null,
+//                lastHalfInning.getInning(), InningType.TOP.toString());
+//    }
+
+    public Long getId() {
+        return id;
     }
 
     public int getInning() {
@@ -51,6 +61,10 @@ public class HalfInning {
         return score;
     }
 
+    public List<BattingRecord> getBattingRecordBoard() {
+        return battingRecordBoard;
+    }
+
     public void updatePitchResult(PitchResult pitchResult) {
         if(!isPlaying()) {
             throw new IllegalStateException();
@@ -64,5 +78,9 @@ public class HalfInning {
 
     public void end() {
         this.playingStatus = PlayingStatus.END.name();
+    }
+
+    public void addBattingRecord(BattingRecord battingRecord) {
+        battingRecordBoard.add(battingRecord);
     }
 }

@@ -2,10 +2,11 @@ package com.team18.baseball.service;
 
 import com.team18.baseball.dto.*;
 import com.team18.baseball.dto.PlateAppearanceInfoDTO;
+import com.team18.baseball.entity.battingBoard.BattingRecord;
 import com.team18.baseball.entity.*;
-import com.team18.baseball.TeamRoleUtils;
-import com.team18.baseball.dto.pitchResult.PitchResult;
-import com.team18.baseball.dto.pitchResult.PitchResultDto;
+import com.team18.baseball.utils.*;
+import com.team18.baseball.dto.pitchResultDto.PitchResult;
+import com.team18.baseball.dto.pitchResultDto.PitchResultDto;
 import com.team18.baseball.dto.startGameInfo.GameInfo;
 import com.team18.baseball.dto.startGameInfo.StartGameInfo;
 import com.team18.baseball.dto.startGameInfo.TeamInfo;
@@ -31,7 +32,6 @@ public class GameService {
     private final GameRepository gameRepository;
     private final TeamRepository teamRepository;
     private final HalfInningRepository halfInningRepository;
-    private final PlateAppearanceRepository plateAppearanceRepository;
     private final PitchResultRepository pitchResultRepository;
 
     private final TeamService teamService;
@@ -40,13 +40,12 @@ public class GameService {
 
 
     public GameService(GameRepository gameRepository, TeamRepository teamRepository,
-                       HalfInningRepository halfInningRepository, PlateAppearanceRepository plateAppearanceRepository,
+                       HalfInningRepository halfInningRepository,
                        PitchResultRepository pitchResultRepository,
                        TeamService teamService, PitchResultService pitchResultService,
                        HalfInningService halfInningService) {
         this.gameRepository = gameRepository;
         this.teamRepository = teamRepository;
-        this.plateAppearanceRepository = plateAppearanceRepository;
         this.halfInningRepository = halfInningRepository;
         this.pitchResultRepository = pitchResultRepository;
         this.teamService = teamService;
@@ -139,7 +138,7 @@ public class GameService {
         Game game = getGameAndHasStatus(gameId, PlayingStatus.IS_PLAYING);
         TeamType teamType = game.checkUser(user.getId()).orElseThrow(IllegalStateException::new);
 
-        if (TeamRoleUtils.checkTeamRole(teamType, game.getHalfInnings().size()) == TeamRole.BATTING) {
+        if (TeamRoleUtils.checkTeamRole(teamType, game.getHalfInnings().size()) == TeamTurn.BATTING) {
             throw new IllegalStateException();
         }
 
@@ -179,7 +178,7 @@ public class GameService {
     }
 
     public PlateAppearanceDTO getPlateAppearance(Long gameId) {
-        Game game = getGameAndHasStatus(gameId, PlayingStatus.IS_PLAYING);
+        Game game = gameRepository.findById(gameId).orElseThrow(IllegalStateException::new);
         GameHasTeam gameHasHomeTeam = game.getGameHasTeam(TeamType.HOME);
         GameHasTeam gameHasAwayTeam = game.getGameHasTeam(TeamType.AWAY);
         Long homeTeamId = gameHasHomeTeam.getTeamId();
@@ -191,6 +190,10 @@ public class GameService {
         List<Player> homePlayers = homeTeam.getPlayers();
         List<Player> awayPlayers = awayTeam.getPlayers();
         PitchResult lastPitchResult = pitchResultService.getLastPitchResult();
+        if(lastPitchResult == null) {
+
+        }
+
         List<PlayersDTO> homePlayersDTO = makePlayersDTO(homePlayers, lastPitchResult);
         List<PlayersDTO> awayPlayersDTO = makePlayersDTO(awayPlayers, lastPitchResult);
         PlateAppearanceInfoDTO homePAInfos = PlateAppearanceInfoDTO.create(homeTeamName, homePlayersDTO);
@@ -217,7 +220,7 @@ public class GameService {
             if(lastPitchResult.getBatter().isOut()) {
                 PlayerOut++;
             }
-            int homePlayerAverage = (PlayerHit + playerAtBat) / 2;
+            int homePlayerAverage = PlayerHit/playerAtBat;
             PlayersDTO playersDTO = PlayersDTO.create(homePlayerId, homePlayerName, playerAtBat, PlayerHit, PlayerOut, homePlayerAverage);
             playersDTOs.add(playersDTO);
         }

@@ -2,8 +2,8 @@ package com.team18.baseball.dto;
 
 import com.team18.baseball.entity.game.Game;
 import com.team18.baseball.entity.game.HalfInning;
-import com.team18.baseball.entity.game.InningType;
-import com.team18.baseball.entity.game.PlayingStatus;
+import com.team18.baseball.utils.InningType;
+import com.team18.baseball.utils.PlayingStatus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,12 +51,9 @@ public class ScoreDTO {
             String inningType = halfInning.getInningType();
             String playingStatus = halfInning.getPlayingStatus();
             if (inningType.equals(InningType.BOTTOM.name())) {
-                System.out.println("야야야야야야야호");
                 homeScore = score;
                 if (playingStatus.equals(PlayingStatus.END.name())) {
                     homeScoreList.add(homeScore);
-                    System.out.println("아하하하하하하하하하하");
-                    System.out.println(halfInning.getScore());
                 }
 
             }

@@ -1,4 +1,4 @@
-package com.team18.baseball.dto.pitchResult;
+package com.team18.baseball.dto.pitchResultDto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.team18.baseball.entity.Player;
