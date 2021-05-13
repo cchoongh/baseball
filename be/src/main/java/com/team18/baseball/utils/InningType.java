@@ -1,4 +1,4 @@
-package com.team18.baseball.entity.game;
+package com.team18.baseball.utils;
 
 public enum InningType {
   TOP("초"),

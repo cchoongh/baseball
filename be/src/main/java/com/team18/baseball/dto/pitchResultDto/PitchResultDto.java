@@ -1,10 +1,6 @@
-package com.team18.baseball.dto.pitchResult;
+package com.team18.baseball.dto.pitchResultDto;
 
-import com.team18.baseball.entity.Player;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Embedded;
-
-import java.util.List;
 
 public class PitchResultDto {
     private Long homeId;

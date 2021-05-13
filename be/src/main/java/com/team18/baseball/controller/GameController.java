@@ -4,7 +4,7 @@ import com.team18.baseball.dto.ScoreDTO;
 import com.team18.baseball.entity.battingBoard.BattingRecord;
 import com.team18.baseball.dto.startGameInfo.StartGameInfo;
 import com.team18.baseball.dto.teamsInGame.TeamsInGame;
-import com.team18.baseball.dto.pitchResult.PitchResultDto;
+import com.team18.baseball.dto.pitchResultDto.PitchResultDto;
 import com.team18.baseball.entity.User;
 import com.team18.baseball.repository.UserRepository;
 import com.team18.baseball.response.ResponseBody;

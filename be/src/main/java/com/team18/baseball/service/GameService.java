@@ -4,9 +4,10 @@ import com.team18.baseball.dto.*;
 import com.team18.baseball.dto.PlateAppearanceInfoDTO;
 import com.team18.baseball.entity.battingBoard.BattingRecord;
 import com.team18.baseball.entity.*;
-import com.team18.baseball.TeamRoleUtils;
-import com.team18.baseball.dto.pitchResult.PitchResult;
-import com.team18.baseball.dto.pitchResult.PitchResultDto;
+import com.team18.baseball.utils.PlayingStatus;
+import com.team18.baseball.utils.TeamRoleUtils;
+import com.team18.baseball.dto.pitchResultDto.PitchResult;
+import com.team18.baseball.dto.pitchResultDto.PitchResultDto;
 import com.team18.baseball.dto.startGameInfo.GameInfo;
 import com.team18.baseball.dto.startGameInfo.StartGameInfo;
 import com.team18.baseball.dto.startGameInfo.TeamInfo;
@@ -17,6 +18,8 @@ import com.team18.baseball.entity.Team;
 import com.team18.baseball.entity.User;
 import com.team18.baseball.entity.game.*;
 import com.team18.baseball.repository.*;
+import com.team18.baseball.utils.TeamTurn;
+import com.team18.baseball.utils.TeamType;
 import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Service;
 
@@ -144,7 +147,7 @@ public class GameService {
         Game game = getGameAndHasStatus(gameId, PlayingStatus.IS_PLAYING);
         TeamType teamType = game.checkUser(user.getId()).orElseThrow(IllegalStateException::new);
 
-        if (TeamRoleUtils.checkTeamRole(teamType, game.getHalfInnings().size()) == TeamRole.BATTING) {
+        if (TeamRoleUtils.checkTeamRole(teamType, game.getHalfInnings().size()) == TeamTurn.BATTING) {
             throw new IllegalStateException();
         }
 
@@ -250,7 +253,7 @@ public class GameService {
     public void recordBatting(User user, Long gameId, List<BattingRecord> battingRecordBoard) {
         Game game = getGameAndHasStatus(gameId, PlayingStatus.IS_PLAYING);
         TeamType teamType = game.checkUser(user.getId()).orElseThrow(IllegalStateException::new);
-        if (TeamRoleUtils.checkTeamRole(teamType, game.getHalfInnings().size()) == TeamRole.BATTING) {
+        if (TeamRoleUtils.checkTeamRole(teamType, game.getHalfInnings().size()) == TeamTurn.BATTING) {
             throw new IllegalStateException();
         }
 
