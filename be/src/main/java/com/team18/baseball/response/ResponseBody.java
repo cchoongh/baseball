@@ -41,6 +41,10 @@ public class ResponseBody<T> {
         return new ResponseBody<>(Status.NEW_HALFINNING_FAIL, Status.NEW_HALFINNING_FAIL.getMessage());
     }
 
+    public static ResponseBody<String> notFound(String message) {
+        return new ResponseBody<>(
+    }
+
     public Status getStatus() {
         return status;
     }
