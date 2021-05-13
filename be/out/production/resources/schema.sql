@@ -1,11 +1,12 @@
-DROP TABLE IF EXISTS plate_appearance;
-DROP TABLE IF EXISTS inning_type;
+DROP TABLE IF EXISTS `batter_record`;
+DROP TABLE IF EXISTS `plate_appearance`;
+DROP TABLE IF EXISTS `inning_type`;
 DROP TABLE IF EXISTS `half_inning`;
 DROP TABLE IF EXISTS `pitch_result`;
-DROP TABLE IF EXISTS player;
+DROP TABLE IF EXISTS `player`;
 DROP TABLE IF EXISTS `game_has_team`;
-DROP TABLE IF EXISTS team;
-DROP TABLE IF EXISTS game;
+DROP TABLE IF EXISTS `team`;
+DROP TABLE IF EXISTS `game`;
 DROP TABLE IF EXISTS `user`;
 
 CREATE TABLE `user`
@@ -99,6 +100,18 @@ CREATE TABLE `pitch_result`
     `away_score` int,
     primary key (id)
 );
+
+CREATE TABLE `batter_record`
+(
+    `id`             int auto_increment,
+    `half_inning_id` int,
+    `player_id`      int,
+    `action`         varchar(50),
+    `strike`         int,
+    `ball`           int,
+    primary key (id)
+);
+
 
 CREATE TABLE plate_appearance
 (

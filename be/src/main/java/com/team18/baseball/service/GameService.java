@@ -2,6 +2,7 @@ package com.team18.baseball.service;
 
 import com.team18.baseball.dto.*;
 import com.team18.baseball.dto.PlateAppearanceInfoDTO;
+import com.team18.baseball.dto.batterBoard.BatterRecordDto;
 import com.team18.baseball.entity.*;
 import com.team18.baseball.TeamRoleUtils;
 import com.team18.baseball.dto.pitchResult.PitchResult;
@@ -36,18 +37,25 @@ public class GameService {
     private final TeamService teamService;
     private final PitchResultService pitchResultService;
     private final HalfInningService halfInningService;
+    private final BatterRecordService batterRecordService;
 
 
-    public GameService(GameRepository gameRepository, TeamRepository teamRepository,
-                       HalfInningRepository halfInningRepository, PlateAppearanceRepository plateAppearanceRepository,
+    public GameService(GameRepository gameRepository,
+                       TeamRepository teamRepository,
+                       HalfInningRepository halfInningRepository,
+                       PlateAppearanceRepository plateAppearanceRepository,
                        PitchResultRepository pitchResultRepository,
-                       TeamService teamService, PitchResultService pitchResultService,
-                       HalfInningService halfInningService) {
+                       TeamService teamService,
+                       PitchResultService pitchResultService,
+                       HalfInningService halfInningService,
+                       BatterRecordService batterRecordService) {
         this.gameRepository = gameRepository;
         this.teamRepository = teamRepository;
         this.plateAppearanceRepository = plateAppearanceRepository;
         this.halfInningRepository = halfInningRepository;
         this.pitchResultRepository = pitchResultRepository;
+        this.batterRecordService = batterRecordService;
+
         this.teamService = teamService;
         this.pitchResultService = pitchResultService;
         this.halfInningService = halfInningService;
@@ -238,6 +246,15 @@ public class GameService {
         teamService.unselect(game.getGameHasTeam(TeamType.HOME).getTeamId(), game.getHomeUserId());
     }
 
+    public void getBatterBoard(User user, Long gameId) {
+    }
+
+    public void recordBatting(User user, Long gameId, List<BatterRecordDto> batterRecordBoard) {
+        Game game = getGameAndHasStatus(gameId, PlayingStatus.IS_PLAYING);
+        game.checkUser(user.getId()).orElseThrow(IllegalStateException::new);
+        batterRecordService.saveBatterRecord(batterRecordBoard, game.getLastHalfInning().getId());
+    }
+
 //    private void recordHalfInningScore(Game game, int lastHalfInningIndex) {
 //        //마지막 마지막 인덱스가 홀수 일 때 home팀 수비 away팀 공격 -> away팀 점수
 //        if ((lastHalfInningIndex / 2) == 1) {
@@ -252,6 +269,5 @@ public class GameService {
 //        int homeScore = game.getHalfInnings().get(lastHalfInningIndex).getScore();
 //        teamInfo.recordScore(homeScore);
 //    }
-
 
 }

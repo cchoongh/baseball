@@ -2,6 +2,7 @@ package com.team18.baseball.controller;
 
 import com.team18.baseball.HttpSessionUtils;
 import com.team18.baseball.dto.ScoreDTO;
+import com.team18.baseball.dto.batterBoard.BatterRecordDto;
 import com.team18.baseball.dto.pitchResult.PitchResult;
 import com.team18.baseball.dto.startGameInfo.StartGameInfo;
 import com.team18.baseball.dto.teamsInGame.TeamsInGame;
@@ -96,4 +97,12 @@ public class GameController {
         User user = userRepository.findById(userId).orElseThrow(IllegalStateException::new);
         gameService.endGame(user, gameId);
     }
+
+    @PostMapping("/{gameId}/batterBoard/user/{userId}")
+    public List<BatterRecordDto> getBatterRecord(@RequestBody List<BatterRecordDto> batterRecordBoard, @PathVariable Long gameId, @PathVariable Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(IllegalStateException::new);
+        gameService.recordBatting(user, gameId, batterRecordBoard);
+        return batterRecordBoard;
+    }
+
 }

@@ -26,13 +26,17 @@ public class HalfInning {
                 inning, inningType);
     }
 
-    public static final HalfInning createNext(HalfInning lastHalfInning) {
-        if(lastHalfInning.inningType.toString().equals(InningType.TOP.toString())) {
-            return new HalfInning(null,
-                    lastHalfInning.getInning(), InningType.BOTTOM.toString());
-        }
-        return new HalfInning(null,
-                lastHalfInning.getInning(), InningType.TOP.toString());
+//    public static final HalfInning createNext(HalfInning lastHalfInning) {
+//        if(lastHalfInning.inningType.toString().equals(InningType.TOP.toString())) {
+//            return new HalfInning(null,
+//                    lastHalfInning.getInning(), InningType.BOTTOM.toString());
+//        }
+//        return new HalfInning(null,
+//                lastHalfInning.getInning(), InningType.TOP.toString());
+//    }
+
+    public Long getId() {
+        return id;
     }
 
     public int getInning() {
