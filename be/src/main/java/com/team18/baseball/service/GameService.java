@@ -270,6 +270,7 @@ public class GameService {
         Game game = getGameAndHasStatus(gameId, PlayingStatus.IS_PLAYING);
         TeamType teamType = game.checkUser(user.getId()).orElseThrow(IllegalStateException::new);
         if (TeamRoleUtils.checkTeamRole(teamType, game.getHalfInnings().size()) == TeamRole.BATTING) {
+            TeamTurn teamTurn = TeamRoleUtils.checkTeamRole(teamType, game.getHalfInnings().size());
             throw new IllegalStateException();
         }
 
