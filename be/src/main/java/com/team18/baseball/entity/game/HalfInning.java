@@ -58,7 +58,6 @@ public class HalfInning {
         score = pitchResult.getScore().getAwayScore();
     }
 
-
     public void end() {
         this.playingStatus = PlayingStatus.END.name();
     }

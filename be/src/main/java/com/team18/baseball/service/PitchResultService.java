@@ -20,11 +20,9 @@ public class PitchResultService {
         this.halfInningService = halfInningService;
     }
 
-    public void pitch(PitchResult pitchResult, Runner[] runners, HalfInning lastHalfInning) {
+    public PitchResult pitch(PitchResult pitchResult, Runner[] runners) {
         pitchResult.addPlayerInfo(runners);
-        pitchResultRepository.save(pitchResult);
-
-        halfInningService.update(lastHalfInning, pitchResult);
+        return pitchResultRepository.save(pitchResult);
     }
 
     public PitchResult getLastPitchResult() {

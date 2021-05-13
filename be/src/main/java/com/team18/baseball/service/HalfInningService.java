@@ -19,4 +19,9 @@ public class HalfInningService {
         lastHalfInning.updatePitchResult(pitchResult);
         halfInningRepository.save(lastHalfInning);
     }
+
+    public void end(HalfInning lastHalfInning) {
+        lastHalfInning.end();
+        halfInningRepository.save(lastHalfInning);
+    }
 }

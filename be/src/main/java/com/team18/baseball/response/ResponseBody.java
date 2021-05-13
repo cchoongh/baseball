@@ -33,6 +33,14 @@ public class ResponseBody<T> {
         return new ResponseBody<>(Status.START_OK, Status.START_OK.getMessage(), body);
     }
 
+    public static <T>  ResponseBody<T> newHalfInningOk() {
+        return new ResponseBody<>(Status.NEW_HALFINNING_OK, Status.NEW_HALFINNING_OK.getMessage());
+    }
+
+    public static <T>  ResponseBody<T> newHalfInningFail() {
+        return new ResponseBody<>(Status.NEW_HALFINNING_FAIL, Status.NEW_HALFINNING_FAIL.getMessage());
+    }
+
     public Status getStatus() {
         return status;
     }
@@ -49,8 +57,9 @@ public class ResponseBody<T> {
         SELECT_OK("팀이 선택되었습니다."),
         SELECT_FAIL("다른 유저가 선택한 팀입니다. 다른 팀을 선택하세요"),
         START_OK("게임이 시작되었습니다"),
-        START_FAIL("상대팀 유저를 기다리는 중입니다");
-
+        START_FAIL("상대팀 유저를 기다리는 중입니다"),
+        NEW_HALFINNING_OK("공격과 수비가 변경됩니다"),
+        NEW_HALFINNING_FAIL("경기가 종료되었습니다");
 
         private final String message;
 

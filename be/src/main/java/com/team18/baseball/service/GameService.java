@@ -11,12 +11,8 @@ import com.team18.baseball.dto.teamsInGame.TeamsInGame;
 import com.team18.baseball.entity.GameHasTeam;
 import com.team18.baseball.entity.Team;
 import com.team18.baseball.entity.User;
-import com.team18.baseball.entity.game.Game;
-import com.team18.baseball.entity.game.PlayingStatus;
-import com.team18.baseball.entity.game.TeamRole;
-import com.team18.baseball.entity.game.TeamType;
+import com.team18.baseball.entity.game.*;
 import com.team18.baseball.repository.GameRepository;
-import com.team18.baseball.repository.PitchResultRepository;
 import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Service;
 
@@ -25,18 +21,23 @@ import java.util.Optional;
 
 @Service
 public class GameService {
+    private static final Integer MAX_HALF_INNING_INDEX = 18;
 
     private final GameRepository gameRepository;
 
     private final TeamService teamService;
     private final PitchResultService pitchResultService;
+    private final HalfInningService halfInningService;
 
-    public GameService(GameRepository gameRepository, 
+
+    public GameService(GameRepository gameRepository,
                        TeamService teamService,
-                       PitchResultService pitchResultService) {
+                       PitchResultService pitchResultService,
+                       HalfInningService halfInningService) {
         this.gameRepository = gameRepository;
         this.teamService = teamService;
         this.pitchResultService = pitchResultService;
+        this.halfInningService = halfInningService;
     }
 
     public List<TeamsInGame> getTeamsInGameList() {
@@ -51,26 +52,28 @@ public class GameService {
     }
 
     public boolean selectTeam(User user, Long gameId, Long teamId) {
-        if(teamService.containsTeam(user)) {
+        if (teamService.containsTeam(user)) {
             throw new IllegalStateException();
         }
 
         Game game = getGameAndHasStatus(gameId, PlayingStatus.READY);
-        if(!game.hasTeam(teamId)) {
+        if (!game.hasTeam(teamId)) {
             throw new IllegalStateException();
-        };
+        }
+        ;
 
         Long userId = user.getId();
-        if(!teamService.selectedBy(teamId, userId)) {
+        if (!teamService.selectedBy(teamId, userId)) {
             return false;
-        };
+        }
+        ;
         addUserId(game, teamId, userId);
         return true;
     }
 
     private Game getGameAndHasStatus(Long gameId, PlayingStatus status) {
         Game game = gameRepository.findById(gameId).orElseThrow(IllegalStateException::new);
-        if(!game.checkStatus().equals(status.name())){
+        if (!game.checkStatus().equals(status.name())) {
             throw new IllegalStateException();
         }
         return game;
@@ -84,12 +87,12 @@ public class GameService {
     public Optional<StartGameInfo> start(User user, Long gameId) {
         Game game = getGameAndHasNotStatus(gameId, PlayingStatus.END);
         game.checkUser(user.getId()).orElseThrow(IllegalStateException::new);
-        if(!game.hasTwoUsers()) {
+        if (!game.hasTwoUsers()) {
             return Optional.empty();
         }
 
         //상대팀 유저도 start를 누르면 해당 정보의 초기화 정보를 볼 수 있다.
-        if(game.checkStatus().equals(PlayingStatus.IS_PLAYING.name())){
+        if (game.checkStatus().equals(PlayingStatus.IS_PLAYING.name())) {
             return Optional.of(getStartGameInfo(game));
         }
 
@@ -101,7 +104,7 @@ public class GameService {
     private StartGameInfo getStartGameInfo(Game game) {
         TeamInfo homeTeamInfo = getTeamInfo(game, TeamType.HOME);
         TeamInfo awayTeamInfo = getTeamInfo(game, TeamType.AWAY);
-        return StartGameInfo.from( GameInfo.from(game, game.getLastHalfInning())
+        return StartGameInfo.from(GameInfo.from(game, game.getLastHalfInning())
                 , homeTeamInfo, awayTeamInfo);
     }
 
@@ -113,20 +116,21 @@ public class GameService {
 
     private Game getGameAndHasNotStatus(Long gameId, PlayingStatus notStatus) {
         Game game = gameRepository.findById(gameId).orElseThrow(IllegalStateException::new);
-        if(game.checkStatus().equals(notStatus.name())){
+        if (game.checkStatus().equals(notStatus.name())) {
             throw new IllegalStateException();
         }
         return game;
     }
 
     public void pitch(User user, Long gameId, PitchResultDto pitchResultDto) {
+        PitchResult pitchResult = pitchResultService.pitch(PitchResult.from(pitchResultDto), pitchResultDto.getRunners());
+
         Game game = getGameAndHasStatus(gameId, PlayingStatus.IS_PLAYING);
         TeamType teamType = game.checkUser(user.getId()).orElseThrow(IllegalStateException::new);
-        if(TeamRoleUtils.checkTeamRole(teamType, game.getHalfInnings().size()) == TeamRole.BATTING) {
+        if (TeamRoleUtils.checkTeamRole(teamType, game.getHalfInnings().size()) == TeamRole.BATTING) {
             throw new IllegalStateException();
         }
-        PitchResult pitchResult = PitchResult.from(pitchResultDto);
-        pitchResultService.pitch(pitchResult, pitchResultDto.getRunners(), game.getLastHalfInning());
+        halfInningService.update(game.getLastHalfInning(), pitchResult);
     }
 
     public PitchResultDto getPitchResult(Long gameId) {
@@ -145,28 +149,42 @@ public class GameService {
         game.deleteUser(userId);
         gameRepository.save(game);
     }
-//
-//    public Optional<PitchResult> completeHalfInning(Long gameId, User user) {
-//        Game game = gameRepository.findById(gameId).orElseThrow(IllegalStateException::new);
-//        //user가 게임에 속하는지 확인한다.
-//        TeamType teamType = game.checkUser(user.getId()).orElseThrow(IllegalStateException::new);
-//        //검증로직
-//        // 이닝을 추가할 수 없는 경우 : 이게임이 9회 말일 때 -> game을 종료 상태로 바꾼다
-//        HalfInning lastInning = game.getLastHalfInning();
-//        if((game.getHalfInnings().indexOf(lastInning) == 18)) {
-//            lastInning.end();
-//            game.end();
-//            return
+
+    public boolean endAndStartHalfInning(User user, Long gameId, PitchResultDto pitchResultDto) {
+        Game game = getGameAndHasStatus(gameId, PlayingStatus.IS_PLAYING);
+        game.checkUser(user.getId()).orElseThrow(IllegalStateException::new);
+
+
+        halfInningService.end(game.getLastHalfInning());
+
+        int lastHalfInningIndex = game.getLastHalfInningIndex();
+        if ((lastHalfInningIndex == MAX_HALF_INNING_INDEX)) {
+            game.end();
+            gameRepository.save(game);
+            //18개 이닝에 대한 총점을 score 입력 //
+            return false;
+        }
+
+        game.addHalfInning();
+        gameRepository.save(game);
+
+        pitchResultService.pitch(PitchResult.from(pitchResultDto), pitchResultDto.getRunners());
+        return true;
+    }
+
+//    private void recordHalfInningScore(Game game, int lastHalfInningIndex) {
+//        //마지막 마지막 인덱스가 홀수 일 때 home팀 수비 away팀 공격 -> away팀 점수
+//        if ((lastHalfInningIndex / 2) == 1) {
+//            recordHalfInningScore(game, lastHalfInningIndex, TeamType.HOME);
+//        } else {
+//            recordHalfInningScore(game, lastHalfInningIndex), TeamType.AWAY);
 //        }
-//        //gamestatus에 새 판으로 깔아줘야 하고, 기존 halfInnig 상태 바꿔줘야 하고 games에 새로운 hallfInning 넣어야 한다.
-//        game.getLastHalfInning()
+//    }
 //
+//    private void recordHalfInningScore(Game game, int lastHalfInningIndex, TeamType teamType) {
+//        GameHasTeam teamInfo = game.getGameHasTeam(TeamType.HOME);
+//        int homeScore = game.getHalfInnings().get(lastHalfInningIndex).getScore();
+//        teamInfo.recordScore(homeScore);
 //    }
 
-    //이닝이 끝났다고 post 할 때
-    //결과를 game score에 반영, inning end 반영
-
-    // 게임 end라고 post 해주세용
-
-    //게임 종료 추가
 }

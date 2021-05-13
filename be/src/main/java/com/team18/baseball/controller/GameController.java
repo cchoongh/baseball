@@ -60,11 +60,9 @@ public class GameController {
         return gameService.getPitchResult(gameId);
     }
 
-//    @PostMapping("/{gameId}/halfInning")
-//    public void completeHalfInning(@PathVariable Long gameId, HttpSession session) {
-//        User user = HttpSessionUtils.getLoginUser(session).orElseThrow(IllegalStateException::new);
-//        gameService.completeHalfInning(gameId, user);
-//    }
-
-
+    @PostMapping("/{gameId}/halfInning")
+    public ResponseBody<Object> endHalfInning(@RequestBody PitchResultDto pitchResultDto, @PathVariable Long gameId, HttpSession session) {
+        User user = HttpSessionUtils.getLoginUser(session).orElseThrow(IllegalStateException::new);
+        return gameService.endAndStartHalfInning(user, gameId, pitchResultDto) ? ResponseBody.newHalfInningOk() : ResponseBody.newHalfInningFail();
+    }
 }
