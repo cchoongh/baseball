@@ -30,6 +30,7 @@ import java.util.Optional;
 @Service
 public class GameService {
     private static final Integer MAX_HALF_INNING_INDEX = 18;
+    private static final Integer PLAYERS_NUM = 9;
 
     private final GameRepository gameRepository;
     private final TeamRepository teamRepository;
@@ -199,20 +200,37 @@ public class GameService {
         List<Player> homePlayers = homeTeam.getPlayers();
         List<Player> awayPlayers = awayTeam.getPlayers();
         PitchResult lastPitchResult = pitchResultService.getLastPitchResult();
-        List<PlateAppearanceInfoDTO> homePAInfos = new ArrayList<>();
-        List<PlateAppearanceInfoDTO> awayPAInfos = new ArrayList<>();
-//        for(Player player : homePlayers) {
-//            PlateAppearance homePA = plateAppearanceRepository.findByPlayerId(player.getId());
-//            PlateAppearanceInfo homePAInfo = PlateAppearanceInfo.from(homePA);
-//            homePAInfos.add(homePAInfo);
-//        }
-//        for(Player player : awayPlayers) {
-//            PlateAppearance awayPA = plateAppearanceRepository.findByPlayerId(player.getId());
-//            PlateAppearanceInfo awayPAInfo = PlateAppearanceInfo.from(awayPA);
-//            awayPAInfos.add(awayPAInfo);
-//        }
-        //PlateAppearance result = PlateAppearance.create();
-        return PlateAppearanceDTO.from(homePAInfos, awayPAInfos);
+        List<PlayersDTO> homePlayersDTO = makePlayersDTO(homePlayers, lastPitchResult);
+        List<PlayersDTO> awayPlayersDTO = makePlayersDTO(awayPlayers, lastPitchResult);
+        PlateAppearanceInfoDTO homePAInfos = PlateAppearanceInfoDTO.create(homeTeamName, homePlayersDTO);
+        PlateAppearanceInfoDTO awayPAInfos = PlateAppearanceInfoDTO.create(awayTeamName, awayPlayersDTO);
+        return PlateAppearanceDTO.create(awayPAInfos, homePAInfos);
+    }
+
+    private List<PlayersDTO> makePlayersDTO(List<Player> players, PitchResult lastPitchResult) {
+        List<PlayersDTO> playersDTOs = new ArrayList<>();
+        for (int i = 0; i < PLAYERS_NUM; i++) {
+            Player player = players.get(i);
+            Long homePlayerId = player.getId();
+            String homePlayerName = player.getName();
+            int playerAtBat = 0;
+            int PlayerHit = 0;
+            int PlayerOut = 0;
+            if(lastPitchResult.getBatter().getPlayerName().equals(homePlayerName)) {
+                playerAtBat++;
+            }
+            if(lastPitchResult.getBatter().getPlayerName().equals(homePlayerName)
+                    && lastPitchResult.getPitchResult().equals(BattingResult.BALL.name())) {
+                PlayerHit++;
+            }
+            if(lastPitchResult.getBatter().isOut()) {
+                PlayerOut++;
+            }
+            int homePlayerAverage = PlayerHit/playerAtBat;
+            PlayersDTO playersDTO = PlayersDTO.create(homePlayerId, homePlayerName, playerAtBat, PlayerHit, PlayerOut, homePlayerAverage);
+            playersDTOs.add(playersDTO);
+        }
+        return playersDTOs;
     }
 
 

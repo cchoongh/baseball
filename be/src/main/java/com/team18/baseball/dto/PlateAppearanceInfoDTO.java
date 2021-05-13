@@ -12,15 +12,15 @@ public class PlateAppearanceInfoDTO {
         this.players = players;
     }
 
-    public PlateAppearanceInfoDTO create(String teamName, List<PlayersDTO> players) {
+    public static PlateAppearanceInfoDTO create(String teamName, List<PlayersDTO> players) {
         return new PlateAppearanceInfoDTO(teamName, players);
     }
 
-    // pa 에서 paInfo로
-    // Long id, String playerName, int atBat, int hit, int out
-//    public static PlateAppearanceInfo from(PlateAppearance plateAppearance) {
-//        return new PlateAppearanceInfo(plateAppearance.getId(), plateAppearance.getPlayerName(),
-//                plateAppearance.getAtBat(), plateAppearance.getHit(), plateAppearance.getOut());
-//
-//    }
+    public String getTeamName() {
+        return teamName;
+    }
+
+    public List<PlayersDTO> getPlayers() {
+        return players;
+    }
 }
