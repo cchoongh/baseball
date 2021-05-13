@@ -75,4 +75,10 @@ public class GameController {
         User user = userRepository.findById(userId).orElseThrow(IllegalStateException::new);
         return gameService.endAndStartHalfInning(user, gameId, pitchResultDto) ? ResponseBody.newHalfInningOk() : ResponseBody.newHalfInningFail();
     }
+
+    @PostMapping("/{gameId}/end/user/{userId}")
+    public void endGame(@PathVariable Long gameId, @PathVariable Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(IllegalStateException::new);
+        gameService.endGame(user, gameId);
+    }
 }

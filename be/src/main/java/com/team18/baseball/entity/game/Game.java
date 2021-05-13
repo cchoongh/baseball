@@ -97,6 +97,13 @@ public class Game {
         return this.awayUserId != null;
     }
 
+    public Long getHomeUserId() {
+        return homeUserId;
+    }
+
+    public Long getAwayUserId() {
+        return awayUserId;
+    }
 
     public Optional<TeamType> checkUser(Long userId) {
         if ((homeUserId != null) && (homeUserId.equals(userId))) {
