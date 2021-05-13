@@ -24,21 +24,24 @@ public class ScoreDTO {
         this.awayName = awayName;
     }
 
-    private ScoreDTO(String homeName, String awayName, List<Integer> homeScoreList,
-                     List<Integer> awayScoreList, int homeTotal, int awayTotal) {
-        this.homeName = homeName;
-        this.awayName = awayName;
-        this.homeScoreList = homeScoreList;
-        this.awayScoreList = awayScoreList;
-        this.homeTotal = homeTotal;
-        this.awayTotal = awayTotal;
+//    private ScoreDTO(String homeName, String awayName, List<Integer> homeScoreList,
+//                     List<Integer> awayScoreList, int homeTotal, int awayTotal) {
+//        this.homeName = homeName;
+//        this.awayName = awayName;
+//        this.homeScoreList = homeScoreList;
+//        this.awayScoreList = awayScoreList;
+//        this.homeTotal = homeTotal;
+//        this.awayTotal = awayTotal;
+//    }
+
+    public static ScoreDTO create(String homeName, String awayName) {
+        return new ScoreDTO(homeName, awayName);
     }
 
-    public static ScoreDTO create(String homeName, String awayName, List<Integer> homeScoreList,
-                                  List<Integer> awayScoreList, int homeTotal, int awayTotal) {
-        return new ScoreDTO(homeName, awayName, homeScoreList, awayScoreList, homeTotal, awayTotal);
-    }
-
+//    public static ScoreDTO create(String homeName, String awayName, List<Integer> homeScoreList,
+//                                  List<Integer> awayScoreList, int homeTotal, int awayTotal) {
+//        return new ScoreDTO(homeName, awayName, homeScoreList, awayScoreList, homeTotal, awayTotal);
+//    }
 
     public List<Integer> makeHomeScore(Game game) {
         List<HalfInning> halfInnings = game.getHalfInnings();
@@ -47,9 +50,15 @@ public class ScoreDTO {
             int score = halfInning.getScore();
             String inningType = halfInning.getInningType();
             String playingStatus = halfInning.getPlayingStatus();
-            if (inningType.equals(InningType.BOTTOM.toString())) {
+            if (inningType.equals(InningType.BOTTOM.name())) {
+                System.out.println("야야야야야야야호");
                 homeScore = score;
-                if (playingStatus.equals(PlayingStatus.END)) homeScoreList.add(awayScore);
+                if (playingStatus.equals(PlayingStatus.END.name())) {
+                    homeScoreList.add(homeScore);
+                    System.out.println("아하하하하하하하하하하");
+                    System.out.println(halfInning.getScore());
+                }
+
             }
         }
         this.homeScoreList = homeScoreList;
@@ -64,9 +73,9 @@ public class ScoreDTO {
             int score = halfInning.getScore();
             String inningType = halfInning.getInningType();
             String playingStatus = halfInning.getPlayingStatus();
-            if (inningType.equals(InningType.TOP.toString())) {
+            if (inningType.equals(InningType.TOP.name())) {
                 awayScore = score;
-                if (playingStatus.equals(PlayingStatus.END)) awayScoreList.add(homeScore);
+                if (playingStatus.equals(PlayingStatus.END.name())) awayScoreList.add(awayScore);
             }
         }
         this.awayScoreList = awayScoreList;

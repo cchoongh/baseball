@@ -70,17 +70,18 @@ public class GameController {
         return gameService.getPitchResult(gameId);
     }
 
-    @GetMapping("/{gameId}/score")
-    public ScoreDTO getScore(@PathVariable Long gameId, HttpSession session) {
-        User user = HttpSessionUtils.getLoginUser(session).orElseThrow(IllegalStateException::new);
-        return gameService.getScore(gameId);
+    @GetMapping("/{gameId}/score/user/{userId}")
+    public ScoreDTO getScore(@PathVariable Long gameId, @PathVariable Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(IllegalStateException::new);
+//        User user = HttpSessionUtils.getLoginUser(session).orElseThrow(IllegalStateException::new);
+        return gameService.getScore(user, gameId);
     }
 
-    @GetMapping("/{gameId}/players")
-    public void getPlayers(@PathVariable Long gameId, HttpSession session) {
-        User user = HttpSessionUtils.getLoginUser(session).orElseThrow(IllegalStateException::new);
+    @GetMapping("/{gameId}/players/user/{userId}")
+    public void getPlayers(@PathVariable Long gameId, @PathVariable Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(IllegalStateException::new);
+//        User user = HttpSessionUtils.getLoginUser(session).orElseThrow(IllegalStateException::new);
         gameService.getPlateAppearance(gameId);
-
     }
 
     @PostMapping("/{gameId}/halfInning/user/{userId}")

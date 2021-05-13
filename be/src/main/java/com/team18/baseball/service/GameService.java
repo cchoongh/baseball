@@ -135,12 +135,13 @@ public class GameService {
 
     public void pitch(User user, Long gameId, PitchResultDto pitchResultDto) {
         PitchResult pitchResult = pitchResultService.pitch(PitchResult.from(pitchResultDto), pitchResultDto.getRunners());
-
         Game game = getGameAndHasStatus(gameId, PlayingStatus.IS_PLAYING);
         TeamType teamType = game.checkUser(user.getId()).orElseThrow(IllegalStateException::new);
+
         if (TeamRoleUtils.checkTeamRole(teamType, game.getHalfInnings().size()) == TeamRole.BATTING) {
             throw new IllegalStateException();
         }
+
         halfInningService.update(game.getLastHalfInning(), pitchResult);
     }
 
@@ -161,15 +162,16 @@ public class GameService {
         gameRepository.save(game);
     }
 
-    public ScoreDTO getScore(Long gameId) {
-        Game game = gameRepository.findById(gameId).orElseThrow(IllegalStateException::new);
-        Long homeTeamId = game.getHomeTeamId();
-        Long awayTeamId = game.getAwayTeamId();
-        Team homeTeam = teamRepository.findById(homeTeamId).orElseThrow(IllegalStateException::new);
-        Team awayTeam = teamRepository.findById(awayTeamId).orElseThrow(IllegalStateException::new);
+    public ScoreDTO getScore(User user, Long gameId) {
+        Game game = getGameAndHasStatus(gameId, PlayingStatus.IS_PLAYING);
+        game.checkUser(user.getId()).orElseThrow(IllegalStateException::new);
+
+        Team homeTeam = teamService.findTeam(game.getHomeTeamId());
+        Team awayTeam =teamService.findTeam(game.getAwayTeamId());
+
         String homeName = homeTeam.getName();
         String awayName = awayTeam.getName();
-        ScoreDTO scoreDTO = new ScoreDTO(homeName, awayName);
+        ScoreDTO scoreDTO = ScoreDTO.create(homeName, awayName);
         scoreDTO.makeHomeScore(game);
         scoreDTO.makeAwayScore(game);
         return scoreDTO;
