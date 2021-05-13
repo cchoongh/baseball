@@ -153,7 +153,11 @@ public class GameService {
 
     public PitchResultDto getPitchResult(Long gameId) {
         getGameAndHasStatus(gameId, PlayingStatus.IS_PLAYING);
-        return PitchResultDto.from(pitchResultService.getLastPitchResult());
+        Optional<PitchResult> lastPitchResult = pitchResultService.getLastPitchResult();
+        if(lastPitchResult.isPresent()) {
+            return PitchResultDto.from(lastPitchResult.get());
+        }
+        return PitchResultDto.createNull();
     }
 
     public void unselectTeam(User user, Long gameId, Long teamId) {
