@@ -1,9 +1,9 @@
+com/team18/baseball/dto/pitchResultDto/Runner.java
+ com.team18.baseball.dto.pitchResultDto.Runner
 com/team18/baseball/entity/game/Players.java
  com.team18.baseball.entity.game.Players
 com/team18/baseball/service/HalfInningService.java
  com.team18.baseball.service.HalfInningService
-com/team18/baseball/dto/pitchResult/Score.java
- com.team18.baseball.dto.pitchResult.Score
 com/team18/baseball/service/TeamService.java
  com.team18.baseball.service.TeamService
 com/team18/baseball/repository/UserRepository.java
@@ -18,6 +18,8 @@ com/team18/baseball/entity/game/InningType.java
  com.team18.baseball.entity.game.InningType
 com/team18/baseball/repository/BattingRecordRepository.java
  com.team18.baseball.repository.BattingRecordRepository
+com/team18/baseball/dto/pitchResultDto/PitchResult.java
+ com.team18.baseball.dto.pitchResultDto.PitchResult
 com/team18/baseball/entity/game/PlayingStatus.java
  com.team18.baseball.entity.game.PlayingStatus
 com/team18/baseball/dto/ScoreDTO.java
@@ -30,6 +32,8 @@ com/team18/baseball/controller/GameController.java
  com.team18.baseball.controller.GameController
 com/team18/baseball/service/GameService.java
  com.team18.baseball.service.GameService
+com/team18/baseball/entity/game/TeamTurn.java
+ com.team18.baseball.entity.game.TeamTurn
 com/team18/baseball/entity/Player.java
  com.team18.baseball.entity.Player
 com/team18/baseball/exception/UserNotFoundException.java
@@ -39,6 +43,8 @@ com/team18/baseball/entity/User.java
 com/team18/baseball/response/ResponseBody.java
  com.team18.baseball.response.ResponseBody
  com.team18.baseball.response.ResponseBody$Status
+com/team18/baseball/dto/pitchResultDto/BallCount.java
+ com.team18.baseball.dto.pitchResultDto.BallCount
 com/team18/baseball/dto/startGameInfo/GameInfo.java
  com.team18.baseball.dto.startGameInfo.GameInfo
 com/team18/baseball/entity/Team.java
@@ -55,8 +61,8 @@ com/team18/baseball/dto/startGameInfo/TeamInfo.java
  com.team18.baseball.dto.startGameInfo.TeamInfo
 com/team18/baseball/entity/game/TeamRole.java
  com.team18.baseball.entity.game.TeamRole
-com/team18/baseball/dto/pitchResult/Batter.java
- com.team18.baseball.dto.pitchResult.Batter
+com/team18/baseball/dto/pitchResultDto/PitchResultDto.java
+ com.team18.baseball.dto.pitchResultDto.PitchResultDto
 com/team18/baseball/exception/NotFoundException.java
  com.team18.baseball.exception.NotFoundException
 com/team18/baseball/dto/PlateAppearanceDTO.java
@@ -69,8 +75,6 @@ com/team18/baseball/dto/teamsInGame/TeamsInGame.java
  com.team18.baseball.dto.teamsInGame.TeamsInGame
 com/team18/baseball/dto/teamsInGame/TeamInGameData.java
  com.team18.baseball.dto.teamsInGame.TeamInGameData
-com/team18/baseball/dto/pitchResult/BallCount.java
- com.team18.baseball.dto.pitchResult.BallCount
 com/team18/baseball/dto/PlateAppearanceInfoDTO.java
  com.team18.baseball.dto.PlateAppearanceInfoDTO
 com/team18/baseball/service/BatterRecordService.java
@@ -81,24 +85,20 @@ com/team18/baseball/BaseballApplication.java
  com.team18.baseball.BaseballApplication
 com/team18/baseball/entity/game/PlateAppearance.java
  com.team18.baseball.entity.game.PlateAppearance
-com/team18/baseball/dto/pitchResult/Runner.java
- com.team18.baseball.dto.pitchResult.Runner
-com/team18/baseball/repository/PlateAppearanceRepository.java
- com.team18.baseball.repository.PlateAppearanceRepository
 com/team18/baseball/dto/PlayersDTO.java
  com.team18.baseball.dto.PlayersDTO
+com/team18/baseball/dto/pitchResultDto/Score.java
+ com.team18.baseball.dto.pitchResultDto.Score
 com/team18/baseball/entity/game/TeamType.java
  com.team18.baseball.entity.game.TeamType
 com/team18/baseball/dto/startGameInfo/PlayerInfo.java
  com.team18.baseball.dto.startGameInfo.PlayerInfo
 com/team18/baseball/entity/GameHasTeam.java
  com.team18.baseball.entity.GameHasTeam
-com/team18/baseball/dto/pitchResult/PitchResultDto.java
- com.team18.baseball.dto.pitchResult.PitchResultDto
+com/team18/baseball/dto/pitchResultDto/Batter.java
+ com.team18.baseball.dto.pitchResultDto.Batter
 com/team18/baseball/repository/TeamRepository.java
  com.team18.baseball.repository.TeamRepository
-com/team18/baseball/dto/pitchResult/PitchResult.java
- com.team18.baseball.dto.pitchResult.PitchResult
 com/team18/baseball/HttpSessionUtils.java
  com.team18.baseball.HttpSessionUtils
 com/team18/baseball/entity/game/BattingResult.java

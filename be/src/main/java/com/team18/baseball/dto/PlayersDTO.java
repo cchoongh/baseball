@@ -8,7 +8,13 @@ public class PlayersDTO {
     private int out;
     private int average;
 
-    private PlayersDTO() {
+    private PlayersDTO(PlayersDTO player) {
+        this.playerId = player.getPlayerId();
+        this.playerName = player.getPlayerName();
+        this.atBat = 0;
+        this.hit = 0;
+        this.out = 0;
+        this.average = 0;
     }
 
     private PlayersDTO(Long playerId, String playerName, int atBat, int hit, int out, int average) {
@@ -24,8 +30,8 @@ public class PlayersDTO {
         return new PlayersDTO(playerId, playerName, atBat, hit, out, average);
     }
 
-    public static PlayersDTO createNull() {
-        return new PlayersDTO();
+    public static PlayersDTO createNullPlayer(PlayersDTO playersDTO) {
+        return new PlayersDTO(playersDTO);
     }
 
     public Long getPlayerId() {

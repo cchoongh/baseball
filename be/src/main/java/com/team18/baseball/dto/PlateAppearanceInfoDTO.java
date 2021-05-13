@@ -1,17 +1,11 @@
 package com.team18.baseball.dto;
 
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class PlateAppearanceInfoDTO {
     private String teamName;
     private List<PlayersDTO> players;
-
-    private PlateAppearanceInfoDTO(List<PlayersDTO> players) {
-        this.players = players;
-        this.teamName = null;
-    }
 
     private PlateAppearanceInfoDTO(String teamName, List<PlayersDTO> players) {
         this.teamName = teamName;
@@ -22,12 +16,11 @@ public class PlateAppearanceInfoDTO {
         return new PlateAppearanceInfoDTO(teamName, players);
     }
 
-    public static PlateAppearanceInfoDTO createNull() {
-        List<PlayersDTO> players = new ArrayList<>();
-        for (int i = 0; i < 9; i++) {
-             players.add(PlayersDTO.createNull());
+    public static PlateAppearanceInfoDTO createNullPAInfo(String teamName, List<PlayersDTO> players) {
+        for(PlayersDTO playersDTO : players) {
+            PlayersDTO.createNullPlayer(playersDTO);
         }
-        return new PlateAppearanceInfoDTO(players);
+        return new PlateAppearanceInfoDTO(teamName, players);
     }
 
 

@@ -194,10 +194,14 @@ public class GameService {
         List<Player> homePlayers = homeTeam.getPlayers();
         List<Player> awayPlayers = awayTeam.getPlayers();
         Optional<PitchResult> lastPitchResult = pitchResultService.getLastPitchResult();
-        if(!lastPitchResult.isPresent()) {
-            return PlateAppearanceDTO.createNull();
+        if(!lastPitchResult.isPresent()) { // pitch 안 한 상태
+            List<PlayersDTO> homePlayersDTO = makeNullPlayersDTO(homePlayers);
+            List<PlayersDTO> awayPlayersDTO = makeNullPlayersDTO(awayPlayers);
+            System.out.println(homePlayersDTO.toString() + awayPlayersDTO.toString());
+            PlateAppearanceInfoDTO homePAInfos = PlateAppearanceInfoDTO.createNullPAInfo(homeTeamName, homePlayersDTO);
+            PlateAppearanceInfoDTO awayPAInfos = PlateAppearanceInfoDTO.createNullPAInfo(awayTeamName, awayPlayersDTO);
+            return PlateAppearanceDTO.createNullPA(awayTeamName, homeTeamName, awayPAInfos, homePAInfos);
         }
-
         List<PlayersDTO> homePlayersDTO = makePlayersDTO(homePlayers, lastPitchResult.get());
         List<PlayersDTO> awayPlayersDTO = makePlayersDTO(awayPlayers, lastPitchResult.get());
         PlateAppearanceInfoDTO homePAInfos = PlateAppearanceInfoDTO.create(homeTeamName, homePlayersDTO);
@@ -209,15 +213,15 @@ public class GameService {
         List<PlayersDTO> playersDTOs = new ArrayList<>();
         for (int i = 0; i < PLAYERS_NUM; i++) {
             Player player = players.get(i);
-            Long homePlayerId = player.getId();
-            String homePlayerName = player.getName();
+            Long playerId = player.getId();
+            String playerName = player.getName();
             int playerAtBat = 0;
             int PlayerHit = 0;
             int PlayerOut = 0;
-            if(lastPitchResult.getBatter().getPlayerName().equals(homePlayerName)) {
+            if(lastPitchResult.getBatter().getPlayerName().equals(playerName)) {
                 playerAtBat++;
             }
-            if(lastPitchResult.getBatter().getPlayerName().equals(homePlayerName)
+            if(lastPitchResult.getBatter().getPlayerName().equals(playerName)
                     && lastPitchResult.getPitchResult().equals(BattingResult.BALL.name())) {
                 PlayerHit++;
             }
@@ -225,7 +229,23 @@ public class GameService {
                 PlayerOut++;
             }
             int homePlayerAverage = (PlayerHit + playerAtBat) / 2;
-            PlayersDTO playersDTO = PlayersDTO.create(homePlayerId, homePlayerName, playerAtBat, PlayerHit, PlayerOut, homePlayerAverage);
+            PlayersDTO playersDTO = PlayersDTO.create(playerId, playerName, playerAtBat, PlayerHit, PlayerOut, homePlayerAverage);
+            playersDTOs.add(playersDTO);
+        }
+        return playersDTOs;
+    }
+
+    private List<PlayersDTO> makeNullPlayersDTO(List<Player> players) {
+        List<PlayersDTO> playersDTOs = new ArrayList<>();
+        for (int i = 0; i < PLAYERS_NUM; i++) {
+            Player player = players.get(i);
+            Long playerId = player.getId();
+            String playerName = player.getName();
+            int playerAtBat = 0;
+            int PlayerHit = 0;
+            int PlayerOut = 0;
+            int homePlayerAverage = 0;
+            PlayersDTO playersDTO = PlayersDTO.create(playerId, playerName, playerAtBat, PlayerHit, PlayerOut, homePlayerAverage);
             playersDTOs.add(playersDTO);
         }
         return playersDTOs;
