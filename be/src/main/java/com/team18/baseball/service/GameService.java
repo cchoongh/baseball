@@ -261,6 +261,7 @@ public class GameService {
         Game game = getGameAndHasStatus(gameId, PlayingStatus.IS_PLAYING);
         game.checkUser(user.getId()).orElseThrow(IllegalStateException::new);
 
+        game.getLastHalfInning().end();
         game.end();
         addTotalScore(game);
         gameRepository.save(game);
