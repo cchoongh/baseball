@@ -187,8 +187,7 @@ public class GameService {
         String awayTeamName = awayTeam.getName();
         List<Player> homePlayers = homeTeam.getPlayers();
         List<Player> awayPlayers = awayTeam.getPlayers();
-
-
+        PitchResult lastPitchResult = pitchResultService.getLastPitchResult();
         List<PlateAppearanceInfoDTO> homePAInfos = new ArrayList<>();
         List<PlateAppearanceInfoDTO> awayPAInfos = new ArrayList<>();
 //        for(Player player : homePlayers) {
