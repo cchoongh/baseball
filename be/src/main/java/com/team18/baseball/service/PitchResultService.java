@@ -1,11 +1,7 @@
 package com.team18.baseball.service;
 
-import com.team18.baseball.dto.pitchResult.PitchResult;
-import com.team18.baseball.dto.pitchResult.PitchResultDto;
-import com.team18.baseball.dto.pitchResult.Runner;
-import com.team18.baseball.entity.game.HalfInning;
-import com.team18.baseball.entity.game.TeamType;
-import com.team18.baseball.repository.HalfInningRepository;
+import com.team18.baseball.dto.pitchResultDto.PitchResult;
+import com.team18.baseball.dto.pitchResultDto.Runner;
 import com.team18.baseball.repository.PitchResultRepository;
 import org.springframework.stereotype.Service;
 

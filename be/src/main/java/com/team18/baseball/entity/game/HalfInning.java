@@ -1,6 +1,6 @@
 package com.team18.baseball.entity.game;
 
-import com.team18.baseball.dto.pitchResult.PitchResult;
+import com.team18.baseball.dto.pitchResultDto.PitchResult;
 import com.team18.baseball.entity.battingBoard.BattingRecord;
 import org.springframework.data.annotation.Id;
 

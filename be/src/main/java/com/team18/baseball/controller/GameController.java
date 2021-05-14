@@ -1,10 +1,11 @@
 package com.team18.baseball.controller;
 
+import com.team18.baseball.dto.PlateAppearanceDTO;
 import com.team18.baseball.dto.ScoreDTO;
 import com.team18.baseball.entity.battingBoard.BattingRecord;
 import com.team18.baseball.dto.startGameInfo.StartGameInfo;
 import com.team18.baseball.dto.teamsInGame.TeamsInGame;
-import com.team18.baseball.dto.pitchResult.PitchResultDto;
+import com.team18.baseball.dto.pitchResultDto.PitchResultDto;
 import com.team18.baseball.entity.User;
 import com.team18.baseball.repository.UserRepository;
 import com.team18.baseball.response.ResponseBody;
@@ -76,10 +77,10 @@ public class GameController {
     }
 
     @GetMapping("/{gameId}/pa/user/{userId}")
-    public void getPlateAppearance(@PathVariable Long gameId, @PathVariable Long userId) {
+    public PlateAppearanceDTO getPlateAppearance(@PathVariable Long gameId, @PathVariable Long userId) {
         User user = userRepository.findById(userId).orElseThrow(IllegalStateException::new);
 //        User user = HttpSessionUtils.getLoginUser(session).orElseThrow(IllegalStateException::new);
-        gameService.getPlateAppearance(gameId);
+        return gameService.getPlateAppearance(gameId);
     }
 
     @PostMapping("/{gameId}/halfInning/user/{userId}")

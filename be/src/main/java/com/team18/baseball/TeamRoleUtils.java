@@ -18,3 +18,4 @@ public class TeamRoleUtils {
         return TeamRole.FIELDING;
     }
 }
+

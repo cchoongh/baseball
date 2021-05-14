@@ -13,8 +13,9 @@ public class PlateAppearanceDTO {
         return new PlateAppearanceDTO(away, home);
     }
 
-    public static PlateAppearanceDTO createNull() {
-        return new PlateAppearanceDTO(PlateAppearanceInfoDTO.createNull(), PlateAppearanceInfoDTO.createNull());
+    public static PlateAppearanceDTO createNullPA(String awayTeamName, String homeTeamName,
+                                                  PlateAppearanceInfoDTO awayPAInfos, PlateAppearanceInfoDTO homePAInfos) {
+        return new PlateAppearanceDTO(awayPAInfos, homePAInfos);
     }
 
     public PlateAppearanceInfoDTO getAway() {

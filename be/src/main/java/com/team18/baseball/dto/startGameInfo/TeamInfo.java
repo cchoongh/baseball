@@ -1,10 +1,8 @@
 package com.team18.baseball.dto.startGameInfo;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.team18.baseball.entity.Player;
 import com.team18.baseball.entity.Team;
 import com.team18.baseball.entity.game.TeamRole;
-import com.team18.baseball.entity.game.TeamType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +41,7 @@ public class TeamInfo {
         }
         return new TeamInfo(team.getId(), team.getName(), teamRole.name(), score, pitcher, batters);
     }
+
 
     public Long getId() {
         return id;
