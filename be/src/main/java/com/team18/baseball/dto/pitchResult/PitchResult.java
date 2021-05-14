@@ -23,6 +23,7 @@ public class PitchResult {
     private String fourth_mode;
     @Embedded.Nullable
     private Batter batter;
+    private int nthBatter;
     @Embedded.Nullable
     private BallCount ballCount;
     @Embedded.Nullable
@@ -33,7 +34,8 @@ public class PitchResult {
     }
 
    public PitchResult(Long homeId, Long awayId, Long battingTeamId, String pitchResult,
-                      Batter batter, BallCount ballCount, Score score) {
+                      Batter batter, int nthBatter,
+                      BallCount ballCount, Score score) {
        this.id = null;
        this.homeId = homeId;
        this.awayId = awayId;
@@ -48,13 +50,14 @@ public class PitchResult {
        this.fourth_player =  null;
        this.fourth_mode =  null;
        this.batter = batter;
+       this.nthBatter = nthBatter;
        this.ballCount = ballCount;
        this.score = score;
    }
 
     public static final PitchResult from(PitchResultDto pitchResultDto) {
                 return new PitchResult(pitchResultDto.getHomeId(), pitchResultDto.getAwayId(), pitchResultDto.getBattingTeamId(), pitchResultDto.getPitchResult(),
-                pitchResultDto.getBatter(),
+                pitchResultDto.getBatter(), pitchResultDto.getNthBatter(),
                 pitchResultDto.getBallCount(),
                 pitchResultDto.getScore());
     }
@@ -128,6 +131,10 @@ public class PitchResult {
 
     public Batter getBatter() {
         return batter;
+    }
+
+    public int getNthBatter() {
+        return nthBatter;
     }
 
     public BallCount getBallCount() {

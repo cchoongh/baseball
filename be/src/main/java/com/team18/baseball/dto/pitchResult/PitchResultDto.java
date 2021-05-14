@@ -14,6 +14,7 @@ public class PitchResultDto {
     private Runner[] runners = new Runner[4];
     @Embedded.Nullable
     private Batter batter;
+    private int nthBatter;
     @Embedded.Nullable
     private BallCount ballCount;
     @Embedded.Nullable
@@ -24,7 +25,7 @@ public class PitchResultDto {
 
     public PitchResultDto(Long homeId, Long awayId, Long battingTeamId, String pitchResult,
                           Runner[] runners,
-                          Batter batter,
+                          Batter batter, int nthBatter,
                           BallCount ballCount,
                           Score score) {
         this.homeId = homeId;
@@ -33,6 +34,7 @@ public class PitchResultDto {
         this.pitchResult = pitchResult;
         this.runners = runners;
         this.batter = batter;
+        this.nthBatter = nthBatter;
         this.ballCount = ballCount;
         this.score = score;
     }
@@ -45,7 +47,7 @@ public class PitchResultDto {
         Runner[] runners = {firstPlayer, secondPlayer, thirdPlayer, fourthPlayer};
         return new PitchResultDto(pitchResult.getHomeId(), pitchResult.getAwayId(), pitchResult.getBattingTeamId(), pitchResult.getPitchResult(),
                 runners,
-                pitchResult.getBatter(),
+                pitchResult.getBatter(), pitchResult.getNthBatter(),
                 pitchResult.getBallCount(),
                 pitchResult.getScore());
     }
@@ -53,8 +55,6 @@ public class PitchResultDto {
     public static final PitchResultDto createNull() {
         return new PitchResultDto();
     }
-
-
 
     public Long getHomeId() {
         return homeId;
@@ -78,6 +78,10 @@ public class PitchResultDto {
 
     public Batter getBatter() {
         return batter;
+    }
+
+    public int getNthBatter() {
+        return nthBatter;
     }
 
     public BallCount getBallCount() {
