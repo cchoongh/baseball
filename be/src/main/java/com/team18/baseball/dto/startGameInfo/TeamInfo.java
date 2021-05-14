@@ -3,7 +3,6 @@ package com.team18.baseball.dto.startGameInfo;
 import com.team18.baseball.entity.Player;
 import com.team18.baseball.entity.Team;
 import com.team18.baseball.entity.game.TeamRole;
-import com.team18.baseball.entity.game.TeamTurn;
 
 import java.util.ArrayList;
 import java.util.List;

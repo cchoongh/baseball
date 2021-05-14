@@ -1,5 +1,7 @@
 package com.team18.baseball.dto;
 
+import com.team18.baseball.entity.Player;
+
 public class PlayersDTO {
     private Long playerId;
     private String playerName;
@@ -8,9 +10,9 @@ public class PlayersDTO {
     private int out;
     private int average;
 
-    private PlayersDTO(PlayersDTO player) {
-        this.playerId = player.getPlayerId();
-        this.playerName = player.getPlayerName();
+    private PlayersDTO(Player player) {
+        this.playerId = player.getId();
+        this.playerName = player.getName();
         this.atBat = 0;
         this.hit = 0;
         this.out = 0;
@@ -28,10 +30,6 @@ public class PlayersDTO {
 
     public static PlayersDTO create(Long playerId, String playerName, int atBat, int hit, int out, int average) {
         return new PlayersDTO(playerId, playerName, atBat, hit, out, average);
-    }
-
-    public static PlayersDTO createNullPlayer(PlayersDTO playersDTO) {
-        return new PlayersDTO(playersDTO);
     }
 
     public Long getPlayerId() {

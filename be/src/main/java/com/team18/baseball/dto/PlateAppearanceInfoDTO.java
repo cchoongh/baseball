@@ -17,12 +17,8 @@ public class PlateAppearanceInfoDTO {
     }
 
     public static PlateAppearanceInfoDTO createNullPAInfo(String teamName, List<PlayersDTO> players) {
-        for(PlayersDTO playersDTO : players) {
-            PlayersDTO.createNullPlayer(playersDTO);
-        }
         return new PlateAppearanceInfoDTO(teamName, players);
     }
-
 
     public String getTeamName() {
         return teamName;
