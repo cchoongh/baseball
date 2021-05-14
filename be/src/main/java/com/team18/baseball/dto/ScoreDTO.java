@@ -56,8 +56,8 @@ public class ScoreDTO {
                     homeScoreList.add(homeScore);
                 }
                 if(playingStatus.equals(PlayingStatus.IS_PLAYING.name())) {
-                    if(homeScoreList.size() == 0) {
-                        homeScoreList.add(0, homeScore);
+                    if(homeScoreList.size() == halfInning.getInning() - 1) {
+                        homeScoreList.add(halfInning.getInning() -1, homeScore);
                     }
                     homeScoreList.set(halfInning.getInning() - 1, homeScore);
                 }
@@ -80,8 +80,8 @@ public class ScoreDTO {
                 awayScore = score;
                 if (playingStatus.equals(PlayingStatus.END.name())) awayScoreList.add(awayScore);
                 if(playingStatus.equals(PlayingStatus.IS_PLAYING.name())) {
-                    if(awayScoreList.size() == 0) {
-                        awayScoreList.add(0, awayScore);
+                    if(awayScoreList.size() == halfInning.getInning() -1 ) {
+                        awayScoreList.add(halfInning.getInning() -1, awayScore);
                     }
                     awayScoreList.set(halfInning.getInning() - 1, awayScore);
                 }
