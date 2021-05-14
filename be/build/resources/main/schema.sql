@@ -83,6 +83,7 @@ CREATE TABLE `pitch_result`
     `player_name` varchar(50) not null,
     `player_uniform_number` int not null,
     `is_out` boolean default false not null,
+    `nth_batter` int,
     `first_player` int,
     `first_mode` varchar(50),
     `second_player` int,
