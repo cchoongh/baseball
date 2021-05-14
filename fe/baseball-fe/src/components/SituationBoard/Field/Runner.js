@@ -3,8 +3,16 @@ import styled, { keyframes } from 'styled-components';
 import { GameContext } from 'util/context.js';
 import { GameAction } from 'util/action.js';
 
+import runnerRunSvg from 'rsc/runner_run.svg';
+import runnerStandSvg from 'rsc/runner_stand.svg';
+
 function Runner({ runnerIdx, onRunEnd }) {
   const { gameState, gameDispatch } = useContext(GameContext);
+
+  const isRun = (mode) => {
+    if (mode === 'run-to-first' || mode === 'run-to-second' || mode === 'run-to-third' || mode === 'run-to-home') return true;
+    return false;
+  };
 
   const handleAnimationEnd = () => {
     gameDispatch({ type: GameAction.RUN_END, payload: { runnerIdx }});
@@ -15,6 +23,9 @@ function Runner({ runnerIdx, onRunEnd }) {
     <StyledRunner
       className={gameState.runners[runnerIdx].mode}
       onAnimationEnd={handleAnimationEnd}>
+      {isRun(gameState.runners[runnerIdx].mode) ?
+        <img src={runnerRunSvg} alt='runner run'/> :
+        <img src={runnerStandSvg} alt='runner stand'/>}
     </StyledRunner>
   );
 }
@@ -39,12 +50,17 @@ const StyledRunner = styled.div`
   position: absolute;
   transform: rotate(-45deg);
 
+  img {
+    width: 100%;
+    height: 100%;
+  }
+
   &.run-to-home, &.run-to-first, &.run-to-second, &.run-to-third {
-    background-color: yellow;
+    /* background-color: yellow; */
   }
 
   &.stay-to-first, &.stay-to-second, &.stay-to-third {
-    background-color: blue;
+    /* background-color: blue; */
   }
 
   &.run-to-home {
@@ -56,8 +72,8 @@ const StyledRunner = styled.div`
   }
 
   &.stay-to-first {
-    right: -2rem;
-    top: -2rem;
+    right: -1rem;
+    top: -3rem;
   }
 
   &.run-to-second {
@@ -65,8 +81,8 @@ const StyledRunner = styled.div`
   }
 
   &.stay-to-second {
-    right: calc(100% - 2rem);
-    top: -2rem;
+    right: calc(100% - 1rem);
+    top: -3rem;
   }
 
   &.run-to-third {
@@ -74,7 +90,7 @@ const StyledRunner = styled.div`
   }
 
   &.stay-to-third {
-    right: calc(100% - 2rem);
-    top: calc(100% - 2rem);
+    right: calc(100% - 1rem);
+    top: calc(100% - 3rem);
   }
 `;
