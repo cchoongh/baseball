@@ -14,7 +14,7 @@ public class HalfInning {
     private final String inningType;
     private int score;
     private String playingStatus;
-    private List<BattingRecord> battingRecordBoard;
+    private List<BattingRecord> battingRecords;
 
     HalfInning(Long id,
                int inning, String inningType) {
@@ -23,7 +23,7 @@ public class HalfInning {
         this.inningType = inningType;
         this.score = 0;
         this.playingStatus = PlayingStatus.IS_PLAYING.name();
-        this.battingRecordBoard = new ArrayList<>();
+        this.battingRecords = new ArrayList<>();
     }
 
     public static final HalfInning create(int inning, String inningType) {
@@ -60,8 +60,8 @@ public class HalfInning {
         return score;
     }
 
-    public List<BattingRecord> getBattingRecordBoard() {
-        return battingRecordBoard;
+    public List<BattingRecord> getBattingRecords() {
+        return battingRecords;
     }
 
     public void updatePitchResult(PitchResult pitchResult) {
@@ -80,6 +80,6 @@ public class HalfInning {
     }
 
     public void addBattingRecord(BattingRecord battingRecord) {
-        battingRecordBoard.add(battingRecord);
+        battingRecords.add(battingRecord);
     }
 }

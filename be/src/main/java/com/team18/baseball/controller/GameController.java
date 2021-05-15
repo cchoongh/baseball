@@ -71,16 +71,16 @@ public class GameController {
         return gameService.getPitchResult(user, gameId);
     }
 
-    @PostMapping("/{gameId}/batterRecord/user/{userId}")
-    public void recordBatting(@RequestBody List<BattingRecord> battingRecordBoard, @PathVariable Long gameId, @PathVariable Long userId) {
+    @PostMapping("/{gameId}/battingRecords/user/{userId}")
+    public void recordBatting(@RequestBody List<BattingRecord> battingRecords, @PathVariable Long gameId, @PathVariable Long userId) {
         User user = userRepository.findById(userId).orElseThrow(IllegalStateException::new);
-        gameService.recordBatting(user, gameId, battingRecordBoard);
+        gameService.recordBatting(user, gameId, battingRecords);
     }
 
-    @GetMapping("/{gameId}/batterBoard/user/{userId}")
-    public List<BattingRecord> getBatterRecord(@PathVariable Long gameId, @PathVariable Long userId) {
+    @GetMapping("/{gameId}/battingRecords/user/{userId}")
+    public List<BattingRecord> getBattingRecords(@PathVariable Long gameId, @PathVariable Long userId) {
         User user = userRepository.findById(userId).orElseThrow(IllegalStateException::new);
-        return gameService.getBattingBoard(user, gameId);
+        return gameService.getBattingRecords(user, gameId);
     }
 
     @GetMapping("/{gameId}/score/user/{userId}")
@@ -101,12 +101,13 @@ public class GameController {
     public ResponseBody<Object> endHalfInning(@RequestBody PitchResultDto pitchResultDto, @PathVariable Long gameId, @PathVariable Long userId) {
 //        User user = HttpSessionUtils.getLoginUser(session).orElseThrow(IllegalStateException::new);
         User user = userRepository.findById(userId).orElseThrow(IllegalStateException::new);
-        return gameService.endAndStartHalfInning(user, gameId, pitchResultDto) ? ResponseBody.newHalfInningOk() : ResponseBody.newHalfInningFail();
+        return gameService.endAndStartNewHalfInning(user, gameId, pitchResultDto) ? ResponseBody.newHalfInningOk() : ResponseBody.newHalfInningFail();
     }
 
     @PostMapping("/{gameId}/end/user/{userId}")
-    public void endGame(@PathVariable Long gameId, @PathVariable Long userId) {
+    public ResponseBody<Object> endGame(@PathVariable Long gameId, @PathVariable Long userId) {
         User user = userRepository.findById(userId).orElseThrow(IllegalStateException::new);
         gameService.endGame(user, gameId);
+        return ResponseBody.endOk();
     }
 }

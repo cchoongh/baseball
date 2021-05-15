@@ -26,9 +26,9 @@ public class HalfInningService {
         halfInningRepository.save(lastHalfInning);
     }
 
-    public List<BattingRecord> getBattingBoard(Long id) {
-        HalfInning halfInning = halfInningRepository.findById(id).orElseThrow(IllegalStateException::new);
-        return halfInning.getBattingRecordBoard();
+    public List<BattingRecord> getBattingRecords(Long halfInningId) {
+        HalfInning halfInning = halfInningRepository.findById(halfInningId).orElseThrow(IllegalStateException::new);
+        return halfInning.getBattingRecords();
     }
 
     public void addBattingRecord(List<BattingRecord> battingRecords, Long halfInningId) {

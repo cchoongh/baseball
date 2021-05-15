@@ -38,11 +38,11 @@ public class ResponseBody<T> {
     }
 
     public static <T>  ResponseBody<T> newHalfInningOk() {
-        return new ResponseBody<>(Status.NEW_HALFINNING_OK, Status.NEW_HALFINNING_OK.getMessage());
+        return new ResponseBody<>(Status.NEW_HALF_INNING_OK, Status.NEW_HALF_INNING_OK.getMessage());
     }
 
     public static <T>  ResponseBody<T> newHalfInningFail() {
-        return new ResponseBody<>(Status.NEW_HALFINNING_FAIL, Status.NEW_HALFINNING_FAIL.getMessage());
+        return new ResponseBody<>(Status.NEW_HALF_INNING_FAIL, Status.NEW_HALF_INNING_FAIL.getMessage());
     }
 
     public static <T> ResponseBody<T> notFound(String message) {
@@ -51,6 +51,10 @@ public class ResponseBody<T> {
 
     public static ResponseBody<Object> pitchOk() {
         return new ResponseBody<>(Status.PITCH_OK, Status.PITCH_OK.getMessage());
+    }
+
+    public static ResponseBody<Object> endOk() {
+        return new ResponseBody<>(Status.END_OK, Status.END_OK.getMessage());
     }
 
     public Status getStatus() {
@@ -72,8 +76,9 @@ public class ResponseBody<T> {
         START_OK("게임이 시작되었습니다"),
         START_FAIL("상대팀 유저를 기다리는 중입니다"),
         PITCH_OK("성공적으로 pitch 결과가 반영되었습니다"),
-        NEW_HALFINNING_OK("공격과 수비가 변경됩니다"),
-        NEW_HALFINNING_FAIL("경기 종료버튼을 눌러주세요"),
+        NEW_HALF_INNING_OK("공격과 수비가 변경됩니다"),
+        NEW_HALF_INNING_FAIL("경기 종료버튼을 눌러주세요"),
+        END_OK("경기가 종료되었습니다");
         ERROR("예외발생");
 
         private final String message;

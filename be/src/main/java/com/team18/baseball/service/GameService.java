@@ -158,6 +158,24 @@ public class GameService {
                 .orElseGet(PitchResultDto::createNull);
     }
 
+    public void recordBatting(User user, Long gameId, List<BattingRecord> battingRecords) {
+        Game game = getGameAndHasStatus(gameId, PlayingStatus.IS_PLAYING);
+        TeamType teamType = game.checkUser(user.getId()).orElseThrow(IllegalStateException::new);
+
+        if (TeamRoleUtils.checkTeamRole(teamType, game.getHalfInnings().size()) == TeamRole.BATTING) {
+            throw new IllegalStateException();
+        }
+
+        halfInningService.addBattingRecord(battingRecords, game.getLastHalfInning().getId());
+    }
+
+    public List<BattingRecord> getBattingRecords(User user, Long gameId) {
+        Game game = getGameAndHasStatus(gameId, PlayingStatus.IS_PLAYING);
+        game.checkUser(user.getId()).orElseThrow(IllegalStateException::new);
+
+        return halfInningService.getBattingRecords(game.getLastHalfInning().getId());
+    }
+
     public ScoreDTO getScore(User user, Long gameId) {
         Game game = getGameAndHasStatus(gameId, PlayingStatus.IS_PLAYING);
         game.checkUser(user.getId()).orElseThrow(IllegalStateException::new);
@@ -175,8 +193,6 @@ public class GameService {
         scoreDTO.makeAwayScore(game);
         return scoreDTO;
     }
-
-
 
     public PlateAppearanceDTO getPlateAppearance(User user, Long gameId) {
         Game game = getGameAndHasStatus(gameId, PlayingStatus.IS_PLAYING);
@@ -246,15 +262,13 @@ public class GameService {
         return playersDTOs;
     }
 
-
-    public boolean endAndStartHalfInning(User user, Long gameId, PitchResultDto pitchResultDto) {
+    public boolean endAndStartNewHalfInning(User user, Long gameId, PitchResultDto pitchResultDto) {
         Game game = getGameAndHasStatus(gameId, PlayingStatus.IS_PLAYING);
         game.checkUser(user.getId()).orElseThrow(IllegalStateException::new);
 
         halfInningService.end(game.getLastHalfInning());
 
-        int lastHalfInningIndex = game.getLastHalfInningIndex();
-        if ((lastHalfInningIndex == MAX_HALF_INNING_INDEX)) {
+        if ( game.getLastHalfInningIndex() == MAX_HALF_INNING_INDEX) {
             return false;
         }
 
@@ -290,25 +304,6 @@ public class GameService {
 
         game.getGameHasTeam(TeamType.HOME).addScore(homeScore);
         game.getGameHasTeam(TeamType.AWAY).addScore(awayScore);
-    }
-
-    public void recordBatting(User user, Long gameId, List<BattingRecord> battingRecordBoard) {
-        Game game = getGameAndHasStatus(gameId, PlayingStatus.IS_PLAYING);
-        TeamType teamType = game.checkUser(user.getId()).orElseThrow(IllegalStateException::new);
-
-
-        if (TeamRoleUtils.checkTeamRole(teamType, game.getHalfInnings().size()) == TeamRole.BATTING) {
-            TeamRole teamRole = TeamRoleUtils.checkTeamRole(teamType, game.getHalfInnings().size());
-            throw new IllegalStateException();
-        }
-
-        halfInningService.addBattingRecord(battingRecordBoard, game.getLastHalfInning().getId());
-    }
-
-    public List<BattingRecord> getBattingBoard(User user, Long gameId) {
-        Game game = getGameAndHasStatus(gameId, PlayingStatus.IS_PLAYING);
-        game.checkUser(user.getId()).orElseThrow(IllegalStateException::new);
-        return halfInningService.getBattingBoard(game.getLastHalfInning().getId());
     }
 
     private Team getTeam(Game game, TeamType teamType) {
