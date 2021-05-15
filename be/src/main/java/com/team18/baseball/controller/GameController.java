@@ -41,10 +41,11 @@ public class GameController {
     }
 
     @PutMapping("/{gameId}/teams/{teamId}/user/{userId}")
-    public void unselectTeam(@PathVariable Long gameId, @PathVariable Long teamId, @PathVariable Long userId) {
+    public ResponseBody<Object> unselectTeam(@PathVariable Long gameId, @PathVariable Long teamId, @PathVariable Long userId) {
         User user = userRepository.findById(userId).orElseThrow(IllegalStateException::new);
 //        User user = HttpSessionUtils.getLoginUser(session).orElseThrow(IllegalStateException::new);
         gameService.unselectTeam(user, gameId, teamId);
+        return ResponseBody.unselectOk();
     }
 
     @GetMapping("/{gameId}/start/user/{userId}")

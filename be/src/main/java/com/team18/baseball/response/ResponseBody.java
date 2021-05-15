@@ -25,6 +25,10 @@ public class ResponseBody<T> {
         return new ResponseBody<>(Status.SELECT_FAIL, Status.SELECT_FAIL.getMessage());
     }
 
+    public static <T>  ResponseBody<T> unselectOk() {
+        return new ResponseBody<>(Status.UNSELECT_OK, Status.UNSELECT_OK.getMessage());
+    }
+
     public static <T>  ResponseBody<T> startFail() {
         return new ResponseBody<>(Status.START_FAIL, Status.START_FAIL.getMessage());
     }
@@ -60,6 +64,7 @@ public class ResponseBody<T> {
     enum Status {
         SELECT_OK("팀이 선택되었습니다."),
         SELECT_FAIL("다른 유저가 선택한 팀입니다. 다른 팀을 선택하세요"),
+        UNSELECT_OK("팀 선택을 취소하였습니다"),
         START_OK("게임이 시작되었습니다"),
         START_FAIL("상대팀 유저를 기다리는 중입니다"),
         NEW_HALFINNING_OK("공격과 수비가 변경됩니다"),
