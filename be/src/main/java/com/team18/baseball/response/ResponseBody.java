@@ -49,6 +49,10 @@ public class ResponseBody<T> {
         return new ResponseBody<>(Status.ERROR, message);
     }
 
+    public static ResponseBody<Object> pitchOk() {
+        return new ResponseBody<>(Status.PITCH_OK, Status.PITCH_OK.getMessage());
+    }
+
     public Status getStatus() {
         return status;
     }
@@ -67,6 +71,7 @@ public class ResponseBody<T> {
         UNSELECT_OK("팀 선택을 취소하였습니다"),
         START_OK("게임이 시작되었습니다"),
         START_FAIL("상대팀 유저를 기다리는 중입니다"),
+        PITCH_OK("성공적으로 pitch 결과가 반영되었습니다"),
         NEW_HALFINNING_OK("공격과 수비가 변경됩니다"),
         NEW_HALFINNING_FAIL("경기 종료버튼을 눌러주세요"),
         ERROR("예외발생");

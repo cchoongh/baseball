@@ -57,10 +57,11 @@ public class GameController {
     }
 
     @PostMapping("/{gameId}/pitch/user/{userId}")
-    public void pitch(@RequestBody PitchResultDto pitchResultDto, @PathVariable Long gameId, @PathVariable Long userId) {
+    public ResponseBody<Object> pitch(@RequestBody PitchResultDto pitchResultDto, @PathVariable Long gameId, @PathVariable Long userId) {
         User user = userRepository.findById(userId).orElseThrow(IllegalStateException::new);
 //        User user = HttpSessionUtils.getLoginUser(session).orElseThrow(IllegalStateException::new);
         gameService.pitch(user, gameId, pitchResultDto);
+        return ResponseBody.pitchOk();
     }
 
     @GetMapping("/{gameId}/pitchResult/user/{userId}")
@@ -68,6 +69,18 @@ public class GameController {
         User user = userRepository.findById(userId).orElseThrow(IllegalStateException::new);
 //        HttpSessionUtils.getLoginUser(session).orElseThrow(IllegalStateException::new);
         return gameService.getPitchResult(user, gameId);
+    }
+
+    @PostMapping("/{gameId}/batterRecord/user/{userId}")
+    public void recordBatting(@RequestBody List<BattingRecord> battingRecordBoard, @PathVariable Long gameId, @PathVariable Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(IllegalStateException::new);
+        gameService.recordBatting(user, gameId, battingRecordBoard);
+    }
+
+    @GetMapping("/{gameId}/batterBoard/user/{userId}")
+    public List<BattingRecord> getBatterRecord(@PathVariable Long gameId, @PathVariable Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(IllegalStateException::new);
+        return gameService.getBattingBoard(user, gameId);
     }
 
     @GetMapping("/{gameId}/score/user/{userId}")
@@ -95,17 +108,5 @@ public class GameController {
     public void endGame(@PathVariable Long gameId, @PathVariable Long userId) {
         User user = userRepository.findById(userId).orElseThrow(IllegalStateException::new);
         gameService.endGame(user, gameId);
-    }
-
-    @PostMapping("/{gameId}/batterRecord/user/{userId}")
-    public void recordBatting(@RequestBody List<BattingRecord> battingRecordBoard, @PathVariable Long gameId, @PathVariable Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(IllegalStateException::new);
-        gameService.recordBatting(user, gameId, battingRecordBoard);
-    }
-
-    @GetMapping("/{gameId}/batterBoard/user/{userId}")
-    public List<BattingRecord> getBatterRecord(@PathVariable Long gameId, @PathVariable Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(IllegalStateException::new);
-        return gameService.getBattingBoard(user, gameId);
     }
 }
