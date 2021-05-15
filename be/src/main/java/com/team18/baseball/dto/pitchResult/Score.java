@@ -1,4 +1,4 @@
-package com.team18.baseball.dto.pitchResultDto;
+package com.team18.baseball.dto.pitchResult;
 
 public class Score {
     private int homeScore;
@@ -12,7 +12,7 @@ public class Score {
         this.awayScore = awayScore;
     }
 
-    public static final Score create(int fieldingScore, int battingScore) {
+    public static Score create(int fieldingScore, int battingScore) {
         return new Score(fieldingScore, battingScore);
     }
 

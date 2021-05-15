@@ -1,4 +1,4 @@
-package com.team18.baseball.dto.pitchResultDto;
+package com.team18.baseball.dto.pitchResult;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Embedded;
@@ -66,7 +66,7 @@ public class PitchResult {
        this.score = score;
    }
 
-    public static final PitchResult from(PitchResultDto pitchResultDto) {
+    public static PitchResult from(PitchResultDto pitchResultDto) {
                 return new PitchResult(pitchResultDto.getHomeId(), pitchResultDto.getAwayId(), pitchResultDto.getBattingTeamId(), pitchResultDto.getPitchResult(),
                 pitchResultDto.getBatter(), pitchResultDto.getNthBatter(),
                 pitchResultDto.getBallCount(),

@@ -3,9 +3,9 @@ package com.team18.baseball.controller;
 import com.team18.baseball.dto.PlateAppearanceDTO;
 import com.team18.baseball.dto.ScoreDTO;
 import com.team18.baseball.entity.battingBoard.BattingRecord;
-import com.team18.baseball.dto.startGameInfo.StartGameInfo;
-import com.team18.baseball.dto.teamsInGame.TeamsInGameDto;
-import com.team18.baseball.dto.pitchResultDto.PitchResultDto;
+import com.team18.baseball.dto.startGame.StartGameInfo;
+import com.team18.baseball.dto.teamsSelection.TeamsInSelectionDto;
+import com.team18.baseball.dto.pitchResult.PitchResultDto;
 import com.team18.baseball.entity.User;
 import com.team18.baseball.repository.UserRepository;
 import com.team18.baseball.response.ResponseBody;
@@ -29,7 +29,7 @@ public class GameController {
     }
 
     @GetMapping()
-    public List<TeamsInGameDto> getGames() {
+    public List<TeamsInSelectionDto> getGames() {
         return gameService.getTeamsInGameList();
     }
 

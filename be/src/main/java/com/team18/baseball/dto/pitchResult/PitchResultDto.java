@@ -1,4 +1,4 @@
-package com.team18.baseball.dto.pitchResultDto;
+package com.team18.baseball.dto.pitchResult;
 
 import org.springframework.data.relational.core.mapping.Embedded;
 
@@ -35,7 +35,7 @@ public class PitchResultDto {
         this.score = score;
     }
 
-    public static final PitchResultDto from(PitchResult pitchResult) {
+    public static PitchResultDto from(PitchResult pitchResult) {
         Runner firstPlayer = Runner.create(pitchResult.getFirst_player(), pitchResult.getFirst_mode());
         Runner secondPlayer = Runner.create(pitchResult.getSecond_player(), pitchResult.getSecond_mode());
         Runner thirdPlayer = Runner.create(pitchResult.getThird_player(), pitchResult.getThird_mode());

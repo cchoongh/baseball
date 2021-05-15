@@ -1,6 +1,5 @@
 package com.team18.baseball.dto;
 
-
 import java.util.List;
 
 public class PlateAppearanceInfoDTO {

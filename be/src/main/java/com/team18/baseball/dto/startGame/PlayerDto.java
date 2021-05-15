@@ -1,20 +1,20 @@
-package com.team18.baseball.dto.startGameInfo;
+package com.team18.baseball.dto.startGame;
 
 import com.team18.baseball.entity.Player;
 
-public class PlayerInfo {
+public class PlayerDto {
     private final Long id;
     private final String name;
     private final int uniformNumber;
 
-    PlayerInfo(Long id, String name, int uniformNumber) {
+    PlayerDto(Long id, String name, int uniformNumber) {
         this.id = id;
         this.name = name;
         this.uniformNumber = uniformNumber;
     }
 
-    public static PlayerInfo from(Player player) {
-        return new PlayerInfo(player.getId(), player.getName(), player.getUniformNumber());
+    public static PlayerDto from(Player player) {
+        return new PlayerDto(player.getId(), player.getName(), player.getUniformNumber());
     }
 
     public Long getId() {

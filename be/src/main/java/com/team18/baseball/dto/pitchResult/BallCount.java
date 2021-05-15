@@ -1,9 +1,9 @@
-package com.team18.baseball.dto.pitchResultDto;
+package com.team18.baseball.dto.pitchResult;
 
 public class BallCount {
-    private int strike;
-    private int ball;
-    private int out;
+    private final int strike;
+    private final int ball;
+    private final int out;
 
     BallCount() {
         this.strike = 0;
@@ -11,7 +11,7 @@ public class BallCount {
         this.out = 0;
     }
 
-    public static final BallCount create() {
+    public static BallCount create() {
         return new BallCount();
     }
 
