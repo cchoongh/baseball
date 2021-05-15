@@ -15,8 +15,7 @@ public class TeamService {
         this.teamRepository = teamRepository;
     }
 
-    public TeamInGameData getTeamsInGameData(Long teamId) {
-        Team team = findTeam(teamId);
+    public TeamInGameData getTeamsInGameData(Team team) {
         return TeamInGameData.from(team);
     }
 

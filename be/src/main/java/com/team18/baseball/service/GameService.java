@@ -1,28 +1,28 @@
 package com.team18.baseball.service;
 
-import com.team18.baseball.dto.*;
-import com.team18.baseball.dto.PlateAppearanceInfoDTO;
-import com.team18.baseball.entity.battingBoard.BattingRecord;
-import com.team18.baseball.entity.*;
 import com.team18.baseball.TeamRoleUtils;
+import com.team18.baseball.dto.PlateAppearanceDTO;
+import com.team18.baseball.dto.PlateAppearanceInfoDTO;
+import com.team18.baseball.dto.PlayersDTO;
+import com.team18.baseball.dto.ScoreDTO;
 import com.team18.baseball.dto.pitchResultDto.PitchResult;
 import com.team18.baseball.dto.pitchResultDto.PitchResultDto;
 import com.team18.baseball.dto.startGameInfo.GameInfo;
 import com.team18.baseball.dto.startGameInfo.StartGameInfo;
 import com.team18.baseball.dto.startGameInfo.TeamInfo;
-import com.team18.baseball.dto.teamsInGame.TeamInGameData;
 import com.team18.baseball.dto.teamsInGame.TeamsInGame;
 import com.team18.baseball.entity.GameHasTeam;
+import com.team18.baseball.entity.Player;
 import com.team18.baseball.entity.Team;
 import com.team18.baseball.entity.User;
+import com.team18.baseball.entity.battingBoard.BattingRecord;
 import com.team18.baseball.entity.game.*;
-import com.team18.baseball.repository.*;
+import com.team18.baseball.repository.GameRepository;
 import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class GameService {
@@ -30,40 +30,40 @@ public class GameService {
     private static final Integer PLAYERS_NUM = 9;
 
     private final GameRepository gameRepository;
-    private final TeamRepository teamRepository;
-    private final HalfInningRepository halfInningRepository;
-    private final PitchResultRepository pitchResultRepository;
 
     private final TeamService teamService;
     private final PitchResultService pitchResultService;
     private final HalfInningService halfInningService;
 
 
-    public GameService(GameRepository gameRepository, TeamRepository teamRepository,
-                       HalfInningRepository halfInningRepository,
-                       PitchResultRepository pitchResultRepository,
+    public GameService(GameRepository gameRepository,
                        TeamService teamService,
                        PitchResultService pitchResultService,
-                       HalfInningService halfInningService,
-                       BatterRecordService batterRecordService) {
+                       HalfInningService halfInningService) {
         this.gameRepository = gameRepository;
-        this.teamRepository = teamRepository;
-        this.halfInningRepository = halfInningRepository;
-        this.pitchResultRepository = pitchResultRepository;
         this.teamService = teamService;
         this.pitchResultService = pitchResultService;
         this.halfInningService = halfInningService;
     }
 
     public List<TeamsInGame> getTeamsInGameList() {
+        gameRepository.findByPlayingStatus(PlayingStatus.READY.name());
         return Streamable.of(gameRepository.findByPlayingStatus(PlayingStatus.READY.name()))
                 .map(this::getTeamsInGame).toList();
     }
 
     private TeamsInGame getTeamsInGame(Game game) {
-        TeamInGameData homeData = teamService.getTeamsInGameData(game.getHomeTeamId());
-        TeamInGameData awayData = teamService.getTeamsInGameData(game.getAwayTeamId());
-        return TeamsInGame.from(game.getId(), game.checkStatus(), homeData, awayData);
+        return TeamsInGame.from(game.getId(), game.checkStatus(),
+                teamService.getTeamsInGameData(getTeam(game, TeamType.HOME)),
+                teamService.getTeamsInGameData(getTeam(game, TeamType.AWAY)));
+    }
+
+    private Team getTeam(Game game, TeamType teamType) {
+        return teamService.findTeam(getTeamId(game, teamType));
+    }
+
+    private Long getTeamId(Game game, TeamType teamType) {
+        return game.getGameHasTeam(teamType).getTeamId();
     }
 
     public boolean selectTeam(User user, Long gameId, Long teamId) {
@@ -72,7 +72,7 @@ public class GameService {
         }
 
         Game game = getGameAndHasStatus(gameId, PlayingStatus.READY);
-        if (!game.hasTeam(teamId)) {
+        if (!hasTeam(game, teamId)) {
             throw new IllegalStateException();
         }
 
@@ -93,8 +93,23 @@ public class GameService {
     }
 
     private void addUserId(Game game, Long teamId, Long userId) {
-        game.addUserId(teamId, userId);
+        game.addUserId(checkTeamType(game, teamId).orElseThrow(IllegalStateException::new), userId);
         gameRepository.save(game);
+    }
+
+    private Optional<String> checkTeamType(Game game, Long teamId) {
+        return getTeamIds(game).entrySet()
+                .stream()
+                .filter(e -> Objects.equals(e.getValue(), teamId))
+                .map(Map.Entry::getKey)
+                .findFirst();
+    }
+
+
+    private Map<String, Long> getTeamIds(Game game) {
+        return game.getTeams().entrySet().stream()
+                .collect(Collectors.toMap(Map.Entry::getKey,
+                        e -> e.getValue().getTeamId()));
     }
 
     public Optional<StartGameInfo> start(User user, Long gameId) {
@@ -123,7 +138,7 @@ public class GameService {
 
     private TeamInfo getTeamInfo(Game game, TeamType teamType) {
         GameHasTeam gameHasTeam = game.getGameHasTeam(teamType);
-        Team team = teamService.findTeam(gameHasTeam.getTeamId());
+        Team team = getTeam(game, teamType);
         return TeamInfo.from(team, TeamRoleUtils.checkTeamRole(teamType, game.getHalfInnings().size()), gameHasTeam.getScore());
     }
 
@@ -150,15 +165,12 @@ public class GameService {
     public PitchResultDto getPitchResult(Long gameId) {
         getGameAndHasStatus(gameId, PlayingStatus.IS_PLAYING);
         Optional<PitchResult> lastPitchResult = pitchResultService.getLastPitchResult();
-        if (lastPitchResult.isPresent()) {
-            return PitchResultDto.from(lastPitchResult.get());
-        }
-        return PitchResultDto.createNull();
+        return lastPitchResult.map(PitchResultDto::from).orElseGet(PitchResultDto::createNull);
     }
 
     public void unselectTeam(User user, Long gameId, Long teamId) {
         Game game = getGameAndHasStatus(gameId, PlayingStatus.READY);
-        if (!game.hasTeam(teamId)) {
+        if (!hasTeam(game, teamId)) {
             throw new IllegalStateException();
         }
 
@@ -172,8 +184,11 @@ public class GameService {
         Game game = getGameAndHasStatus(gameId, PlayingStatus.IS_PLAYING);
         game.checkUser(user.getId()).orElseThrow(IllegalStateException::new);
 
-        Team homeTeam = teamService.findTeam(game.getHomeTeamId());
-        Team awayTeam = teamService.findTeam(game.getAwayTeamId());
+        GameHasTeam gameHasHomeTeam = game.getGameHasTeam(TeamType.HOME);
+        GameHasTeam gameHasAwayTeam = game.getGameHasTeam(TeamType.AWAY);
+
+        Team homeTeam = teamService.findTeam(gameHasHomeTeam.getId());
+        Team awayTeam = teamService.findTeam(gameHasAwayTeam.getId());
 
         String homeName = homeTeam.getName();
         String awayName = awayTeam.getName();
@@ -185,12 +200,9 @@ public class GameService {
 
     public PlateAppearanceDTO getPlateAppearance(Long gameId) {
         Game game = getGameAndHasStatus(gameId, PlayingStatus.IS_PLAYING);
-        GameHasTeam gameHasHomeTeam = game.getGameHasTeam(TeamType.HOME);
-        GameHasTeam gameHasAwayTeam = game.getGameHasTeam(TeamType.AWAY);
-        Long homeTeamId = gameHasHomeTeam.getTeamId();
-        Long awayTeamId = gameHasAwayTeam.getTeamId();
-        Team homeTeam = teamRepository.findById(homeTeamId).orElseThrow(IllegalStateException::new);
-        Team awayTeam = teamRepository.findById(awayTeamId).orElseThrow(IllegalStateException::new);
+
+        Team homeTeam = getTeam(game, TeamType.HOME);
+        Team awayTeam = getTeam(game, TeamType.AWAY);
         String homeTeamName = homeTeam.getName();
         String awayTeamName = awayTeam.getName();
         List<Player> homePlayers = homeTeam.getPlayers();
@@ -281,8 +293,7 @@ public class GameService {
         addTotalScore(game);
         gameRepository.save(game);
 
-        teamService.unselect(game.getGameHasTeam(TeamType.AWAY).getTeamId(),
-                game.getGameHasTeam(TeamType.HOME).getTeamId());
+        teamService.unselect(getTeamId(game, TeamType.HOME), getTeamId(game,TeamType.AWAY));
     }
 
     private void addTotalScore(Game game) {
@@ -315,6 +326,10 @@ public class GameService {
         Game game = getGameAndHasStatus(gameId, PlayingStatus.IS_PLAYING);
         game.checkUser(user.getId()).orElseThrow(IllegalStateException::new);
         return halfInningService.getBattingBoard(game.getLastHalfInning().getId());
+    }
+
+    private boolean hasTeam(Game game, Long teamId) {
+        return getTeamIds(game).containsValue(teamId);
     }
 
 //    private void recordHalfInningScore(Game game, int lastHalfInningIndex) {

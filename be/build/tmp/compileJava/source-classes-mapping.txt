@@ -22,16 +22,16 @@ com/team18/baseball/dto/pitchResultDto/PitchResult.java
  com.team18.baseball.dto.pitchResultDto.PitchResult
 com/team18/baseball/entity/game/PlayingStatus.java
  com.team18.baseball.entity.game.PlayingStatus
-com/team18/baseball/dto/ScoreDTO.java
- com.team18.baseball.dto.ScoreDTO
+com/team18/baseball/entity/game/BattingResult.java
+ com.team18.baseball.entity.game.BattingResult
 com/team18/baseball/entity/game/HalfInning.java
  com.team18.baseball.entity.game.HalfInning
 com/team18/baseball/repository/PlayerRepository.java
  com.team18.baseball.repository.PlayerRepository
-com/team18/baseball/controller/GameController.java
- com.team18.baseball.controller.GameController
-com/team18/baseball/service/GameService.java
- com.team18.baseball.service.GameService
+com/team18/baseball/HttpSessionUtils.java
+ com.team18.baseball.HttpSessionUtils
+com/team18/baseball/repository/TeamRepository.java
+ com.team18.baseball.repository.TeamRepository
 com/team18/baseball/entity/game/TeamTurn.java
  com.team18.baseball.entity.game.TeamTurn
 com/team18/baseball/entity/Player.java
@@ -97,9 +97,9 @@ com/team18/baseball/entity/GameHasTeam.java
  com.team18.baseball.entity.GameHasTeam
 com/team18/baseball/dto/pitchResultDto/Batter.java
  com.team18.baseball.dto.pitchResultDto.Batter
-com/team18/baseball/repository/TeamRepository.java
- com.team18.baseball.repository.TeamRepository
-com/team18/baseball/HttpSessionUtils.java
- com.team18.baseball.HttpSessionUtils
-com/team18/baseball/entity/game/BattingResult.java
- com.team18.baseball.entity.game.BattingResult
+com/team18/baseball/dto/ScoreDTO.java
+ com.team18.baseball.dto.ScoreDTO
+com/team18/baseball/controller/GameController.java
+ com.team18.baseball.controller.GameController
+com/team18/baseball/service/GameService.java
+ com.team18.baseball.service.GameService

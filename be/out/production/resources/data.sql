@@ -6,17 +6,17 @@ VALUES ("kkk@honux.com"),
        ("ppp@honux.com"),
        ("aaa@honux.com");
 
-INSERT INTO game(id, home_user_id, away_user_id, `playing_status`)
-VALUES (1, null, null, "READY"),
-       (2, null, null, "READY"),
-       (3, null, null, "READY"),
-       (4, null, null, "READY"),
-       (5, null, null, "READY"),
-       (6, null, null, "READY"),
-       (7, null, null, "READY"),
-       (8, null, null, "READY"),
-       (9, null, null, "READY"),
-       (10, null, null, "READY");
+INSERT INTO game(`id`, `playing_status`)
+VALUES (1, "READY"),
+       (2, "READY"),
+       (3, "READY"),
+       (4, "READY"),
+       (5, "READY"),
+       (6, "READY"),
+       (7, "READY"),
+       (8, "READY"),
+       (9, "READY"),
+       (10, "READY");
 
 INSERT INTO team (id, `name`)
 VALUES (1, "hanwha"),

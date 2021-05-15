@@ -7,40 +7,42 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Game {
-
     @Id
     private final Long id;
-    private List<HalfInning> halfInnings;
-    private Map<String, GameHasTeam> teams;
-    private Long homeUserId;
-    private Long awayUserId;
+    private final List<HalfInning> halfInnings;
+    private final Map<String, GameHasTeam> teams;
+    private Long homeUserId, awayUserId;
     private String playingStatus;
 
-    Game(Long id) {
+    Game(Long id, List<HalfInning> halfInnings, Map<String, GameHasTeam> teams, String playingStatus) {
         this.id = id;
-        halfInnings = new ArrayList<>();
-        teams = new HashMap<>();
-        playingStatus = PlayingStatus.READY.name();
+        this.halfInnings = halfInnings;
+        this.teams = teams;
+        this.playingStatus = playingStatus;
     }
 
-    public static final Game create() {
-        return new Game(null);
+    public static Game create() {
+        return new Game(null, new ArrayList<>(), new HashMap<>(), PlayingStatus.READY.name());
     }
 
     public Long getId() {
         return id;
     }
 
-    public String checkStatus() {
-        return playingStatus;
+    public List<HalfInning> getHalfInnings() {
+        return this.halfInnings;
+    }
+
+    public Map<String, GameHasTeam> getTeams() {
+        return this.teams;
     }
 
     public GameHasTeam getGameHasTeam(TeamType teamType) {
         return teams.get(teamType.toString());
     }
 
-    public List<HalfInning> getHalfInnings() {
-        return this.halfInnings;
+    public String checkStatus() {
+        return playingStatus;
     }
 
     public HalfInning getLastHalfInning() {
@@ -50,38 +52,9 @@ public class Game {
         return halfInnings.get(halfInnings.size()-1);
     }
 
-    private Map<String, Long> getTeamIds() {
-        return teams.entrySet().stream()
-                .collect(Collectors.toMap(Map.Entry::getKey,
-                        e -> e.getValue().getTeamId()));
+    public int getLastHalfInningIndex() {
+        return halfInnings.size();
     }
-
-    public Long getHomeTeamId() {
-        return getTeamIds().get(TeamType.HOME.name());
-    }
-
-    public Long getAwayTeamId() {
-        return getTeamIds().get(TeamType.AWAY.name());
-    }
-
-    private Optional<String> checkTeamType(Long teamId) {
-        return getTeamIds().entrySet()
-                .stream()
-                .filter(e -> Objects.equals(e.getValue(), teamId))
-                .map(Map.Entry::getKey)
-                .findFirst();
-    }
-
-    public boolean hasTeam(Long teamId) {
-        return getTeamIds().containsValue(teamId);
-    }
-
-//    public TeamType getTeamType(Long teamId) {
-//        if(!getTeamIds().containsValue(teamId)) {
-//            throw new IllegalStateException();
-//        }
-//        return TeamType.valueOf(checkTeamType(teamId).get());
-//    }
 
     public boolean hasTwoUsers() {
         return homeUserExist() && awayUserExist();
@@ -95,14 +68,6 @@ public class Game {
         return this.awayUserId != null;
     }
 
-    public Long getHomeUserId() {
-        return homeUserId;
-    }
-
-    public Long getAwayUserId() {
-        return awayUserId;
-    }
-
     public Optional<TeamType> checkUser(Long userId) {
         if ((homeUserId != null) && (homeUserId.equals(userId))) {
             return Optional.of(TeamType.HOME);
@@ -111,26 +76,6 @@ public class Game {
             return Optional.of(TeamType.AWAY);
         }
         return Optional.empty();
-    }
-
-    public void addUserId(Long teamId, Long userId) {
-        String teamType = checkTeamType(teamId).orElseThrow(IllegalStateException::new);
-        if((teamType.equals(TeamType.HOME.name())) && (this.homeUserId == null)) {
-            this.homeUserId = userId;
-        }
-
-        if((teamType.equals(TeamType.AWAY.name())) && (this.awayUserId == null)) {
-            this.awayUserId = userId;
-        }
-    }
-
-    public void deleteUser(Long userId) {
-        if((homeUserId != null ) && (homeUserId.equals(userId))) {
-            this.homeUserId = null;
-        }
-        if((awayUserId != null) && (awayUserId.equals(userId))) {
-            this.awayUserId = null;
-        }
     }
 
     public HalfInning addHalfInning() {
@@ -154,15 +99,30 @@ public class Game {
         changeStatus(PlayingStatus.IS_PLAYING);
     }
 
+    public void addUserId(String teamType, Long userId) {
+        if((teamType.equals(TeamType.HOME.name())) && (this.homeUserId == null)) {
+            this.homeUserId = userId;
+        }
+
+        if((teamType.equals(TeamType.AWAY.name())) && (this.awayUserId == null)) {
+            this.awayUserId = userId;
+        }
+    }
+
+    public void deleteUser(Long userId) {
+        if((homeUserId != null ) && (homeUserId.equals(userId))) {
+            this.homeUserId = null;
+        }
+        if((awayUserId != null) && (awayUserId.equals(userId))) {
+            this.awayUserId = null;
+        }
+    }
+
     public void changeStatus(PlayingStatus isPlaying) {
         this.playingStatus = isPlaying.name();
     }
 
     public void end() {
         playingStatus = PlayingStatus.END.name();
-    }
-
-    public int getLastHalfInningIndex() {
-        return halfInnings.size();
     }
 }

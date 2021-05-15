@@ -21,7 +21,6 @@ CREATE TABLE game
     `id` int auto_increment,
     `home_user_id` int,
     `away_user_id` int,
-    `is_end` boolean default false not null,
     `playing_status` varchar(50) not null,
     primary key (id)
 );
@@ -113,31 +112,6 @@ CREATE TABLE `batting_record`
     `batter_name`     varchar(50),
     `strike`          int,
     `ball`            int,
-    primary key (id)
+    primary key (id),
+    foreign key (half_inning) references half_inning (id)
 );
-
-
-CREATE TABLE plate_appearance
-(
-    id     int not null auto_increment,
-    -- player_id int not null,
-    player_name varchar(45) not null,
-    at_bat int not null,
-    hit    int not null,
-    `out`    int not null,
-    primary key (id)
-    -- foreign key (player_id) references player (id)
-);
---
--- CREATE TABLE plate_appearance_info
--- (
---     id                  int         not null auto_increment,
---     result              int         not null,
---     isOut               tinyint(0) not null,
---     plate_appearance_id int         not null,
---     batter_id           int         not null,
---     inning_index        int         not null,
---     is_top              varchar(45) not null,
---     primary key (id),
---     foreign key (plate_appearance_id) references plate_appearance (id)
--- );
