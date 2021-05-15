@@ -10,6 +10,7 @@ import com.team18.baseball.dto.pitchResultDto.PitchResultDto;
 import com.team18.baseball.dto.startGameInfo.GameInfo;
 import com.team18.baseball.dto.startGameInfo.StartGameInfo;
 import com.team18.baseball.dto.startGameInfo.TeamInfo;
+import com.team18.baseball.dto.teamsInGame.TeamInGameData;
 import com.team18.baseball.dto.teamsInGame.TeamsInGame;
 import com.team18.baseball.entity.GameHasTeam;
 import com.team18.baseball.entity.Player;
@@ -54,8 +55,12 @@ public class GameService {
 
     private TeamsInGame getTeamsInGame(Game game) {
         return TeamsInGame.from(game.getId(), game.checkStatus(),
-                teamService.getTeamsInGameData(getTeam(game, TeamType.HOME)),
-                teamService.getTeamsInGameData(getTeam(game, TeamType.AWAY)));
+                getTeamsInGameData(getTeam(game, TeamType.HOME)),
+                getTeamsInGameData(getTeam(game, TeamType.AWAY)));
+    }
+
+    private TeamInGameData getTeamsInGameData(Team team) {
+        return TeamInGameData.from(team);
     }
 
     private Team getTeam(Game game, TeamType teamType) {

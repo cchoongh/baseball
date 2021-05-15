@@ -15,10 +15,6 @@ public class TeamService {
         this.teamRepository = teamRepository;
     }
 
-    public TeamInGameData getTeamsInGameData(Team team) {
-        return TeamInGameData.from(team);
-    }
-
     public boolean selectedBy(Long teamId, Long userId) {
         Team team = findTeam(teamId);
         if (!team.selectedBy(userId)) {
