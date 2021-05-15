@@ -1,6 +1,5 @@
 package com.team18.baseball.service;
 
-import com.team18.baseball.dto.teamsInGame.TeamInGameData;
 import com.team18.baseball.entity.Team;
 import com.team18.baseball.entity.User;
 import com.team18.baseball.repository.TeamRepository;
