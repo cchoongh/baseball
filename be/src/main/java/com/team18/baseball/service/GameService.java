@@ -63,20 +63,12 @@ public class GameService {
         return TeamInGameData.from(team);
     }
 
-    private Team getTeam(Game game, TeamType teamType) {
-        return teamService.findTeam(getTeamId(game, teamType));
-    }
-
-    private Long getTeamId(Game game, TeamType teamType) {
-        return game.getGameHasTeam(teamType).getTeamId();
-    }
-
     public boolean selectTeam(User user, Long gameId, Long teamId) {
         if (teamService.containsTeam(user)) {
             throw new IllegalStateException();
         }
 
-        Game game = getGameAndHasStatus(gameId, PlayingStatus.READY);
+        Game game = checkGameAndUserCondition(user, gameId, PlayingStatus.READY);
         if (!hasTeam(game, teamId)) {
             throw new IllegalStateException();
         }
@@ -87,14 +79,6 @@ public class GameService {
         }
         addUserId(game, teamId, userId);
         return true;
-    }
-
-    private Game getGameAndHasStatus(Long gameId, PlayingStatus status) {
-        Game game = gameRepository.findById(gameId).orElseThrow(IllegalStateException::new);
-        if (!game.checkStatus().equals(status.name())) {
-            throw new IllegalStateException();
-        }
-        return game;
     }
 
     private void addUserId(Game game, Long teamId, Long userId) {
@@ -108,13 +92,6 @@ public class GameService {
                 .filter(e -> Objects.equals(e.getValue(), teamId))
                 .map(Map.Entry::getKey)
                 .findFirst();
-    }
-
-
-    private Map<String, Long> getTeamIds(Game game) {
-        return game.getTeams().entrySet().stream()
-                .collect(Collectors.toMap(Map.Entry::getKey,
-                        e -> e.getValue().getTeamId()));
     }
 
     public Optional<StartGameInfo> start(User user, Long gameId) {
@@ -134,6 +111,14 @@ public class GameService {
         return Optional.of(getStartGameInfo(game));
     }
 
+    private Game getGameAndHasNotStatus(Long gameId, PlayingStatus notStatus) {
+        Game game = gameRepository.findById(gameId).orElseThrow(IllegalStateException::new);
+        if (game.checkStatus().equals(notStatus.name())) {
+            throw new IllegalStateException();
+        }
+        return game;
+    }
+
     private StartGameInfo getStartGameInfo(Game game) {
         TeamInfo homeTeamInfo = getTeamInfo(game, TeamType.HOME);
         TeamInfo awayTeamInfo = getTeamInfo(game, TeamType.AWAY);
@@ -147,17 +132,9 @@ public class GameService {
         return TeamInfo.from(team, TeamRoleUtils.checkTeamRole(teamType, game.getHalfInnings().size()), gameHasTeam.getScore());
     }
 
-    private Game getGameAndHasNotStatus(Long gameId, PlayingStatus notStatus) {
-        Game game = gameRepository.findById(gameId).orElseThrow(IllegalStateException::new);
-        if (game.checkStatus().equals(notStatus.name())) {
-            throw new IllegalStateException();
-        }
-        return game;
-    }
-
     public void pitch(User user, Long gameId, PitchResultDto pitchResultDto) {
         PitchResult pitchResult = pitchResultService.pitch(PitchResult.from(pitchResultDto), pitchResultDto.getRunners());
-        Game game = getGameAndHasStatus(gameId, PlayingStatus.IS_PLAYING);
+        Game game = checkGameAndUserCondition(user, gameId, PlayingStatus.IS_PLAYING);
         TeamType teamType = game.checkUser(user.getId()).orElseThrow(IllegalStateException::new);
 
         if (TeamRoleUtils.checkTeamRole(teamType, game.getHalfInnings().size()) == TeamRole.BATTING) {
@@ -167,14 +144,16 @@ public class GameService {
         halfInningService.update(game.getLastHalfInning(), pitchResult);
     }
 
-    public PitchResultDto getPitchResult(Long gameId) {
-        getGameAndHasStatus(gameId, PlayingStatus.IS_PLAYING);
+    public PitchResultDto getPitchResult(User user, Long gameId) {
+        Game game = checkGameAndUserCondition(user, gameId, PlayingStatus.IS_PLAYING);
+        game.checkUser(user.getId()).orElseThrow(IllegalStateException::new);
+
         Optional<PitchResult> lastPitchResult = pitchResultService.getLastPitchResult();
         return lastPitchResult.map(PitchResultDto::from).orElseGet(PitchResultDto::createNull);
     }
 
     public void unselectTeam(User user, Long gameId, Long teamId) {
-        Game game = getGameAndHasStatus(gameId, PlayingStatus.READY);
+        Game game = checkGameAndUserCondition(user, gameId, PlayingStatus.READY);
         if (!hasTeam(game, teamId)) {
             throw new IllegalStateException();
         }
@@ -186,8 +165,7 @@ public class GameService {
     }
 
     public ScoreDTO getScore(User user, Long gameId) {
-        Game game = getGameAndHasStatus(gameId, PlayingStatus.IS_PLAYING);
-        game.checkUser(user.getId()).orElseThrow(IllegalStateException::new);
+        Game game = checkGameAndUserCondition(user, gameId, PlayingStatus.IS_PLAYING);
 
         GameHasTeam gameHasHomeTeam = game.getGameHasTeam(TeamType.HOME);
         GameHasTeam gameHasAwayTeam = game.getGameHasTeam(TeamType.AWAY);
@@ -203,8 +181,8 @@ public class GameService {
         return scoreDTO;
     }
 
-    public PlateAppearanceDTO getPlateAppearance(Long gameId) {
-        Game game = getGameAndHasStatus(gameId, PlayingStatus.IS_PLAYING);
+    public PlateAppearanceDTO getPlateAppearance(User user, Long gameId) {
+        Game game = checkGameAndUserCondition(user, gameId, PlayingStatus.IS_PLAYING);
 
         Team homeTeam = getTeam(game, TeamType.HOME);
         Team awayTeam = getTeam(game, TeamType.AWAY);
@@ -272,8 +250,7 @@ public class GameService {
 
 
     public boolean endAndStartHalfInning(User user, Long gameId, PitchResultDto pitchResultDto) {
-        Game game = getGameAndHasStatus(gameId, PlayingStatus.IS_PLAYING);
-        game.checkUser(user.getId()).orElseThrow(IllegalStateException::new);
+        Game game = checkGameAndUserCondition(user, gameId, PlayingStatus.IS_PLAYING);
 
         halfInningService.end(game.getLastHalfInning());
 
@@ -290,8 +267,7 @@ public class GameService {
     }
 
     public void endGame(User user, Long gameId) {
-        Game game = getGameAndHasStatus(gameId, PlayingStatus.IS_PLAYING);
-        game.checkUser(user.getId()).orElseThrow(IllegalStateException::new);
+        Game game = checkGameAndUserCondition(user, gameId, PlayingStatus.IS_PLAYING);
 
         game.getLastHalfInning().end();
         game.end();
@@ -317,8 +293,7 @@ public class GameService {
     }
 
     public void recordBatting(User user, Long gameId, List<BattingRecord> battingRecordBoard) {
-        Game game = getGameAndHasStatus(gameId, PlayingStatus.IS_PLAYING);
-        TeamType teamType = game.checkUser(user.getId()).orElseThrow(IllegalStateException::new);
+        Game game = checkGameAndUserCondition(user, gameId, PlayingStatus.IS_PLAYING);
         if (TeamRoleUtils.checkTeamRole(teamType, game.getHalfInnings().size()) == TeamRole.BATTING) {
             TeamRole teamRole = TeamRoleUtils.checkTeamRole(teamType, game.getHalfInnings().size());
             throw new IllegalStateException();
@@ -328,16 +303,38 @@ public class GameService {
     }
 
     public List<BattingRecord> getBattingBoard(User user, Long gameId) {
-        Game game = getGameAndHasStatus(gameId, PlayingStatus.IS_PLAYING);
-        game.checkUser(user.getId()).orElseThrow(IllegalStateException::new);
+        Game game = checkGameAndUserCondition(user, gameId, PlayingStatus.IS_PLAYING);
         return halfInningService.getBattingBoard(game.getLastHalfInning().getId());
+    }
+
+    private Team getTeam(Game game, TeamType teamType) {
+        return teamService.findTeam(getTeamId(game, teamType));
+    }
+
+    private Long getTeamId(Game game, TeamType teamType) {
+        return game.getGameHasTeam(teamType).getTeamId();
     }
 
     private boolean hasTeam(Game game, Long teamId) {
         return getTeamIds(game).containsValue(teamId);
     }
 
-//    private void recordHalfInningScore(Game game, int lastHalfInningIndex) {
+    private Map<String, Long> getTeamIds(Game game) {
+        return game.getTeams().entrySet().stream()
+                .collect(Collectors.toMap(Map.Entry::getKey,
+                        e -> e.getValue().getTeamId()));
+    }
+
+    private Game checkGameAndUserCondition( User user, Long gameId, PlayingStatus playingStatus) {
+        Game game = gameRepository.findById(gameId).orElseThrow(IllegalStateException::new);
+        if (!game.checkStatus().equals(playingStatus.name())) {
+            throw new IllegalStateException();
+        }
+        game.checkUser(user.getId()).orElseThrow(IllegalStateException::new);
+        return game;
+    }
+
+    //    private void recordHalfInningScore(Game game, int lastHalfInningIndex) {
 //        //마지막 마지막 인덱스가 홀수 일 때 home팀 수비 away팀 공격 -> away팀 점수
 //        if ((lastHalfInningIndex / 2) == 1) {
 //            recordHalfInningScore(game, lastHalfInningIndex, TeamType.HOME);

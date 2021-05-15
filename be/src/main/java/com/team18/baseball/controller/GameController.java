@@ -66,7 +66,7 @@ public class GameController {
     public PitchResultDto getPitchResult(@PathVariable Long gameId, @PathVariable Long userId) {
         User user = userRepository.findById(userId).orElseThrow(IllegalStateException::new);
 //        HttpSessionUtils.getLoginUser(session).orElseThrow(IllegalStateException::new);
-        return gameService.getPitchResult(gameId);
+        return gameService.getPitchResult(user, gameId);
     }
 
     @GetMapping("/{gameId}/score/user/{userId}")
@@ -80,7 +80,7 @@ public class GameController {
     public PlateAppearanceDTO getPlateAppearance(@PathVariable Long gameId, @PathVariable Long userId) {
         User user = userRepository.findById(userId).orElseThrow(IllegalStateException::new);
 //        User user = HttpSessionUtils.getLoginUser(session).orElseThrow(IllegalStateException::new);
-        return gameService.getPlateAppearance(gameId);
+        return gameService.getPlateAppearance(user, gameId);
     }
 
     @PostMapping("/{gameId}/halfInning/user/{userId}")
