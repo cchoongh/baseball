@@ -69,6 +69,10 @@ public class ResponseBody<T> {
         return new ResponseBody<>(Status.END_OK, Status.END_OK.getMessage());
     }
 
+    public static <T> ResponseBody<T> recordBattingOk() {
+        return new ResponseBody<>(Status.RECORD_BATTING_OK, Status.RECORD_BATTING_OK.getMessage());
+    }
+
     public Status getStatus() {
         return status;
     }
@@ -90,6 +94,7 @@ public class ResponseBody<T> {
         PITCH_OK("성공적으로 pitch 결과가 반영되었습니다"),
         GET_PITCH_OK("pitch 결과입니다"),
         GET_PITCH_FAIL("아직 pitch한 결과가 없습니다"),
+        RECORD_BATTING_OK("성공적으로 Batting Records가 반영되었습니다"),
         NEW_HALF_INNING_OK("공격과 수비가 변경됩니다"),
         NEW_HALF_INNING_FAIL("경기 종료버튼을 눌러주세요"),
         END_OK("경기가 종료되었습니다"),
