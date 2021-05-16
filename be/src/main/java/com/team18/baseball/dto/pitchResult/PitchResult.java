@@ -48,7 +48,7 @@ public class PitchResult {
        this.score = score;
    }
 
-    public static PitchResult from(PitchResultDto pitchResultDto) {
+    public static PitchResult from(PitchResultDTO pitchResultDto) {
         PitchResult pitchResult = new PitchResult(pitchResultDto.getHomeId(), pitchResultDto.getAwayId(), pitchResultDto.getBattingTeamId(), pitchResultDto.getPitchResult(),
                 pitchResultDto.getBatter(), pitchResultDto.getNthBatter(),
                 pitchResultDto.getBallCount(),

@@ -20,7 +20,6 @@ public class HalfInningService {
 
     public void pitch(HalfInning halfInning, PitchResult pitchResult) {
         halfInning.addPitchResult(pitchResult);
-        halfInningRepository.save(halfInning);
     }
 
     public Optional<PitchResult> getLastPitchResult(HalfInning halfInning) {

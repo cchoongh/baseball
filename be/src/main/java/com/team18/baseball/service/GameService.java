@@ -4,14 +4,14 @@ import com.team18.baseball.TeamRoleUtils;
 import com.team18.baseball.dto.PlateAppearanceDTO;
 import com.team18.baseball.dto.PlateAppearanceInfoDTO;
 import com.team18.baseball.dto.PlayersDTO;
-import com.team18.baseball.dto.ScoreDTO;
+import com.team18.baseball.dto.ScoreBoardDTO;
 import com.team18.baseball.dto.pitchResult.PitchResult;
-import com.team18.baseball.dto.pitchResult.PitchResultDto;
-import com.team18.baseball.dto.startGame.GameDto;
+import com.team18.baseball.dto.pitchResult.PitchResultDTO;
+import com.team18.baseball.dto.startGame.GameDTO;
 import com.team18.baseball.dto.startGame.StartGameInfo;
-import com.team18.baseball.dto.startGame.TeamForStartDto;
-import com.team18.baseball.dto.teamsSelection.TeamInSelectionDto;
-import com.team18.baseball.dto.teamsSelection.TeamsInSelectionDto;
+import com.team18.baseball.dto.startGame.TeamForStartDTO;
+import com.team18.baseball.dto.teamsSelection.TeamInSelectionDTO;
+import com.team18.baseball.dto.teamsSelection.TeamsInSelectionDTO;
 import com.team18.baseball.entity.GameHasTeam;
 import com.team18.baseball.entity.Player;
 import com.team18.baseball.entity.Team;
@@ -47,13 +47,13 @@ public class GameService {
         this.halfInningService = halfInningService;
     }
 
-    public List<TeamsInSelectionDto> getTeamsInGameList() {
+    public List<TeamsInSelectionDTO> getTeamsInGameList() {
         gameRepository.findByPlayingStatus(PlayingStatus.READY.name());
         return Streamable.of(gameRepository.findByPlayingStatus(PlayingStatus.READY.name()))
-                .map(game -> TeamsInSelectionDto.from(game.getId(),
+                .map(game -> TeamsInSelectionDTO.from(game.getId(),
                         game.checkStatus(),
-                        TeamInSelectionDto.from(getTeam(game, TeamType.HOME)),
-                        TeamInSelectionDto.from(getTeam(game, TeamType.AWAY))))
+                        TeamInSelectionDTO.from(getTeam(game, TeamType.HOME)),
+                        TeamInSelectionDTO.from(getTeam(game, TeamType.AWAY))))
                 .toList();
     }
 
@@ -125,18 +125,18 @@ public class GameService {
     }
 
     private StartGameInfo getStartGameInfo(Game game) {
-        return StartGameInfo.from(GameDto.from(game, game.getLastHalfInning()),
+        return StartGameInfo.from(GameDTO.from(game, game.getLastHalfInning()),
                 getTeamInfo(game, TeamType.HOME), getTeamInfo(game, TeamType.AWAY));
     }
 
-    private TeamForStartDto getTeamInfo(Game game, TeamType teamType) {
+    private TeamForStartDTO getTeamInfo(Game game, TeamType teamType) {
         List<HalfInning> halfInnings = game.getHalfInnings();
         GameHasTeam gameHasTeam = game.getGameHasTeam(teamType);
-        return TeamForStartDto.from(getTeam(game, teamType),
+        return TeamForStartDTO.from(getTeam(game, teamType),
                 TeamRoleUtils.checkTeamRole(teamType, halfInnings.size()), gameHasTeam.getScore());
     }
 
-    public void pitch(User user, Long gameId, PitchResultDto pitchResultDto) {
+    public void pitch(User user, Long gameId, PitchResultDTO pitchResultDto) {
         Game game = getGameAndHasStatus(gameId, PlayingStatus.IS_PLAYING);
         TeamType teamType = game.checkUser(user.getId()).orElseThrow(IllegalStateException::new);
 
@@ -145,14 +145,17 @@ public class GameService {
         }
 
         halfInningService.pitch(game.getLastHalfInning(), PitchResult.from(pitchResultDto));
+        gameRepository.save(game);
     }
-
-    public Optional<PitchResultDto> getPitchResult(User user, Long gameId) {
+    public Optional<PitchResultDTO> getPitchResult(User user, Long gameId) {
         Game game = getGameAndHasStatus(gameId, PlayingStatus.IS_PLAYING);
         game.checkUser(user.getId()).orElseThrow(IllegalStateException::new);
 
-        return halfInningService.getLastPitchResult(game.getLastHalfInning())
-                .map(PitchResultDto::from);
+        final Optional<PitchResult> lastPitchResult = halfInningService.getLastPitchResult(game.getLastHalfInning());
+        if(lastPitchResult.isPresent()) {
+            return Optional.of(PitchResultDTO.from(lastPitchResult.get()));
+        };
+        return Optional.empty();
     }
 
     public void recordBatting(User user, Long gameId, List<BattingRecord> battingRecords) {
@@ -173,7 +176,7 @@ public class GameService {
         return halfInningService.getBattingRecords(game.getLastHalfInning());
     }
 
-    public ScoreDTO getScore(User user, Long gameId) {
+    public ScoreBoardDTO getScore(User user, Long gameId) {
         Game game = getGameAndHasStatus(gameId, PlayingStatus.IS_PLAYING);
         game.checkUser(user.getId()).orElseThrow(IllegalStateException::new);
 
@@ -185,10 +188,10 @@ public class GameService {
 
         String homeName = homeTeam.getName();
         String awayName = awayTeam.getName();
-        ScoreDTO scoreDTO = ScoreDTO.create(homeName, awayName);
-        scoreDTO.makeHomeScore(game);
-        scoreDTO.makeAwayScore(game);
-        return scoreDTO;
+        ScoreBoardDTO scoreBoardDTO = ScoreBoardDTO.create(homeName, awayName);
+        scoreBoardDTO.makeHomeScore(game);
+        scoreBoardDTO.makeAwayScore(game);
+        return scoreBoardDTO;
     }
 
     public PlateAppearanceDTO getPlateAppearance(User user, Long gameId) {
@@ -205,7 +208,6 @@ public class GameService {
         if (!lastPitchResult.isPresent()) { // pitch 안 한 상태
             List<PlayersDTO> homePlayersDTO = makeNullPlayersDTO(homePlayers);
             List<PlayersDTO> awayPlayersDTO = makeNullPlayersDTO(awayPlayers);
-            System.out.println(homePlayersDTO.toString() + awayPlayersDTO.toString());
             PlateAppearanceInfoDTO homePAInfos = PlateAppearanceInfoDTO.createNullPAInfo(homeTeamName, homePlayersDTO);
             PlateAppearanceInfoDTO awayPAInfos = PlateAppearanceInfoDTO.createNullPAInfo(awayTeamName, awayPlayersDTO);
             return PlateAppearanceDTO.createNullPA(awayTeamName, homeTeamName, awayPAInfos, homePAInfos);
@@ -259,7 +261,7 @@ public class GameService {
         return playersDTOs;
     }
 
-    public boolean endAndStartNewHalfInning(User user, Long gameId, PitchResultDto pitchResultDto) {
+    public boolean endAndStartNewHalfInning(User user, Long gameId, PitchResultDTO pitchResultDto) {
         Game game = getGameAndHasStatus(gameId, PlayingStatus.IS_PLAYING);
         game.checkUser(user.getId()).orElseThrow(IllegalStateException::new);
 

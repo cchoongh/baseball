@@ -1,11 +1,11 @@
 package com.team18.baseball.controller;
 
 import com.team18.baseball.dto.PlateAppearanceDTO;
-import com.team18.baseball.dto.ScoreDTO;
+import com.team18.baseball.dto.ScoreBoardDTO;
 import com.team18.baseball.entity.battingBoard.BattingRecord;
 import com.team18.baseball.dto.startGame.StartGameInfo;
-import com.team18.baseball.dto.teamsSelection.TeamsInSelectionDto;
-import com.team18.baseball.dto.pitchResult.PitchResultDto;
+import com.team18.baseball.dto.teamsSelection.TeamsInSelectionDTO;
+import com.team18.baseball.dto.pitchResult.PitchResultDTO;
 import com.team18.baseball.entity.User;
 import com.team18.baseball.repository.UserRepository;
 import com.team18.baseball.response.ResponseBody;
@@ -29,7 +29,7 @@ public class GameController {
     }
 
     @GetMapping()
-    public List<TeamsInSelectionDto> getGames() {
+    public List<TeamsInSelectionDTO> getGames() {
         return gameService.getTeamsInGameList();
     }
 
@@ -57,7 +57,7 @@ public class GameController {
     }
 
     @PostMapping("/{gameId}/pitch/user/{userId}")
-    public ResponseBody<Object> pitch(@RequestBody PitchResultDto pitchResultDto, @PathVariable Long gameId, @PathVariable Long userId) {
+    public ResponseBody<Object> pitch(@RequestBody PitchResultDTO pitchResultDto, @PathVariable Long gameId, @PathVariable Long userId) {
         User user = userRepository.findById(userId).orElseThrow(IllegalStateException::new);
 //        User user = HttpSessionUtils.getLoginUser(session).orElseThrow(IllegalStateException::new);
         gameService.pitch(user, gameId, pitchResultDto);
@@ -68,7 +68,7 @@ public class GameController {
     public ResponseBody<Object> getPitchResult(@PathVariable Long gameId, @PathVariable Long userId) {
         User user = userRepository.findById(userId).orElseThrow(IllegalStateException::new);
 //        HttpSessionUtils.getLoginUser(session).orElseThrow(IllegalStateException::new);
-        Optional<PitchResultDto> pitchResult = gameService.getPitchResult(user, gameId);
+        Optional<PitchResultDTO> pitchResult = gameService.getPitchResult(user, gameId);
         if(pitchResult.isPresent()) {
             return ResponseBody.getPitchOkay(pitchResult.get());
         };
@@ -89,7 +89,7 @@ public class GameController {
     }
 
     @GetMapping("/{gameId}/score/user/{userId}")
-    public ScoreDTO getScore(@PathVariable Long gameId, @PathVariable Long userId) {
+    public ScoreBoardDTO getScore(@PathVariable Long gameId, @PathVariable Long userId) {
         User user = userRepository.findById(userId).orElseThrow(IllegalStateException::new);
 //        User user = HttpSessionUtils.getLoginUser(session).orElseThrow(IllegalStateException::new);
         return gameService.getScore(user, gameId);
@@ -103,7 +103,7 @@ public class GameController {
     }
 
     @PostMapping("/{gameId}/halfInning/user/{userId}")
-    public ResponseBody<Object> endHalfInning(@RequestBody PitchResultDto pitchResultDto, @PathVariable Long gameId, @PathVariable Long userId) {
+    public ResponseBody<Object> endHalfInning(@RequestBody PitchResultDTO pitchResultDto, @PathVariable Long gameId, @PathVariable Long userId) {
 //        User user = HttpSessionUtils.getLoginUser(session).orElseThrow(IllegalStateException::new);
         User user = userRepository.findById(userId).orElseThrow(IllegalStateException::new);
         return gameService.endAndStartNewHalfInning(user, gameId, pitchResultDto) ? ResponseBody.newHalfInningOk() : ResponseBody.newHalfInningFail();

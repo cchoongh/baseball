@@ -1,7 +1,5 @@
 package com.team18.baseball.response;
 
-import com.team18.baseball.dto.pitchResult.PitchResult;
-import com.team18.baseball.dto.pitchResult.PitchResultDto;
 import com.team18.baseball.dto.startGame.StartGameInfo;
 
 public class ResponseBody<T> {
@@ -58,7 +56,7 @@ public class ResponseBody<T> {
     }
 
     public static <T> ResponseBody<T> getPitchOkay(T body) {
-        return new ResponseBody<>(Status.GET_PITCH_OK, Status.GET_PITCH_OK.getMessage());
+        return new ResponseBody<>(Status.GET_PITCH_OK, Status.GET_PITCH_OK.getMessage(), body);
     }
 
     public static <T> ResponseBody<T> getPitchFail() {

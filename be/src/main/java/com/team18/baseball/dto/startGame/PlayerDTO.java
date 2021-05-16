@@ -2,19 +2,19 @@ package com.team18.baseball.dto.startGame;
 
 import com.team18.baseball.entity.Player;
 
-public class PlayerDto {
+public class PlayerDTO {
     private final Long id;
     private final String name;
     private final int uniformNumber;
 
-    PlayerDto(Long id, String name, int uniformNumber) {
+    PlayerDTO(Long id, String name, int uniformNumber) {
         this.id = id;
         this.name = name;
         this.uniformNumber = uniformNumber;
     }
 
-    public static PlayerDto from(Player player) {
-        return new PlayerDto(player.getId(), player.getName(), player.getUniformNumber());
+    public static PlayerDTO from(Player player) {
+        return new PlayerDTO(player.getId(), player.getName(), player.getUniformNumber());
     }
 
     public Long getId() {

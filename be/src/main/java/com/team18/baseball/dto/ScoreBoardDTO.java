@@ -8,7 +8,7 @@ import com.team18.baseball.entity.game.PlayingStatus;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ScoreDTO {
+public class ScoreBoardDTO {
 
     private String homeName;
     private String awayName;
@@ -19,7 +19,7 @@ public class ScoreDTO {
     private int homeTotal;
     private int awayTotal;
 
-    public ScoreDTO(String homeName, String awayName) {
+    public ScoreBoardDTO(String homeName, String awayName) {
         this.homeName = homeName;
         this.awayName = awayName;
     }
@@ -34,8 +34,8 @@ public class ScoreDTO {
 //        this.awayTotal = awayTotal;
 //    }
 
-    public static ScoreDTO create(String homeName, String awayName) {
-        return new ScoreDTO(homeName, awayName);
+    public static ScoreBoardDTO create(String homeName, String awayName) {
+        return new ScoreBoardDTO(homeName, awayName);
     }
 
 //    public static ScoreDTO create(String homeName, String awayName, List<Integer> homeScoreList,

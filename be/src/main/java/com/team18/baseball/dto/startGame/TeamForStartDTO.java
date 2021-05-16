@@ -8,16 +8,16 @@ import com.team18.baseball.entity.game.TeamRole;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TeamForStartDto extends TeamDto {
+public class TeamForStartDTO extends TeamDto {
     private final String mode;
     private final int score;
-    private final PlayerDto pitcher;
-    private final List<PlayerDto> batters;
+    private final PlayerDTO pitcher;
+    private final List<PlayerDTO> batters;
 
-    private TeamForStartDto(Long id, String name,
+    private TeamForStartDTO(Long id, String name,
                             String mode,
                             int score,
-                            PlayerDto pitcher, List<PlayerDto> batters) {
+                            PlayerDTO pitcher, List<PlayerDTO> batters) {
         super(id, name);
         this.mode = mode;
         this.score = score;
@@ -25,19 +25,19 @@ public class TeamForStartDto extends TeamDto {
         this.batters = batters;
     }
 
-    public static TeamForStartDto from(Team team, TeamRole teamRole, int score) {
-        PlayerDto pitcher = null;
-        List<PlayerDto> batters = new ArrayList<>();
+    public static TeamForStartDTO from(Team team, TeamRole teamRole, int score) {
+        PlayerDTO pitcher = null;
+        List<PlayerDTO> batters = new ArrayList<>();
 
         for (Player player : team.getPlayers()) {
-            PlayerDto playerDto = PlayerDto.from(player);
+            PlayerDTO playerDto = PlayerDTO.from(player);
             if (player.isPitcher()) {
                 pitcher = playerDto;
             }
             batters.add(playerDto);
         }
 
-        return new TeamForStartDto(team.getId(), team.getName(), teamRole.name(), score, pitcher, batters);
+        return new TeamForStartDTO(team.getId(), team.getName(), teamRole.name(), score, pitcher, batters);
     }
 
     public String getMode() {
@@ -48,11 +48,11 @@ public class TeamForStartDto extends TeamDto {
         return score;
     }
 
-    public PlayerDto getPitcher() {
+    public PlayerDTO getPitcher() {
         return pitcher;
     }
 
-    public List<PlayerDto> getBatters() {
+    public List<PlayerDTO> getBatters() {
         return batters;
     }
 }
