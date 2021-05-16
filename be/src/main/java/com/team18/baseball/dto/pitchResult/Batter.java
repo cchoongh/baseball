@@ -9,7 +9,7 @@ public class Batter {
     private int playerUniformNumber;
     private boolean isOut;
 
-    Batter() {
+    private Batter() {
     }
 
     Batter(Long playerId, String playerName, int playerUniformNumber) {

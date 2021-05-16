@@ -1,5 +1,9 @@
 package com.team18.baseball.response;
 
+import com.team18.baseball.dto.pitchResult.PitchResult;
+import com.team18.baseball.dto.pitchResult.PitchResultDto;
+import com.team18.baseball.dto.startGame.StartGameInfo;
+
 public class ResponseBody<T> {
     private final Status status;
     private final String message;
@@ -49,11 +53,19 @@ public class ResponseBody<T> {
         return new ResponseBody<>(Status.ERROR, message);
     }
 
-    public static ResponseBody<Object> pitchOk() {
+    public static <T> ResponseBody<T> pitchOk() {
         return new ResponseBody<>(Status.PITCH_OK, Status.PITCH_OK.getMessage());
     }
 
-    public static ResponseBody<Object> endOk() {
+    public static <T> ResponseBody<T> getPitchOkay(T body) {
+        return new ResponseBody<>(Status.GET_PITCH_OK, Status.GET_PITCH_OK.getMessage());
+    }
+
+    public static <T> ResponseBody<T> getPitchFail() {
+        return new ResponseBody<>(Status.GET_PITCH_FAIL, Status.GET_PITCH_FAIL.getMessage());
+    }
+
+    public static <T> ResponseBody<T> endOk() {
         return new ResponseBody<>(Status.END_OK, Status.END_OK.getMessage());
     }
 
@@ -76,9 +88,11 @@ public class ResponseBody<T> {
         START_OK("게임이 시작되었습니다"),
         START_FAIL("상대팀 유저를 기다리는 중입니다"),
         PITCH_OK("성공적으로 pitch 결과가 반영되었습니다"),
+        GET_PITCH_OK("pitch 결과입니다"),
+        GET_PITCH_FAIL("아직 pitch한 결과가 없습니다"),
         NEW_HALF_INNING_OK("공격과 수비가 변경됩니다"),
         NEW_HALF_INNING_FAIL("경기 종료버튼을 눌러주세요"),
-        END_OK("경기가 종료되었습니다");
+        END_OK("경기가 종료되었습니다"),
         ERROR("예외발생");
 
         private final String message;
@@ -90,5 +104,6 @@ public class ResponseBody<T> {
         public String getMessage() {
             return message;
         }
+
     }
 }

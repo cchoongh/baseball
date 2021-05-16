@@ -49,7 +49,7 @@ public class ScoreDTO {
         for (HalfInning halfInning : halfInnings) {
             int score = halfInning.getScore();
             String inningType = halfInning.getInningType();
-            String playingStatus = halfInning.getPlayingStatus();
+            String playingStatus = halfInning.checkStatus();
             if (inningType.equals(InningType.BOTTOM.name())) {
                 homeScore = score;
                 if (playingStatus.equals(PlayingStatus.END.name())) {
@@ -75,7 +75,7 @@ public class ScoreDTO {
         for (HalfInning halfInning : halfInnings) {
             int score = halfInning.getScore();
             String inningType = halfInning.getInningType();
-            String playingStatus = halfInning.getPlayingStatus();
+            String playingStatus = halfInning.checkStatus();
             if (inningType.equals(InningType.TOP.name())) {
                 awayScore = score;
                 if (playingStatus.equals(PlayingStatus.END.name())) awayScoreList.add(awayScore);

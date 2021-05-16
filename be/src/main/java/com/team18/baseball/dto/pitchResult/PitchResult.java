@@ -26,25 +26,7 @@ public class PitchResult {
     @Embedded.Nullable
     private Score score;
 
-    public PitchResult() {
-        this.homeId = 0L;
-        this.awayId = 0L;
-        this.battingTeamId = null;
-        this.pitchResult = null;
-        this.first_player = 0L;
-        this.first_mode = null;
-        this.second_player = 0L;
-        this.second_mode = null;
-        this.third_player = 0L;
-        this.third_mode = null;
-        this.fourth_player = 0L;
-        this.fourth_mode = null;
-        this.batter = null;
-        this.ballCount = null;
-        this.score = null;
-    }
-
-   public PitchResult(Long homeId, Long awayId, Long battingTeamId, String pitchResult,
+   PitchResult(Long homeId, Long awayId, Long battingTeamId, String pitchResult,
                       Batter batter, int nthBatter,
                       BallCount ballCount, Score score) {
        this.id = null;
@@ -67,10 +49,12 @@ public class PitchResult {
    }
 
     public static PitchResult from(PitchResultDto pitchResultDto) {
-                return new PitchResult(pitchResultDto.getHomeId(), pitchResultDto.getAwayId(), pitchResultDto.getBattingTeamId(), pitchResultDto.getPitchResult(),
+        PitchResult pitchResult = new PitchResult(pitchResultDto.getHomeId(), pitchResultDto.getAwayId(), pitchResultDto.getBattingTeamId(), pitchResultDto.getPitchResult(),
                 pitchResultDto.getBatter(), pitchResultDto.getNthBatter(),
                 pitchResultDto.getBallCount(),
                 pitchResultDto.getScore());
+        pitchResult.addPlayerInfo(pitchResultDto.getRunners());
+        return pitchResult;
     }
 
     public void addPlayerInfo(Runner[] runners) {

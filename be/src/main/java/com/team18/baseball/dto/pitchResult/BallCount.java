@@ -1,18 +1,21 @@
 package com.team18.baseball.dto.pitchResult;
 
 public class BallCount {
-    private final int strike;
-    private final int ball;
-    private final int out;
+    private int strike;
+    private int ball;
+    private int out;
 
-    BallCount() {
-        this.strike = 0;
-        this.ball = 0;
-        this.out = 0;
+    private BallCount() {
+    }
+
+    BallCount(int strike, int ball, int out) {
+        this.strike = strike;
+        this.ball = ball;
+        this.out = out;
     }
 
     public static BallCount create() {
-        return new BallCount();
+        return new BallCount(0, 0, 0);
     }
 
     public int getStrike() {

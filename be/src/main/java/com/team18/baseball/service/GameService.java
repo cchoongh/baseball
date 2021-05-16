@@ -140,22 +140,20 @@ public class GameService {
         Game game = getGameAndHasStatus(gameId, PlayingStatus.IS_PLAYING);
         TeamType teamType = game.checkUser(user.getId()).orElseThrow(IllegalStateException::new);
 
-        PitchResult pitchResult = pitchResultService.pitch(PitchResult.from(pitchResultDto), pitchResultDto.getRunners());
-
         if (TeamRoleUtils.checkTeamRole(teamType, game.getHalfInnings().size()) == TeamRole.BATTING) {
             throw new IllegalStateException();
         }
 
-        halfInningService.update(game.getLastHalfInning(), pitchResult);
+        PitchResult pitchResult = PitchResult.from(pitchResultDto);
+        halfInningService.pitch(game.getLastHalfInning(), pitchResult);
     }
 
-    public PitchResultDto getPitchResult(User user, Long gameId) {
+    public Optional<PitchResultDto> getPitchResult(User user, Long gameId) {
         Game game = getGameAndHasStatus(gameId, PlayingStatus.IS_PLAYING);
         game.checkUser(user.getId()).orElseThrow(IllegalStateException::new);
 
-        return pitchResultService.getLastPitchResult()
-                .map(PitchResultDto::from)
-                .orElseGet(PitchResultDto::createNull);
+        return halfInningService.getLastPitchResult(game.getLastHalfInning())
+                .map(PitchResultDto::from);
     }
 
     public void recordBatting(User user, Long gameId, List<BattingRecord> battingRecords) {
@@ -166,14 +164,14 @@ public class GameService {
             throw new IllegalStateException();
         }
 
-        halfInningService.addBattingRecord(battingRecords, game.getLastHalfInning().getId());
+        halfInningService.addBattingRecord(game.getLastHalfInning(), battingRecords);
     }
 
     public List<BattingRecord> getBattingRecords(User user, Long gameId) {
         Game game = getGameAndHasStatus(gameId, PlayingStatus.IS_PLAYING);
         game.checkUser(user.getId()).orElseThrow(IllegalStateException::new);
 
-        return halfInningService.getBattingRecords(game.getLastHalfInning().getId());
+        return halfInningService.getBattingRecords(game.getLastHalfInning());
     }
 
     public ScoreDTO getScore(User user, Long gameId) {

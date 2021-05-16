@@ -3,11 +3,13 @@ package com.team18.baseball.dto.pitchResult;
 import org.springframework.data.relational.core.mapping.Embedded;
 
 public class PitchResultDto {
+    private static final Integer MAX_NUMBER_OF_RUNNER = 4;
+
     private Long homeId;
     private Long awayId;
     private Long battingTeamId;
     private String pitchResult;
-    private Runner[] runners = new Runner[4];
+    private Runner[] runners = new Runner[MAX_NUMBER_OF_RUNNER];
     @Embedded.Nullable
     private Batter batter;
     private int nthBatter;
@@ -16,10 +18,10 @@ public class PitchResultDto {
     @Embedded.Nullable
     private Score score;
 
-    PitchResultDto() {
+    private PitchResultDto() {
     }
 
-    public PitchResultDto(Long homeId, Long awayId, Long battingTeamId, String pitchResult,
+    private PitchResultDto(Long homeId, Long awayId, Long battingTeamId, String pitchResult,
                           Runner[] runners,
                           Batter batter, int nthBatter,
                           BallCount ballCount,

@@ -1,6 +1,7 @@
 package com.team18.baseball.entity.game;
 
 import com.team18.baseball.dto.pitchResult.PitchResult;
+import com.team18.baseball.dto.pitchResult.Score;
 import com.team18.baseball.entity.battingBoard.BattingRecord;
 import org.springframework.data.annotation.Id;
 
@@ -12,33 +13,31 @@ public class HalfInning {
     private final Long id;
     private final int inning;
     private final String inningType;
+    private final List<PitchResult> pitchesResult;
+    private final List<BattingRecord> battingRecords;
     private int score;
     private String playingStatus;
-    private List<BattingRecord> battingRecords;
 
-    HalfInning(Long id,
-               int inning, String inningType) {
+    public HalfInning(Long id,
+                      int inning, String inningType,
+                      List<PitchResult> pitchesResult, List<BattingRecord> battingRecords,
+                      int score,
+                      String playingStatus) {
         this.id = id;
         this.inning = inning;
         this.inningType = inningType;
-        this.score = 0;
-        this.playingStatus = PlayingStatus.IS_PLAYING.name();
-        this.battingRecords = new ArrayList<>();
+        this.pitchesResult = pitchesResult;
+        this.battingRecords = battingRecords;
+        this.score = score;
+        this.playingStatus = playingStatus;
     }
 
-    public static final HalfInning create(int inning, String inningType) {
+    public static HalfInning create(int inning, String inningType) {
         return new HalfInning(null,
-                inning, inningType);
+                inning, inningType,
+                new ArrayList<>(), new ArrayList<>(),
+                0, PlayingStatus.IS_PLAYING.name());
     }
-
-//    public static final HalfInning createNext(HalfInning lastHalfInning) {
-//        if(lastHalfInning.inningType.toString().equals(InningType.TOP.toString())) {
-//            return new HalfInning(null,
-//                    lastHalfInning.getInning(), InningType.BOTTOM.toString());
-//        }
-//        return new HalfInning(null,
-//                lastHalfInning.getInning(), InningType.TOP.toString());
-//    }
 
     public Long getId() {
         return id;
@@ -56,27 +55,33 @@ public class HalfInning {
         return playingStatus.equals(PlayingStatus.IS_PLAYING.name());
     }
 
-    public int getScore() {
-        return score;
+    public List<PitchResult> getPitchesResult() {
+        return pitchesResult;
     }
 
     public List<BattingRecord> getBattingRecords() {
         return battingRecords;
     }
 
-    public void updatePitchResult(PitchResult pitchResult) {
-        if(!isPlaying()) {
-            throw new IllegalStateException();
-        }
-        score = pitchResult.getScore().getAwayScore();
+    public int getScore() {
+        return score;
     }
 
-    public String getPlayingStatus() {
+    public String checkStatus() {
         return playingStatus;
+    }
+
+    public void updateScore(Score score) {
+        this.score = score.getAwayScore();
     }
 
     public void end() {
         this.playingStatus = PlayingStatus.END.name();
+    }
+
+    public void addPitchResult(PitchResult pitchResult) {
+        pitchesResult.add(pitchResult);
+        updateScore(pitchResult.getScore());
     }
 
     public void addBattingRecord(BattingRecord battingRecord) {

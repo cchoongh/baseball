@@ -46,7 +46,7 @@ public class Game {
     }
 
     public HalfInning getLastHalfInning() {
-        if (halfInnings.size() < 1) {
+        if (halfInnings.size() == 0) {
             throw new IllegalStateException();
         }
         return halfInnings.get(halfInnings.size()-1);

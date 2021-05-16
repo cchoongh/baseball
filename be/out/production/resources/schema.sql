@@ -74,6 +74,8 @@ CREATE TABLE `half_inning`
 CREATE TABLE `pitch_result`
 (
     `id` int auto_increment,
+    `half_inning`     int,
+    `half_inning_key` int,
     `home_id` int not null,
     `away_id` int not null,
     `batting_team_id` int not null,

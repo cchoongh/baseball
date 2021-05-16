@@ -33,14 +33,14 @@ public class GameController {
         return gameService.getTeamsInGameList();
     }
 
-    @PostMapping("/{gameId}/teams/{teamId}/user/{userId}")
+    @PostMapping("/{gameId}/teams/{teamId}/select/user/{userId}")
     public ResponseBody<Object> selectTeam(@PathVariable Long gameId, @PathVariable Long teamId, @PathVariable Long userId) {
 //        User user = HttpSessionUtils.getLoginUser(session).orElseThrow(IllegalStateException::new);
         User user = userRepository.findById(userId).orElseThrow(IllegalStateException::new);
         return gameService.selectTeam(user, gameId, teamId) ? ResponseBody.selectOk() : ResponseBody.selectFail();
     }
 
-    @PutMapping("/{gameId}/teams/{teamId}/user/{userId}")
+    @PostMapping("/{gameId}/teams/{teamId}/unselect/user/{userId}")
     public ResponseBody<Object> unselectTeam(@PathVariable Long gameId, @PathVariable Long teamId, @PathVariable Long userId) {
         User user = userRepository.findById(userId).orElseThrow(IllegalStateException::new);
 //        User user = HttpSessionUtils.getLoginUser(session).orElseThrow(IllegalStateException::new);
@@ -48,7 +48,7 @@ public class GameController {
         return ResponseBody.unselectOk();
     }
 
-    @GetMapping("/{gameId}/start/user/{userId}")
+    @PostMapping("/{gameId}/start/user/{userId}")
     public ResponseBody<Object> startGame(@PathVariable Long gameId, @PathVariable Long userId) {
         User user = userRepository.findById(userId).orElseThrow(IllegalStateException::new);
 //        User user = HttpSessionUtils.getLoginUser(session).orElseThrow(IllegalStateException::new);
@@ -65,10 +65,14 @@ public class GameController {
     }
 
     @GetMapping("/{gameId}/pitchResult/user/{userId}")
-    public PitchResultDto getPitchResult(@PathVariable Long gameId, @PathVariable Long userId) {
+    public ResponseBody<Object> getPitchResult(@PathVariable Long gameId, @PathVariable Long userId) {
         User user = userRepository.findById(userId).orElseThrow(IllegalStateException::new);
 //        HttpSessionUtils.getLoginUser(session).orElseThrow(IllegalStateException::new);
-        return gameService.getPitchResult(user, gameId);
+        Optional<PitchResultDto> pitchResult = gameService.getPitchResult(user, gameId);
+        if(pitchResult.isPresent()) {
+            return ResponseBody.getPitchOkay(pitchResult.get());
+        };
+        return ResponseBody.getPitchFail();
     }
 
     @PostMapping("/{gameId}/battingRecords/user/{userId}")
