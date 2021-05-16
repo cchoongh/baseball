@@ -144,8 +144,7 @@ public class GameService {
             throw new IllegalStateException();
         }
 
-        PitchResult pitchResult = PitchResult.from(pitchResultDto);
-        halfInningService.pitch(game.getLastHalfInning(), pitchResult);
+        halfInningService.pitch(game.getLastHalfInning(), PitchResult.from(pitchResultDto));
     }
 
     public Optional<PitchResultDto> getPitchResult(User user, Long gameId) {
@@ -272,8 +271,8 @@ public class GameService {
 
         game.addHalfInning();
         gameRepository.save(game);
+        halfInningService.pitch(game.getLastHalfInning(), PitchResult.from(pitchResultDto));
 
-        pitchResultService.pitch(PitchResult.from(pitchResultDto), pitchResultDto.getRunners());
         return true;
     }
 
